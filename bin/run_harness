@@ -1,0 +1,4 @@
+#!/bin/sh
+
+root="$(dirname "$0")/..";
+PYHTONPATH="$root" exec python3 -m unittest discover -s "$root/simple_test" -t "$root";
