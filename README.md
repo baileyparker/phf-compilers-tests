@@ -180,4 +180,4 @@ thanks to these wonderful people who contributed test cases:
 ## Reporting Bugs
 
 If you find a bug in the test harness or in one of the fixtures, please
-[file an issue](https://baileyparker/phf-compilers-tests/issues).
+[file an issue](https://github.com/baileyparker/phf-compilers-tests/issues).
