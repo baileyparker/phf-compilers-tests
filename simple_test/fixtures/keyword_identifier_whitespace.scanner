@@ -1,0 +1,7 @@
+identifier<PRO>@(0, 2)
+identifier<GRAM>@(4, 7)
+PROGRAM@(9, 15)
+identifier<PROG>@(17, 20)
+#@(21, 21)
+identifier<AM>@(22, 23)
+eof@(60, 60)
