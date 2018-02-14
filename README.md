@@ -172,6 +172,8 @@ $ pipenv run python3 setup.py coverage
 Harness made by [Bailey Parker](https://github.com/baileyparker). Special
 thanks to these wonderful people who contributed test cases:
 
+  - [Nicholas Hale](https://github.com/nhaleft)
+  - [Sam Beckley](https://github.com/sobeckley)
   - Your name could be here!
 
 
