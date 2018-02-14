@@ -174,6 +174,7 @@ thanks to these wonderful people who contributed test cases:
 
   - [Nicholas Hale](https://github.com/nhaleft)
   - [Sam Beckley](https://github.com/sobeckley)
+  - [Peter Lazorchak](https://github.com/lazorchakp)
   - Your name could be here!
 
 
