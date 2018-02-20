@@ -22,18 +22,30 @@ class TestRunner(TestCase):
              patch("{}.shell_quote".format(PREFIX)) as self.shell_quote, \
              patch("{}.environ".format(PREFIX), new={}) as self.environ:
 
-            # TODO: test relative_to raises ValueError  # pylint: disable=W0511
-            self.assertRunsSimpleWithArgument(runner, args)
-            self.assertRunsSimpleWithArgument(runner, args, sc_path='./foo')
-            self.assertRunsSimpleAsStdin(runner, args)
-            self.assertRunsSimpleAsStdin(runner, args, sc_path='./foo')
+            for raises in (False, True):
+                self.assertRunsSimpleWithArgument(runner, args,
+                                                  relative_to_raises=raises)
+                self.assertRunsSimpleWithArgument(runner, args,
+                                                  sc_path='./foo',
+                                                  relative_to_raises=raises)
+                self.assertRunsSimpleAsStdin(runner, args,
+                                             relative_to_raises=raises)
+                self.assertRunsSimpleAsStdin(runner, args, sc_path='./foo',
+                                             relative_to_raises=raises)
 
-    def setup_subprocess(self, sc_path=None):
+    def setup_subprocess(self, sc_path=None, relative_to_raises=False):
         sim_file = MagicMock()
+        sim_file.__str__.return_value = 'non_relative_path.sim'
         relative_sim_file = MagicMock()
         relative_sim_file.__str__.return_value = 'foo/bar.sim'
-        sim_file.relative_to.side_effect = \
-            lambda p: relative_sim_file if p == Path('.').resolve() else None
+
+        if not relative_to_raises:
+            cwd = Path('.').resolve()
+
+            sim_file.relative_to.side_effect = \
+                lambda p: relative_sim_file if p == cwd else None
+        else:
+            sim_file.relative_to.side_effect = ValueError('relative_to')
 
         stdout, stderr = Mock(), Mock()
         fake_args = ('a', 'b')
@@ -55,37 +67,41 @@ class TestRunner(TestCase):
 
         return sim_file, relative_sim_file, cmd, stdout, stderr
 
-    def assertRunsSimpleWithArgument(self, runner, args, sc_path=None):
+    def assertRunsSimpleWithArgument(self, runner, args, sc_path=None,
+                                     relative_to_raises=False):
         sim_file, relative_sim_file, cmd, stdout, stderr = \
-            self.setup_subprocess(sc_path)
+            self.setup_subprocess(sc_path, relative_to_raises)
+        last_arg = sim_file if relative_to_raises else relative_sim_file
 
         result = runner(sim_file)
 
         self.subprocess_run \
             .assert_called_once_with([sc_path if sc_path else './sc', *args,
-                                      str(relative_sim_file)], stdout=PIPE,
+                                      str(last_arg)], stdout=PIPE,
                                      stderr=PIPE, stdin=DEVNULL)
         self.assertEqual(cmd, result.cmd)
         self.assertEqual(stdout, result.stdout)
         self.assertEqual(stderr, result.stderr)
 
-    def assertRunsSimpleAsStdin(self, runner, args, sc_path=None):
+    def assertRunsSimpleAsStdin(self, runner, args, sc_path=None,
+                                relative_to_raises=False):
         sim_file, relative_sim_file, cmd, stdout, stderr = \
-            self.setup_subprocess(sc_path)
+            self.setup_subprocess(sc_path, relative_to_raises)
+        redirected_file = sim_file if relative_to_raises else relative_sim_file
 
         # Wire up relative_sim_file so we can call .open() on it
         fake_file = MagicMock()
         fake_file_context = MagicMock()
         fake_file_context.__enter__.return_value = fake_file
-        relative_sim_file.open.return_value = fake_file_context
+        redirected_file.open.return_value = fake_file_context
 
         result = runner(sim_file, as_stdin=True)
 
-        relative_sim_file.open.assert_called_once_with()
+        redirected_file.open.assert_called_once_with()
         self.subprocess_run \
             .assert_called_once_with([sc_path if sc_path else './sc', *args],
                                      stdout=PIPE, stderr=PIPE, stdin=fake_file)
-        self.assertEqual("{} < {}".format(cmd, relative_sim_file), result.cmd)
+        self.assertEqual("{} < {}".format(cmd, redirected_file), result.cmd)
         self.assertEqual(stdout, result.stdout)
         self.assertEqual(stderr, result.stderr)
 

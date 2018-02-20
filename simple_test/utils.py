@@ -40,7 +40,7 @@ def unified_diff(a: str, b: str,  # pylint: disable=C0103
 
 
 def _color_diff_line(line: str) -> str:
-    if sys.stdout.isatty():
+    if sys.stdout.isatty():  # pragma: no coverage
         if line[0] == '+':
             return _green(line)
         elif line[0] == '-':

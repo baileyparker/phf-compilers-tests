@@ -17,7 +17,7 @@ def _create_test_method(fixture: Fixture, runner: SimpleRunner) -> TestMethod:
     return lambda self: self.assertFixture(fixture, runner)
 
 
-if sys.version_info < (3, 6):
+if sys.version_info < (3, 6):  # pragma: no cover
     import types
 
     class _PEP487(type):
@@ -54,7 +54,7 @@ if sys.version_info < (3, 6):
 
         def __init__(cls, name, bases, ns, **kwargs):  # pylint: disable=W0613
             super().__init__(name, bases, ns)
-else:
+else:  # pragma: no cover
     class _PEP487(type):
         pass
 
