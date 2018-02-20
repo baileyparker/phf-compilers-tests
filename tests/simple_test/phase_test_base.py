@@ -25,17 +25,22 @@ class PhaseTestBase(TestCase):
             return
 
         with FakeCompilerContext() as fake_compiler:
-            for fixture in discover_fixtures():
-                if fixture.phase_name == self.phase_name:  # noqa  # pylint: disable=E1101
-                    self.assertGoodFakeCompilerPasses(fake_compiler, fixture)
+            phase_name = self.phase_name  # noqa  # pylint: disable=E1101
+            fixtures = [f for f in discover_fixtures()
+                        if f.phase_name == phase_name]
+            if not fixtures:
+                self.fail("{} will not assert anything because there are no "
+                          "*.{} phase files in fixtures/"
+                          .format(self.__class__.__name__, phase_name))
 
-                    for for_stdin in (False, True):
-                        self.assertBadStdoutFakeCompilerFails(fake_compiler,
-                                                              fixture,
-                                                              for_stdin)
-                        self.assertBadStderrFakeCompilerFails(fake_compiler,
-                                                              fixture,
-                                                              for_stdin)
+            for fixture in fixtures:
+                self.assertGoodFakeCompilerPasses(fake_compiler, fixture)
+
+                for for_stdin in (False, True):
+                    self.assertBadStdoutFakeCompilerFails(fake_compiler,
+                                                          fixture, for_stdin)
+                    self.assertBadStderrFakeCompilerFails(fake_compiler,
+                                                          fixture, for_stdin)
 
     def assertGoodFakeCompilerPasses(self, fake_compiler, fixture):
         phase_file = fixture.phase_file
