@@ -1,0 +1,7 @@
+PROGRAM As3;
+CONST x = -47;
+TYPE T = RECORD f: INTEGER; END;
+VAR a: ARRAY 12 OF T;
+BEGIN
+  a[7].f := -x
+END As3.

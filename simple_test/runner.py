@@ -60,3 +60,14 @@ def run_simple_scanner(sim_file: Path, as_stdin: bool = False) -> Result:
     and stderr.
     """
     return _run_simple(['-s'], sim_file, as_stdin)
+
+
+def run_simple_cst(sim_file: Path, as_stdin: bool = False) -> Result:
+    """
+    Run the CST phase of the simple compiler (at ./sc or in the SC env var,
+    if provided). If `as_stdin` is True, then the `sim_file` will be fed into
+    the stdin of the compiler. Otherwise, `sim_file`'s path will be passed as
+    the final argument to the compiler. Returns a result containing the stdout
+    and stderr.
+    """
+    return _run_simple(['-c'], sim_file, as_stdin)

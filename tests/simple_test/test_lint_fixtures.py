@@ -13,17 +13,21 @@ class TestLintFixtures(TestCase):
 
     def test_no_duplicate_sim_files(self):
         sim_file_contents = {}
+        sim_files = set()
 
         for fixture in discover_fixtures():
-            with fixture.sim_file_path.open() as f:
-                contents = f.read()
+            if fixture.sim_file_path not in sim_files:
+                with fixture.sim_file_path.open() as f:
+                    contents = f.read()
 
-                if contents in sim_file_contents:
-                    self.fail("identical sim files {} and {}"
-                              .format(fixture.relative_sim_file_path,
-                                      sim_file_contents[contents]))
+                    if contents in sim_file_contents:
+                        self.fail("identical sim files {} and {}"
+                                  .format(fixture.relative_sim_file_path,
+                                          sim_file_contents[contents]))
 
-                sim_file_contents[contents] = fixture.relative_sim_file_path
+                    sim_file_contents[contents] = \
+                        fixture.relative_sim_file_path
+                    sim_files.add(fixture.sim_file_path)
 
 
 if __name__ == '__main__':

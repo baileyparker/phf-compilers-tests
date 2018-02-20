@@ -4,26 +4,29 @@ from subprocess import CompletedProcess, DEVNULL, PIPE
 from unittest import main, TestCase
 from unittest.mock import MagicMock, Mock, patch
 
-from simple_test.runner import run_simple_scanner
+from simple_test.runner import run_simple_scanner, run_simple_cst
 
 
 PREFIX = 'simple_test.runner'
 
 
 class TestRunner(TestCase):
-    def test_run_simple(self):
+    def test_run_simple_scanner(self):
+        self.assertRunsSimple(run_simple_scanner, ['-s'])
+
+    def test_run_simple_cst(self):
+        self.assertRunsSimple(run_simple_cst, ['-c'])
+
+    def assertRunsSimple(self, runner, args):
         with patch("{}.run".format(PREFIX)) as self.subprocess_run, \
              patch("{}.shell_quote".format(PREFIX)) as self.shell_quote, \
              patch("{}.environ".format(PREFIX), new={}) as self.environ:
 
-            self.assertRunsSimple(run_simple_scanner, ['-s'])
-
-    def assertRunsSimple(self, runner, args):
-        # TODO: test relative_to raises ValueError  # pylint: disable=W0511
-        self.assertRunsSimpleWithArgument(runner, args)
-        self.assertRunsSimpleWithArgument(runner, args, sc_path='./foo')
-        self.assertRunsSimpleAsStdin(runner, args)
-        self.assertRunsSimpleAsStdin(runner, args, sc_path='./foo')
+            # TODO: test relative_to raises ValueError  # pylint: disable=W0511
+            self.assertRunsSimpleWithArgument(runner, args)
+            self.assertRunsSimpleWithArgument(runner, args, sc_path='./foo')
+            self.assertRunsSimpleAsStdin(runner, args)
+            self.assertRunsSimpleAsStdin(runner, args, sc_path='./foo')
 
     def setup_subprocess(self, sc_path=None):
         sim_file = MagicMock()

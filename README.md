@@ -64,9 +64,9 @@ that provide input to the compiler and describe the expected output:
 
   1. A `*.sim` file (called the **input file**) that will be given to the
      compiler under test
-  2. A `*.{scanner}` file (called the **phase file**) that described what the
-     expected output of running the compiler under test in the phase described
-     by its file extension against the `*.sim` file of the same name
+  2. A `*.{scanner|cst}` file (called the **phase file**) that described what
+     the expected output of running the compiler under test in the phase
+     described by its file extension against the `*.sim` file of the same name
 
 In a line (*if you trust your compiler!*), a fixture for the scanner can be
 created like so (assuming `quicksort.sim` exists):
@@ -81,11 +81,12 @@ and expect the output `*.scanner` file. The test harness derives the phase to ru
 the compiler in from the extension of the second file, currently the phases are:
 
   - `*.scanner` - `./sc -s`
+  - `*.cst` - `./sc -c`
 
 More will be added with future assignments.
 
 Note that one input `*.sim` file can have multiple expected outputs for
-different compiler phases (ex. `random.scanner` and `random.parser` are two
+different compiler phases (ex. `random.scanner` and `random.cst` are two
 phase files that describe the expected output for `./sc -s`, the scanner, and
 `./sc -c`, the parser, respectively when given the input `random.sim`).
 
