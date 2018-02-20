@@ -36,6 +36,9 @@ class PhaseTestBase(TestCase):
             for fixture in fixtures:
                 self.assertGoodFakeCompilerPasses(fake_compiler, fixture)
 
+                if fixture.phase_file.has_error:
+                    self.assertMultipleErrorsPasses(fake_compiler, fixture)
+
                 for for_stdin in (False, True):
                     self.assertBadStdoutFakeCompilerFails(fake_compiler,
                                                           fixture, for_stdin)
@@ -45,7 +48,17 @@ class PhaseTestBase(TestCase):
     def assertGoodFakeCompilerPasses(self, fake_compiler, fixture):
         phase_file = fixture.phase_file
 
-        stderr = 'error: \n' if phase_file.has_error else ''
+        stderr = 'error: blah blah\n' if phase_file.has_error else ''
+        self.run_fake_compiler(fake_compiler, fixture, (phase_file.stdout,
+                                                        stderr))
+
+        self.assertFakeCompilerHasCalls(fake_compiler, fixture)
+
+    def assertMultipleErrorsPasses(self, fake_compiler, fixture):
+        phase_file = fixture.phase_file
+        assert phase_file.has_error, 'should only be called for error fixtures'
+
+        stderr = 'error: foo bar\nerror: baz blah'
         self.run_fake_compiler(fake_compiler, fixture, (phase_file.stdout,
                                                         stderr))
 
