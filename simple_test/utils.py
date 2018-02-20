@@ -2,7 +2,6 @@
 
 from contextlib import contextmanager
 from difflib import unified_diff as _unified_diff
-import sys
 from typing import Generator
 
 
@@ -40,13 +39,12 @@ def unified_diff(a: str, b: str,  # pylint: disable=C0103
 
 
 def _color_diff_line(line: str) -> str:
-    if sys.stdout.isatty():  # pragma: no coverage
-        if line[0] == '+':
-            return _green(line)
-        elif line[0] == '-':
-            return _red(line)
-        elif line[0] == '@':
-            return _blue(line)
+    if line[0] == '+':
+        return _green(line)
+    elif line[0] == '-':
+        return _red(line)
+    elif line[0] == '@':
+        return _blue(line)
 
     return line
 
