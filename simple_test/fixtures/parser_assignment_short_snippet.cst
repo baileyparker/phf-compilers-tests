@@ -1,0 +1,16 @@
+Program
+  PROGRAM@(0, 6)
+  identifier<X>@(8, 8)
+  ;@(9, 9)
+  Declarations
+    VarDecl
+      VAR@(11, 13)
+      IdentifierList
+        identifier<i>@(15, 15)
+      :@(16, 16)
+      Type
+        identifier<INTEGER>@(18, 24)
+      ;@(25, 25)
+  END@(27, 29)
+  identifier<X>@(31, 31)
+  .@(32, 32)
