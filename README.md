@@ -136,6 +136,12 @@ identifier<ics142>@(4, 9)
 error: unexpected ';' at (11, 11)
 ```
 
+#### Some Housekeeping
+
+  - Test fixtures must have `snake_case_names`.
+  - There should not be duplicate input files (`*.sim` files). If `a.sim` and
+    `b.sim` are identical, then you should merge their phase files.
+
 ### Running the Test Harness Tests
 
 To ensure a bug free harness, I've written tests for the test harness itself
