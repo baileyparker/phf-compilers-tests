@@ -1,0 +1,134 @@
+Program
+  PROGRAM@(1, 7)
+  identifier<express1ons>@(9, 19)
+  ;@(21, 21)
+  Declarations
+    ConstDecl
+      CONST@(24, 28)
+      identifier<a>@(31, 31)
+      =@(33, 33)
+      Expression
+        +@(35, 35)
+        Term
+          Factor
+            integer<5>@(36, 36)
+      ;@(37, 37)
+      identifier<b>@(40, 40)
+      =@(42, 42)
+      Expression
+        -@(44, 44)
+        Term
+          Factor
+            integer<2>@(45, 45)
+      ;@(46, 46)
+      identifier<c>@(49, 49)
+      =@(51, 51)
+      Expression
+        -@(53, 53)
+        Term
+          Factor
+            integer<8>@(54, 54)
+        -@(55, 55)
+        Term
+          Factor
+            integer<0>@(56, 56)
+      ;@(57, 57)
+      identifier<d>@(60, 60)
+      =@(62, 62)
+      Expression
+        Term
+          Factor
+            integer<6>@(64, 64)
+          *@(66, 66)
+          Factor
+            Designator
+              identifier<seven>@(68, 72)
+              Selector
+      ;@(73, 73)
+      identifier<e>@(76, 76)
+      =@(78, 78)
+      Expression
+        -@(80, 80)
+        Term
+          Factor
+            integer<0>@(81, 81)
+          DIV@(83, 85)
+          Factor
+            integer<1>@(87, 87)
+      ;@(88, 88)
+      identifier<f>@(91, 91)
+      =@(93, 93)
+      Expression
+        Term
+          Factor
+            (@(95, 95)
+            Expression
+              Term
+                Factor
+                  Designator
+                    identifier<nineteen>@(96, 103)
+                    Selector
+                      [@(104, 104)
+                      ExpressionList
+                        Expression
+                          Term
+                            Factor
+                              integer<6>@(105, 105)
+                      ]@(106, 106)
+            )@(107, 107)
+          MOD@(108, 110)
+          Factor
+            (@(111, 111)
+            Expression
+              Term
+                Factor
+                  integer<12324>@(112, 116)
+            )@(117, 117)
+      ;@(118, 118)
+      identifier<g>@(121, 121)
+      =@(123, 123)
+      Expression
+        Term
+          Factor
+            (@(125, 125)
+            Expression
+              Term
+                Factor
+                  Designator
+                    identifier<two>@(126, 128)
+                    Selector
+                      [@(129, 129)
+                      ExpressionList
+                        Expression
+                          Term
+                            Factor
+                              integer<1>@(130, 130)
+                        ,@(131, 131)
+                        Expression
+                          Term
+                            Factor
+                              integer<2>@(132, 132)
+                        ,@(133, 133)
+                        Expression
+                          Term
+                            Factor
+                              integer<3>@(134, 134)
+                      ]@(135, 135)
+            )@(136, 136)
+        +@(138, 138)
+        Term
+          Factor
+            (@(140, 140)
+            Expression
+              Term
+                Factor
+                  Designator
+                    identifier<one>@(141, 143)
+                    Selector
+                      .@(144, 144)
+                      identifier<ten>@(145, 147)
+            )@(148, 148)
+      ;@(149, 149)
+  END@(152, 154)
+  identifier<yes>@(156, 158)
+  .@(159, 159)

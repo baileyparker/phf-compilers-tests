@@ -1,0 +1,11 @@
+PROGRAM ifelse;
+BEGIN
+IF z = 7 THEN
+        z:=6
+ELSE
+        t:=u;
+        b:=0;
+              g:=4
+END
+
+END then.

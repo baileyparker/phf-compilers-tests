@@ -1,0 +1,11 @@
+PROGRAM while;
+
+BEGIN
+
+WHILE someExpression >= theOther DO
+	instruction1 := assignment;
+	noSemiColon := isStrangeHere
+END
+
+END while.
+

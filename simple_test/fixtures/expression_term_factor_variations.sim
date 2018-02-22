@@ -1,0 +1,13 @@
+	PROGRAM express1ons
+;
+
+CONST
+	a = +5;
+	b = -2;
+	c = -8-0;
+	d = 6 * seven;
+	e = -0 DIV 1;
+	f = (nineteen[6])MOD(12324);
+	g = (two[1,2,3]) + (one.ten);
+
+END yes.

@@ -1,0 +1,70 @@
+Program
+  PROGRAM@(0, 6)
+  identifier<read>@(8, 11)
+  ;@(12, 12)
+  Declarations
+  BEGIN@(14, 18)
+  Instructions
+    Instruction
+      Read
+        READ@(21, 24)
+        Designator
+          identifier<hard>@(26, 29)
+          Selector
+            [@(30, 30)
+            ExpressionList
+              Expression
+                Term
+                  Factor
+                    (@(31, 31)
+                    Expression
+                      Term
+                        Factor
+                          Designator
+                            identifier<eight>@(32, 36)
+                            Selector
+                              [@(37, 37)
+                              ExpressionList
+                                Expression
+                                  Term
+                                    Factor
+                                      Designator
+                                        identifier<nine>@(38, 41)
+                                        Selector
+                                ,@(42, 42)
+                                Expression
+                                  Term
+                                    Factor
+                                      Designator
+                                        identifier<ten>@(44, 46)
+                                        Selector
+                                ,@(47, 47)
+                                Expression
+                                  Term
+                                    Factor
+                                      Designator
+                                        identifier<eleven>@(49, 54)
+                                        Selector
+                              ]@(55, 55)
+                    )@(56, 56)
+              ,@(57, 57)
+              Expression
+                Term
+                  Factor
+                    Designator
+                      identifier<twelve>@(59, 64)
+                      Selector
+            ]@(65, 65)
+    ;@(66, 66)
+    Instruction
+      Write
+        WRITE@(68, 72)
+        Expression
+          Term
+            Factor
+              Designator
+                identifier<easy>@(74, 77)
+                Selector
+  END@(80, 82)
+  identifier<write>@(84, 88)
+  .@(89, 89)

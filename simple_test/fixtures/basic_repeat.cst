@@ -1,0 +1,60 @@
+Program
+  PROGRAM@(0, 6)
+  identifier<repeat>@(8, 13)
+  ;@(14, 14)
+  Declarations
+  BEGIN@(18, 22)
+  Instructions
+    Instruction
+      Repeat
+        REPEAT@(25, 30)
+        Instructions
+          Instruction
+            Assign
+              Designator
+                identifier<a>@(33, 33)
+                Selector
+              :=@(35, 36)
+              Expression
+                Term
+                  Factor
+                    integer<5>@(37, 37)
+          ;@(38, 38)
+          Instruction
+            Assign
+              Designator
+                identifier<b>@(40, 40)
+                Selector
+              :=@(42, 43)
+              Expression
+                Term
+                  Factor
+                    integer<9>@(45, 45)
+        UNTIL@(48, 52)
+        Condition
+          Expression
+            Term
+              Factor
+                Designator
+                  identifier<v>@(54, 54)
+                  Selector
+          #@(56, 56)
+          Expression
+            Term
+              Factor
+                integer<10>@(58, 59)
+        END@(61, 63)
+    ;@(64, 64)
+    Instruction
+      Assign
+        Designator
+          identifier<a>@(67, 67)
+          Selector
+        :=@(68, 69)
+        Expression
+          Term
+            Factor
+              integer<0>@(70, 70)
+  END@(73, 75)
+  identifier<program>@(77, 83)
+  .@(84, 84)

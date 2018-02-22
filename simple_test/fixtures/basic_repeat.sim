@@ -1,0 +1,15 @@
+PROGRAM repeat;
+
+
+BEGIN
+
+REPEAT
+
+a :=5;
+b := 9
+
+UNTIL v # 10 END;
+
+a:=0
+
+END program.

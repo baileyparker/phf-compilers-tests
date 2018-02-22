@@ -1,0 +1,66 @@
+Program
+  PROGRAM@(0, 6)
+  identifier<assign>@(8, 13)
+  ;@(14, 14)
+  Declarations
+  BEGIN@(16, 20)
+  Instructions
+    Instruction
+      Assign
+        Designator
+          identifier<a>@(23, 23)
+          Selector
+        :=@(24, 25)
+        Expression
+          Term
+            Factor
+              integer<1>@(26, 26)
+    ;@(27, 27)
+    Instruction
+      Assign
+        Designator
+          identifier<a>@(29, 29)
+          Selector
+        :=@(31, 32)
+        Expression
+          -@(34, 34)
+          Term
+            Factor
+              Designator
+                identifier<a>@(35, 35)
+                Selector
+                  [@(36, 36)
+                  ExpressionList
+                    Expression
+                      Term
+                        Factor
+                          integer<6>@(37, 37)
+                    ,@(38, 38)
+                    Expression
+                      Term
+                        Factor
+                          integer<6>@(39, 39)
+                    ,@(40, 40)
+                    Expression
+                      Term
+                        Factor
+                          integer<5>@(41, 41)
+                    ,@(42, 42)
+                    Expression
+                      -@(43, 43)
+                      Term
+                        Factor
+                          integer<3>@(44, 44)
+                  ]@(45, 45)
+          -@(46, 46)
+          Term
+            Factor
+              Designator
+                identifier<f>@(47, 47)
+                Selector
+            DIV@(49, 51)
+            Factor
+              integer<5>@(53, 53)
+  END@(124, 126)
+  identifier<assign>@(128, 133)
+  .@(134, 134)
