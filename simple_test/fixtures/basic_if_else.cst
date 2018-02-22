@@ -1,0 +1,74 @@
+Program
+  PROGRAM@(0, 6)
+  identifier<ifelse>@(8, 13)
+  ;@(14, 14)
+  Declarations
+  BEGIN@(16, 20)
+  Instructions
+    Instruction
+      If
+        IF@(22, 23)
+        Condition
+          Expression
+            Term
+              Factor
+                Designator
+                  identifier<z>@(25, 25)
+                  Selector
+          =@(27, 27)
+          Expression
+            Term
+              Factor
+                integer<7>@(29, 29)
+        THEN@(31, 34)
+        Instructions
+          Instruction
+            Assign
+              Designator
+                identifier<z>@(44, 44)
+                Selector
+              :=@(45, 46)
+              Expression
+                Term
+                  Factor
+                    integer<6>@(47, 47)
+        ELSE@(49, 52)
+        Instructions
+          Instruction
+            Assign
+              Designator
+                identifier<t>@(62, 62)
+                Selector
+              :=@(63, 64)
+              Expression
+                Term
+                  Factor
+                    Designator
+                      identifier<u>@(65, 65)
+                      Selector
+          ;@(66, 66)
+          Instruction
+            Assign
+              Designator
+                identifier<b>@(76, 76)
+                Selector
+              :=@(77, 78)
+              Expression
+                Term
+                  Factor
+                    integer<0>@(79, 79)
+          ;@(80, 80)
+          Instruction
+            Assign
+              Designator
+                identifier<g>@(96, 96)
+                Selector
+              :=@(97, 98)
+              Expression
+                Term
+                  Factor
+                    integer<4>@(99, 99)
+        END@(101, 103)
+  END@(106, 108)
+  identifier<then>@(110, 113)
+  .@(114, 114)

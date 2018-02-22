@@ -1,0 +1,8 @@
+Program
+  PROGRAM@(0, 6)
+  identifier<a>@(8, 8)
+  ;@(9, 9)
+  Declarations
+  END@(11, 13)
+  identifier<b>@(15, 15)
+  .@(16, 16)

@@ -1,0 +1,20 @@
+Program
+  PROGRAM@(0, 6)
+  identifier<a>@(8, 8)
+  ;@(9, 9)
+  Declarations
+    ConstDecl
+      CONST@(11, 15)
+    ConstDecl
+      CONST@(17, 21)
+      identifier<b>@(23, 23)
+      =@(25, 25)
+      Expression
+        -@(27, 27)
+        Term
+          Factor
+            integer<9>@(28, 28)
+      ;@(29, 29)
+  END@(31, 33)
+  identifier<a>@(35, 35)
+  .@(36, 36)

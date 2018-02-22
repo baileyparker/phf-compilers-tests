@@ -1,0 +1,9 @@
+PROGRAM A;
+TYPE
+TYPE mytype = atype;
+	mysecondtype = ARRAY 5 OF int;
+	anotherType = RECORD
+	END;
+	lastone = RECORD a, b, c, d : double;
+	END;
+END it.

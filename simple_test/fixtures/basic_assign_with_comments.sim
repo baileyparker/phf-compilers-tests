@@ -1,0 +1,12 @@
+PROGRAM assign;
+BEGIN
+
+a:=1;
+a := -a[6,6,5,-3]-f DIV 5
+
+(*Hope these still (*really*) work*)
+(*and (* *all* )*) of these*)
+
+END assign.
+
+(*these too*)

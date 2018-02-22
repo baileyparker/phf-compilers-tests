@@ -1,0 +1,6 @@
+PROGRAM read; BEGIN
+
+READ hard[(eight[nine, ten, eleven]), twelve];
+WRITE easy
+
+END write.
