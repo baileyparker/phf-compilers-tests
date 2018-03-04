@@ -1,0 +1,12 @@
+PROGRAM varsAndTypes;
+    VAR a : INTEGER; TYPE TYPE
+    VAR a2,b : INTEGER; VAR
+    TYPE c = INTEGER;
+    VAR d : c;
+    VAR e,f : c; VAR TYPE VAR VAR TYPE
+    TYPE g = INTEGER;
+    VAR h,i,j,k,l : INTEGER;
+    VAR m,n,o,p,q : g;
+    VAR VAR VAR
+    TYPE TYPE TYPE VAR TYPE
+END varsAndTypes.

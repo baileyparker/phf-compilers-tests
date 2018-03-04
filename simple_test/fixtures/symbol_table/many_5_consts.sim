@@ -1,0 +1,8 @@
+PROGRAM consts;
+    CONST a = 5; CONST
+    CONST b = 5; c = 5;
+    CONST c2 = 5;
+    CONST CONST
+    CONST d = 5; e = 5; f = 5; g = 5;
+    CONST CONST CONST
+END consts.
