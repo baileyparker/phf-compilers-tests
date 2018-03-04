@@ -1,0 +1,5 @@
+PROGRAM earlyUseConst;
+    TYPE seat : RECORD studentId : INTEGER END;
+    VAR seats : ARRAY classRoomSize OF seat;
+    CONST classRoomSize = 5;
+END earlyUseConst.

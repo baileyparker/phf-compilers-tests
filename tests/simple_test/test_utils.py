@@ -1,6 +1,7 @@
 from unittest import main, TestCase
 
-from simple_test.utils import assertion_context, unified_diff
+from simple_test.utils import assertion_context, unified_diff, \
+    replace_values_with_fives
 
 
 class TestUtils(TestCase):
@@ -33,6 +34,84 @@ class TestUtils(TestCase):
                          '\033[1;31m-b\n\033[0;0m'
                          '\033[1;32m+c\n\033[0;0m',
                          diff)
+
+    def test_replace_values_with_fixes(self):
+        self.assertEqual('value:\n  5',
+                         replace_values_with_fives('value:\n  8675309'))
+
+    def test_replace_values_with_fixes_in_context(self):
+        stdout = 'SCOPE BEGIN\n'                        \
+                 '  x123 =>\n'                          \
+                 '    CONST BEGIN\n'                    \
+                 '      type:\n'                        \
+                 '        INTEGER\n'                    \
+                 '      value:\n'                       \
+                 '        18006492568\n'                \
+                 '    END CONST\n'                      \
+                 '  y23x28 =>\n'                        \
+                 '    CONST BEGIN\n'                    \
+                 '      type:\n'                        \
+                 '        INTEGER\n'                    \
+                 '      value:\n'                       \
+                 '        42\n'                         \
+                 '    END CONST\n'                      \
+                 '  y2345 =>\n'                         \
+                 '    RECORD BEGIN\n'                   \
+                 '      SCOPE BEGIN\n'                  \
+                 '        x22 =>\n'                     \
+                 '          ARRAY BEGIN\n'              \
+                 '            type:\n'                  \
+                 '              INTEGER\n'              \
+                 '            length:\n'                \
+                 '              43252003274489856000\n' \
+                 '          END ARRAY\n'                \
+                 '      END SCOPE\n'                    \
+                 '    END RECORD\n'                     \
+                 '  x24 =>\n'                           \
+                 '    ARRAY BEGIN\n'                    \
+                 '      type:\n'                        \
+                 '        INTEGER\n'                    \
+                 '      length:\n'                      \
+                 '        5\n'                          \
+                 '    END ARRAY\n'                      \
+                 'END SCOPE\n'
+
+        expected = 'SCOPE BEGIN\n'           \
+                   '  x123 =>\n'             \
+                   '    CONST BEGIN\n'       \
+                   '      type:\n'           \
+                   '        INTEGER\n'       \
+                   '      value:\n'          \
+                   '        5\n'             \
+                   '    END CONST\n'         \
+                   '  y23x28 =>\n'           \
+                   '    CONST BEGIN\n'       \
+                   '      type:\n'           \
+                   '        INTEGER\n'       \
+                   '      value:\n'          \
+                   '        5\n'             \
+                   '    END CONST\n'         \
+                   '  y2345 =>\n'            \
+                   '    RECORD BEGIN\n'      \
+                   '      SCOPE BEGIN\n'     \
+                   '        x22 =>\n'        \
+                   '          ARRAY BEGIN\n' \
+                   '            type:\n'     \
+                   '              INTEGER\n' \
+                   '            length:\n'   \
+                   '              5\n'       \
+                   '          END ARRAY\n'   \
+                   '      END SCOPE\n'       \
+                   '    END RECORD\n'        \
+                   '  x24 =>\n'              \
+                   '    ARRAY BEGIN\n'       \
+                   '      type:\n'           \
+                   '        INTEGER\n'       \
+                   '      length:\n'         \
+                   '        5\n'             \
+                   '    END ARRAY\n'         \
+                   'END SCOPE\n'
+        self.assertEqual(expected, replace_values_with_fives(stdout))
 
 
 if __name__ == '__main__':

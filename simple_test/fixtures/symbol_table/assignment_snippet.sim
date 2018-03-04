@@ -1,0 +1,7 @@
+PROGRAM X;
+  CONST a = 47;
+  VAR i: INTEGER;
+  TYPE X = RECORD
+    a, b: ARRAY 7 OF INTEGER;
+  END;
+END X.

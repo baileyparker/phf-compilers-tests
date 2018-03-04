@@ -41,6 +41,8 @@ class TestLintFixtures(TestCase):
                       .format('\n'.join("\t{} and {}".format(a, b)
                                         for a, b in duplicates)))
 
+    # TODO: ensure ST files don't have 5's replaced  # pylint: disable=W0511
+
 
 if __name__ == '__main__':
     main()

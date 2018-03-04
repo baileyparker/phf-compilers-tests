@@ -1,0 +1,4 @@
+PROGRAM bar;
+    TYPE A = INTEGER;
+    VAR A : INTEGER;
+END bar.

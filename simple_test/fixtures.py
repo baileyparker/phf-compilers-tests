@@ -94,15 +94,17 @@ def discover_fixtures() -> List[Fixture]:
     sim_files = set()  # type: Set[Path]
 
     for path in filter(lambda p: p.name[0] != '.', FIXTURES.glob('**/*')):
-        assert path.suffix != '', "unexpected fixture file: {}".format(path)
+        if path.is_file():  # TODO: test this!  # pylint: disable=W0511
+            assert path.suffix != '', \
+                "unexpected fixture file: {}".format(path)
 
-        # Organize phase tests by their associated .sim file
-        if path.suffix != '.sim':
-            phase_files[path.with_suffix('.sim')].append(path)
+            # Organize phase tests by their associated .sim file
+            if path.suffix != '.sim':
+                phase_files[path.with_suffix('.sim')].append(path)
 
-        # Keep track of sim files (see assertions below)
-        if path.suffix == '.sim':
-            sim_files.add(path)
+            # Keep track of sim files (see assertions below)
+            if path.suffix == '.sim':
+                sim_files.add(path)
 
     # Every fixture not ending in .sim, must have a corresponding .sim file (of
     # the same name, just with the extension changed to .sim). This is an easy

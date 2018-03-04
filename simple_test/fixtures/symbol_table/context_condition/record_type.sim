@@ -1,0 +1,7 @@
+PROGRAM recordTypeMustBeType;
+    CONST x = 42;
+    VAR xs : RECORD
+        valid, yep : INTEGER;
+        whoa : x;
+    END;
+END recordTypeMustBeType.

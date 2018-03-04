@@ -69,7 +69,10 @@ class PhaseTestBase(TestCase):
         with self.assertRaises(AssertionError):
             phase_file = fixture.phase_file
             stdout = phase_file.stdout
-            bad_stdout = chr((ord(stdout[0]) + 1) % 128) + stdout[1:]
+            try:
+                bad_stdout = chr((ord(stdout[0]) + 1) % 128) + stdout[1:]
+            except IndexError:
+                bad_stdout = 'a'
 
             stderr = 'error: \n' if phase_file.has_error else ''
 

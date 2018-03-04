@@ -1,0 +1,4 @@
+PROGRAM arrayTypeMustBeType;
+    VAR x : INTEGER;
+    VAR xs : ARRAY 7 OF x;
+END arrayTypeMustBeType.

@@ -1,0 +1,204 @@
+Program
+  PROGRAM@(53, 59)
+  identifier<Random>@(61, 66)
+  ;@(67, 67)
+  Declarations
+    ConstDecl
+      CONST@(69, 73)
+      identifier<a>@(77, 77)
+      =@(79, 79)
+      Expression
+        Term
+          Factor
+            integer<16807>@(81, 85)
+      ;@(86, 86)
+      identifier<m>@(90, 90)
+      =@(92, 92)
+      Expression
+        Term
+          Factor
+            integer<2147483647>@(94, 103)
+      ;@(104, 104)
+      identifier<q>@(108, 108)
+      =@(110, 110)
+      Expression
+        Term
+          Factor
+            Designator
+              identifier<m>@(112, 112)
+              Selector
+          DIV@(114, 116)
+          Factor
+            Designator
+              identifier<a>@(118, 118)
+              Selector
+      ;@(119, 119)
+      identifier<r>@(123, 123)
+      =@(125, 125)
+      Expression
+        Term
+          Factor
+            Designator
+              identifier<m>@(127, 127)
+              Selector
+          MOD@(129, 131)
+          Factor
+            Designator
+              identifier<a>@(133, 133)
+              Selector
+      ;@(134, 134)
+    VarDecl
+      VAR@(136, 138)
+      IdentifierList
+        identifier<Z>@(142, 142)
+      :@(143, 143)
+      Type
+        identifier<INTEGER>@(145, 151)
+      ;@(152, 152)
+      IdentifierList
+        identifier<g>@(167, 167)
+      :@(168, 168)
+      Type
+        identifier<INTEGER>@(170, 176)
+      ;@(177, 177)
+  BEGIN@(195, 199)
+  Instructions
+    Instruction
+      Assign
+        Designator
+          identifier<Z>@(203, 203)
+          Selector
+        :=@(205, 206)
+        Expression
+          Term
+            Factor
+              integer<1>@(208, 208)
+    ;@(209, 209)
+    Instruction
+      While
+        WHILE@(232, 236)
+        Condition
+          Expression
+            Term
+              Factor
+                integer<0>@(238, 238)
+          =@(240, 240)
+          Expression
+            Term
+              Factor
+                integer<0>@(242, 242)
+        DO@(244, 245)
+        Instructions
+          Instruction
+            Assign
+              Designator
+                identifier<g>@(291, 291)
+                Selector
+              :=@(293, 294)
+              Expression
+                Term
+                  Factor
+                    Designator
+                      identifier<a>@(296, 296)
+                      Selector
+                  *@(297, 297)
+                  Factor
+                    (@(298, 298)
+                    Expression
+                      Term
+                        Factor
+                          Designator
+                            identifier<Z>@(299, 299)
+                            Selector
+                        MOD@(301, 303)
+                        Factor
+                          Designator
+                            identifier<q>@(305, 305)
+                            Selector
+                    )@(306, 306)
+                -@(308, 308)
+                Term
+                  Factor
+                    Designator
+                      identifier<r>@(310, 310)
+                      Selector
+                  *@(311, 311)
+                  Factor
+                    (@(312, 312)
+                    Expression
+                      Term
+                        Factor
+                          Designator
+                            identifier<Z>@(313, 313)
+                            Selector
+                        DIV@(315, 317)
+                        Factor
+                          Designator
+                            identifier<q>@(319, 319)
+                            Selector
+                    )@(320, 320)
+          ;@(321, 321)
+          Instruction
+            If
+              IF@(327, 328)
+              Condition
+                Expression
+                  Term
+                    Factor
+                      Designator
+                        identifier<g>@(330, 330)
+                        Selector
+                >@(332, 332)
+                Expression
+                  Term
+                    Factor
+                      integer<0>@(334, 334)
+              THEN@(336, 339)
+              Instructions
+                Instruction
+                  Assign
+                    Designator
+                      identifier<Z>@(341, 341)
+                      Selector
+                    :=@(343, 344)
+                    Expression
+                      Term
+                        Factor
+                          Designator
+                            identifier<g>@(346, 346)
+                            Selector
+              ELSE@(348, 351)
+              Instructions
+                Instruction
+                  Assign
+                    Designator
+                      identifier<Z>@(353, 353)
+                      Selector
+                    :=@(355, 356)
+                    Expression
+                      Term
+                        Factor
+                          Designator
+                            identifier<g>@(358, 358)
+                            Selector
+                      +@(360, 360)
+                      Term
+                        Factor
+                          Designator
+                            identifier<m>@(362, 362)
+                            Selector
+              END@(364, 366)
+          ;@(367, 367)
+          Instruction
+            Write
+              WRITE@(400, 404)
+              Expression
+                Term
+                  Factor
+                    Designator
+                      identifier<Z>@(406, 406)
+                      Selector
+        END@(410, 412)
+  END@(414, 416)
+  identifier<Random>@(418, 423)
+  .@(424, 424)

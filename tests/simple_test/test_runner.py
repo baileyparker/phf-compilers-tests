@@ -4,7 +4,8 @@ from subprocess import CompletedProcess, DEVNULL, PIPE
 from unittest import main, TestCase
 from unittest.mock import MagicMock, Mock, patch
 
-from simple_test.runner import run_simple_scanner, run_simple_cst
+from simple_test.runner import run_simple_scanner, run_simple_cst, \
+    run_simple_symbol_table
 
 
 PREFIX = 'simple_test.runner'
@@ -16,6 +17,9 @@ class TestRunner(TestCase):
 
     def test_run_simple_cst(self):
         self.assertRunsSimple(run_simple_cst, ['-c'])
+
+    def test_run_simple_symbol_table(self):
+        self.assertRunsSimple(run_simple_symbol_table, ['-t'])
 
     def assertRunsSimple(self, runner, args):
         with patch("{}.run".format(PREFIX)) as self.subprocess_run, \

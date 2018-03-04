@@ -2,6 +2,7 @@
 
 from contextlib import contextmanager
 from difflib import unified_diff as _unified_diff
+import re
 from typing import Generator
 
 
@@ -59,3 +60,9 @@ def _red(text: str) -> str:
 
 def _blue(text: str) -> str:
     return "\033[1;34m{}\033[0;0m".format(text)
+
+
+def replace_values_with_fives(symbol_table_output: str) -> str:
+    """Replaces all INTEGER values in symbol table output with 5's."""
+    return re.sub(r'^(( *)(value|length):)$\n\2  (\d+)', r'\1\n\2  5',
+                  symbol_table_output, flags=re.MULTILINE)

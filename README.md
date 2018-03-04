@@ -64,7 +64,7 @@ that provide input to the compiler and describe the expected output:
 
   1. A `*.sim` file (called the **input file**) that will be given to the
      compiler under test
-  2. A `*.{scanner|cst}` file (called the **phase file**) that described what
+  2. A `*.{scanner|cst|st}` file (called the **phase file**) that described what
      the expected output of running the compiler under test in the phase
      described by its file extension against the `*.sim` file of the same name
 
@@ -82,6 +82,8 @@ the compiler in from the extension of the second file, currently the phases are:
 
   - `*.scanner` - `./sc -s`
   - `*.cst` - `./sc -c`
+  - `*.st` - `./sc -t` (**do not** replace all `INTEGER` values with `5`s in
+    these files!)
 
 More will be added with future assignments.
 

@@ -1,0 +1,4 @@
+PROGRAM earlyUseType;
+  VAR homeTeam : score;
+  TYPE score : INTEGER;
+END earlyUseType.

@@ -1,0 +1,6 @@
+PROGRAM shadow;
+VAR kerfuffle : INTEGER;
+VAR shadowScope : RECORD
+    kerfuffle : ARRAY 22 OF INTEGER;
+END;
+END shadow.
