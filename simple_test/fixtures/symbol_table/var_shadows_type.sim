@@ -1,0 +1,7 @@
+PROGRAM varShadowsType;
+    TYPE int = INTEGER;
+    VAR foo : RECORD
+        int : int;
+        b : int; (* error here: int is VAR *)
+    END;
+END varShadowsType.

@@ -1,0 +1,7 @@
+PROGRAM varUnshadowsAfterRecord;
+    TYPE int = INTEGER;
+    VAR foo : RECORD
+        int : int;
+    END;
+    VAR b : int;
+END varUnshadowsAfterRecord.

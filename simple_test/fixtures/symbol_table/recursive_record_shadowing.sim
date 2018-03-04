@@ -1,0 +1,11 @@
+PROGRAM recursiveShadowing;
+
+TYPE A = INTEGER;
+TYPE B = RECORD
+  A : A;
+  B : RECORD
+    B : A; (* error here: A is VAR from outer scope *)
+  END;
+END;
+
+END recursiveShadowing.

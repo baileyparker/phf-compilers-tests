@@ -1,0 +1,6 @@
+PROGRAM varDoesNotShadowType;
+    TYPE int = INTEGER;
+    VAR foo : RECORD
+        int, b : int;
+    END;
+END varDoesNotShadowType.
