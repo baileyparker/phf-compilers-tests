@@ -53,43 +53,54 @@ class TestPhaseFile(TestCase):
         self.assertEqual(has_error, phase_file.has_error)
 
 
+class PathMock(type(Path('.'))):
+    def __init__(self, _, is_file=True):
+        self._is_file = is_file
+
+    def is_file(self):
+        return self._is_file
+
+
 class TestDiscoverFixtures(TestCase):
     def test_discover_fixtures(self):
-        discovered = self.discover_fixtures([
-            Path('.gitkeep'),
-            Path('foo.sim'),
-            Path('foo.scanner'),
-            Path('foo.parser'),
-            Path('bar.sim'),
-            Path('bar.parser'),
-            Path('baz/foo.sim'),
-            Path('baz/foo.parser'),
-            Path('baz/foo.code_generator'),
-        ])
+        paths = [
+            PathMock('.gitkeep'),
+            PathMock('foo.sim'),
+            PathMock('foo.scanner'),
+            PathMock('foo.parser'),
+            PathMock('bar.sim'),
+            PathMock('bar.parser'),
+            PathMock('baz', is_file=False),
+            PathMock('baz/foo.sim'),
+            PathMock('baz/foo.parser'),
+            PathMock('baz/foo.code_generator'),
+        ]
+
+        discovered = self.discover_fixtures(paths)
 
         fixtures = [
-            Fixture(Path('foo.scanner')),
-            Fixture(Path('foo.parser')),
-            Fixture(Path('bar.parser')),
-            Fixture(Path('baz/foo.parser')),
-            Fixture(Path('baz/foo.code_generator')),
+            Fixture(paths[2]),
+            Fixture(paths[3]),
+            Fixture(paths[5]),
+            Fixture(paths[8]),
+            Fixture(paths[9]),
         ]
 
         self.assertCountEqual(fixtures, discovered)
 
     def test_discover_fixtures_unexpected_file(self):
         with self.assertRaisesRegex(AssertionError, 'unexpected fixture file'):
-            self.discover_fixtures([Path('foo')])
+            self.discover_fixtures([PathMock('foo')])
 
     def test_discover_fixtures_sim_with_no_phases(self):
         error = r'\.sim files have no phases:\nfoo\.sim'
         with self.assertRaisesRegex(AssertionError, error):
-            self.discover_fixtures([Path('foo.sim')])
+            self.discover_fixtures([PathMock('foo.sim')])
 
     def test_discover_fixtures_phase_with_no_sim(self):
         error = r'\.sim files .* are missing:\nfoo\.sim'
         with self.assertRaisesRegex(AssertionError, error):
-            self.discover_fixtures([Path('foo.scanner')])
+            self.discover_fixtures([PathMock('foo.scanner')])
 
     def test_discover_fixtures_name_collision(self):
         error = \
@@ -97,10 +108,10 @@ class TestDiscoverFixtures(TestCase):
             r'(foo_bar\.sim and foo/bar\.sim|foo/bar\.sim and foo_bar\.sim)'
         with self.assertRaisesRegex(AssertionError, error):
             self.discover_fixtures([
-                Path('foo_bar.sim'),
-                Path('foo_bar.scanner'),
-                Path('foo/bar.sim'),
-                Path('foo/bar.scanner'),
+                PathMock('foo_bar.sim'),
+                PathMock('foo_bar.scanner'),
+                PathMock('foo/bar.sim'),
+                PathMock('foo/bar.scanner'),
             ])
 
     def discover_fixtures(self, files):

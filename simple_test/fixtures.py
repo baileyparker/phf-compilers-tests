@@ -94,7 +94,7 @@ def discover_fixtures() -> List[Fixture]:
     sim_files = set()  # type: Set[Path]
 
     for path in filter(lambda p: p.name[0] != '.', FIXTURES.glob('**/*')):
-        if path.is_file():  # TODO: test this!  # pylint: disable=W0511
+        if path.is_file():
             assert path.suffix != '', \
                 "unexpected fixture file: {}".format(path)
 
