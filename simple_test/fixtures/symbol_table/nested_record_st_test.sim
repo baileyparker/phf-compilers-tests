@@ -1,0 +1,15 @@
+PROGRAM X;
+  TYPE b = INTEGER;
+  CONST a = 47;
+  VAR i: INTEGER;
+  VAR x: b;
+  VAR q: ARRAY 12 OF INTEGER;
+  TYPE f = ARRAY 55 OF INTEGER;
+  TYPE X = RECORD
+    a, b: ARRAY 7 OF INTEGER;
+    c, d: RECORD
+      a: INTEGER;
+      b: ARRAY 14 OF INTEGER;
+    END;
+  END;
+END X.
