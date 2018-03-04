@@ -1,0 +1,12 @@
+PROGRAM X;
+CONST s = 47;
+TYPE R = RECORD
+ a, b : RECORD
+   a, x : INTEGER;
+   END;
+ q : ARRAY 5 OF INTEGER;
+ END;
+A = ARRAY 5+1 OF RECORD
+ x : R;
+ END;
+END X.
