@@ -58,6 +58,20 @@ $ ./integration_tests/bin/run_harness scanner ast
 
 #### Optional Flags
 
+##### Skipping Semantically Invalid CST Fixtures
+For assignments after the CST, if your compiler is implemented in such a way
+that even if the `-c` is passed the semantic analysis (symbol table and AST)
+are still run, those later phases may find semantic errors in a CST fixture
+(that alone would pass `-c`, because it is syntactically valid, but would fail
+semantic analysis and thus fail the test). Although you should design your
+compiler in a way that these phases can be turned off, that may be more trouble
+than it's worth. So, to prevent false negatives, pass `--skip-cst-passes`
+(after the CST assignment):
+
+```
+$ ./integration_tests/bin/run_harness --skip-cst-passes
+```
+
 ##### Symbol Table `5`s
 For the Symbol Table assignment (before the AST assignment), your symbol table
 should replace all constant integer values with `5`. But then for the AST

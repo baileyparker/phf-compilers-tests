@@ -36,6 +36,9 @@ ALL_TESTS = OrderedDict([('scanner', TestScanner),
 
 class TestMain(TestCase):
     def setUp(self):
+        self.reset_mocks()
+
+    def reset_mocks(self):
         for test_case in ALL_TESTS.values():
             test_case.reset_mock()
 
@@ -75,10 +78,13 @@ class TestMain(TestCase):
         warn.assert_called_once_with(msg, DeprecationWarning)
 
     def test_main_extra_args_passed_to_tests(self):
-        extra_args = [(['--st-all-fives'], {'st_all_fives': True})]
+        extra_args = [(['--st-all-fives'], {'st_all_fives': True}),
+                      (['--skip-cst-passes'], {'skip_cst_passes': True})]
 
         for args, config in extra_args:
-            self.assertMainRunsTests(args=args, config=config)
+            with self.subTest(' '.join(args)):
+                self.assertMainRunsTests(args=args, config=config)
+                self.reset_mocks()
 
     def assertMainFailsWithStderr(self, stderr, *args, **kwargs):
         f = io.StringIO()

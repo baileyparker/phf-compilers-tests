@@ -67,6 +67,14 @@ def _get_args() -> Namespace:
                              'symbol table tests (useful for ST assignment '
                              'before the AST, when constant folding is added)')
 
+    parser.add_argument('--skip-cst-passes', action='store_const', const=True,
+                        help='If you have implemented your Symbol Table and '
+                             'AST assignments such that the symbol table and '
+                             'AST parts still run for -c, then some of the '
+                             'CST tests (which are syntactically but not '
+                             'semantically valid) will fail. This flag skips '
+                             'these potentially misleading tests.')
+
     # We are unable to use choices here due to a longstanding bug in the
     # interaction between type, choices, nargs='*', and default=[]:
     # https://bugs.python.org/issue9625
