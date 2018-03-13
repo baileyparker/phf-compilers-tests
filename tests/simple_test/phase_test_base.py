@@ -1,13 +1,13 @@
 from collections import namedtuple
 from importlib import import_module
 import json
-from os import environ
 from pathlib import Path
 from shutil import copyfile, rmtree
 from tempfile import mkdtemp
 from unittest import TestCase
 
 from simple_test.fixtures import discover_fixtures
+from simple_test.runner import Runner
 
 
 class PhaseTestBase(TestCase):
@@ -131,7 +131,7 @@ class PhaseTestBase(TestCase):
         fqn = self.__class__.cases_under_test  # noqa  # pylint: disable=E1101
         cases_module, class_name = fqn.rsplit('.', 1)
         test_cases_class = getattr(import_module(cases_module), class_name)
-        test_cases = test_cases_class()
+        test_cases = test_cases_class(Runner(fake_compiler.sc_path))
 
         getattr(test_cases, "test_{}".format(fixture.name))()
 
@@ -167,11 +167,9 @@ class FakeCompilerContext:
 
         # Setup dummy compiler
         directory = (Path(__file__) / '..').resolve()  # pylint: disable=E1101
-        sc_path = self.directory / 'sc'
-        copyfile(str(directory / 'dummy_compiler.py'), str(sc_path))
-        sc_path.chmod(0o755)  # pylint: disable=E1101
-        self.old_sc = environ.get('SC', None)
-        environ['SC'] = str(sc_path)
+        self.sc_path = self.directory / 'sc'
+        copyfile(str(directory / 'dummy_compiler.py'), str(self.sc_path))
+        self.sc_path.chmod(0o755)  # pylint: disable=E1101
 
         # Paths to input/output files for dummy compiler
         self.arguments_files = [
@@ -241,9 +239,4 @@ class FakeCompilerContext:
             return FakeCompilerCall(json.load(args_f), stdin_f.read())
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        if self.old_sc:
-            environ['SC'] = self.old_sc
-        else:
-            del environ['SC']
-
         rmtree(str(self.directory))

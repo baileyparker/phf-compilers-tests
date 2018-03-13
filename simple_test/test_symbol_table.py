@@ -1,18 +1,24 @@
 """Tests for the symbol table phase of the simple compiler."""
 
+from pathlib import Path
 from unittest import main
 
 from simple_test.fixtured_test_case import FixturedTestCase
 from simple_test.fixtures import PhaseFile
-from simple_test.runner import Result, run_simple_symbol_table  # noqa:  # pylint: disable=W0611
+from simple_test.runner import Result
 from simple_test.utils import replace_values_with_fives
 
 
-class TestSymbolTable(FixturedTestCase,
-                      phase_name='st', run_simple=run_simple_symbol_table):
+class TestSymbolTable(FixturedTestCase, phase_name='st'):
     """Tests for the symbol table phase of the simple compiler."""
 
     # TODO: randomized fuzzing tests  # pylint: disable=W0511
+
+    def run_phase(self, sim_file: Path, as_stdin: bool = False) -> Result:
+        """
+        Run the symbol table phase of the simple compiler.
+        """
+        return self.runner.run_symbol_table(sim_file, as_stdin)
 
     def assertFixtureStdout(self, expected: PhaseFile, result: Result) -> None:
         """Assert the stdout from the simple compiler matches the expected."""

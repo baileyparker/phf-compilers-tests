@@ -1,6 +1,4 @@
 #!/bin/sh
 
 root="$(dirname "$0")/..";
-PYTHONPATH="$root" exec python3 -m unittest simple_test.test_scanner      \
-                                            simple_test.test_cst          \
-                                            simple_test.test_symbol_table
+PYTHONPATH="$root" exec python3 -m simple_test.main

@@ -22,12 +22,14 @@ class TestFixturedTestCase(TestCase):
 
             discover_fixtures.return_value = fixtures
 
-            class DummyTestCase(FixturedTestCase,
-                                phase_name='foo', run_simple=runner):
-                pass
+            class DummyTestCase(FixturedTestCase, phase_name='foo'):
+                def run_phase(self, sim_file, as_stdin=False):
+                    return self.runner.foo(sim_file, as_stdin)
 
             # Assert test methods were added for each fixture (for that phase)
-            test_case = DummyTestCase()
+            test_case = DummyTestCase(runner)
+
+            self.assertEqual(runner, test_case.runner)
             self.assertHasMethod('test_bar', test_case)
             self.assertHasMethod('test_cat', test_case)
 
@@ -35,13 +37,11 @@ class TestFixturedTestCase(TestCase):
             test_case.assertFixture = Mock()
 
             test_case.test_bar()  # pylint: disable=E1101
-            test_case.assertFixture.assert_called_once_with(fixtures[0],
-                                                            runner)
+            test_case.assertFixture.assert_called_once_with(fixtures[0])
             test_case.assertFixture.reset_mock()
 
             test_case.test_cat()  # pylint: disable=E1101
-            test_case.assertFixture.assert_called_once_with(fixtures[2],
-                                                            runner)
+            test_case.assertFixture.assert_called_once_with(fixtures[2])
             test_case.assertFixture.reset_mock()
 
     def test_subclassing_with_method_name_collision(self):
@@ -50,16 +50,18 @@ class TestFixturedTestCase(TestCase):
             fixtures = [
                 _make_fixture(name='foo', phase_name='bar'),
             ]
-            runner = Mock()  # pylint: disable=W0612
 
             discover_fixtures.return_value = fixtures
 
             error = r'replace existing test method: test_foo'
             with self.assertRaisesRegex(AssertionError, error):
                 class DummyTestCase(FixturedTestCase,  # noqa  # pylint: disable=W0612
-                                    phase_name='bar', run_simple=runner):
+                                    phase_name='bar'):
                     def test_foo(self):
                         pass
+
+                    def run_phase(self, sim_file, as_stdin=False):
+                        raise NotImplementedError
 
     def assertHasMethod(self, name, obj):
         if not callable(getattr(obj, name, None)):
@@ -75,7 +77,9 @@ def _make_fixture(name, phase_name):
 
 class TestFixturedTestCaseAssertions(TestCase):
     def setUp(self):
-        self.test_case = FixturedTestCase()
+        self.runner = Mock()
+        self.test_case = FixturedTestCase(self.runner)
+        self.test_case.run_phase = self.test_case.runner.foo
 
         self.sim_file_path = Mock()
         self.expected_stdout = Mock()
@@ -89,7 +93,6 @@ class TestFixturedTestCaseAssertions(TestCase):
 
         self.fixture = Mock(autospec=Fixture, sim_file_path=self.sim_file_path,
                             phase_file=self.phase_file)
-        self.runner = Mock()
 
         self.stdout.decode.return_value = self.stdout_str
         self.stderr.decode.return_value = self.stderr_str
@@ -98,30 +101,31 @@ class TestFixturedTestCaseAssertions(TestCase):
         self.test_case.assertFixtureAsArgument = Mock()
         self.test_case.assertFixtureAsStdin = Mock()
 
-        self.test_case.assertFixture(self.fixture, self.runner)
+        self.test_case.assertFixture(self.fixture)
 
         self.test_case.assertFixtureAsArgument \
-            .assert_called_once_with(self.fixture, self.runner)
-        self.test_case.assertFixtureAsStdin. \
-            assert_called_once_with(self.fixture, self.runner)
+            .assert_called_once_with(self.fixture)
+        self.test_case.assertFixtureAsStdin \
+            .assert_called_once_with(self.fixture)
 
     def test_assertFixtureAsArgument(self):
-        self.runner.return_value = self.result
+        self.runner.foo.return_value = self.result
         self.test_case.assertFixtureOutput = Mock()
 
-        self.test_case.assertFixtureAsArgument(self.fixture, self.runner)
+        self.test_case.assertFixtureAsArgument(self.fixture)
 
-        self.runner.assert_called_once_with(self.sim_file_path)
+        self.runner.foo.assert_called_once_with(self.sim_file_path)
         self.test_case.assertFixtureOutput. \
             assert_called_once_with(self.phase_file, self.result)
 
     def test_assertFixtureAsStdin(self):
-        self.runner.return_value = self.result
+        self.runner.foo.return_value = self.result
         self.test_case.assertFixtureOutput = Mock()
 
-        self.test_case.assertFixtureAsStdin(self.fixture, self.runner)
+        self.test_case.assertFixtureAsStdin(self.fixture)
 
-        self.runner.assert_called_once_with(self.sim_file_path, as_stdin=True)
+        self.runner.foo.assert_called_once_with(self.sim_file_path,
+                                                as_stdin=True)
         self.test_case.assertFixtureOutput \
             .assert_called_once_with(self.phase_file, self.result)
 

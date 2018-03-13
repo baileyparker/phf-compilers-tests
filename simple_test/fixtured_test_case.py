@@ -1,20 +1,21 @@
 """Base class for test harness TestCases that have fixtures."""
 
 # pylint: disable=C0103
+from pathlib import Path
 import sys
 from typing import Callable
-from unittest import TestCase
 
-from simple_test.runner import SimpleRunner, Result
 from simple_test.fixtures import Fixture, PhaseFile, discover_fixtures
+from simple_test.runner import Result
+from simple_test.test_case import TestCase
 from simple_test.utils import assertion_context, unified_diff
 
 
 TestMethod = Callable[['FixturedTestCase'], None]
 
 
-def _create_test_method(fixture: Fixture, runner: SimpleRunner) -> TestMethod:
-    return lambda self: self.assertFixture(fixture, runner)
+def _create_test_method(fixture: Fixture) -> TestMethod:
+    return lambda self: self.assertFixture(fixture)
 
 
 if sys.version_info < (3, 6):  # pragma: no cover
@@ -74,8 +75,7 @@ class FixturedTestCase(TestCase, metaclass=_PEP487):
     calling the provided run_simple function).
     """
     @classmethod
-    def __init_subclass__(cls, phase_name: str,
-                          run_simple: SimpleRunner) -> None:
+    def __init_subclass__(cls, phase_name: str) -> None:
         # NOTE: See above, the metaclass hackey to add PEP487 support to python
         #       does not provide a super().__init_subclass__()
         # super().__init_subclass__()
@@ -83,7 +83,7 @@ class FixturedTestCase(TestCase, metaclass=_PEP487):
         # Add the test_{fixture.name} methods for each fixture discovered
         for fixture in discover_fixtures():
             if fixture.phase_name == phase_name:
-                test_method = _create_test_method(fixture, run_simple)
+                test_method = _create_test_method(fixture)
                 method_name = "test_{}".format(fixture.name)
                 test_method.__name__ = method_name
 
@@ -93,31 +93,35 @@ class FixturedTestCase(TestCase, metaclass=_PEP487):
 
                 setattr(cls, method_name, test_method)
 
-    def assertFixture(self, fixture: Fixture, runner: SimpleRunner) -> None:
+    def run_phase(self, sim_file: Path, as_stdin: bool = False) -> Result:
+        """
+        Run the appropriate phase of the simple compiler for this test case.
+        """
+        raise NotImplementedError
+
+    def assertFixture(self, fixture: Fixture) -> None:
         """
         Asserts that the simple compiler when run under the fixture's phase and
         given the fixture's sim file produces the expected output.
         """
-        self.assertFixtureAsArgument(fixture, runner)
-        self.assertFixtureAsStdin(fixture, runner)
+        self.assertFixtureAsArgument(fixture)
+        self.assertFixtureAsStdin(fixture)
 
-    def assertFixtureAsArgument(self, fixture: Fixture,
-                                runner: SimpleRunner) -> None:
+    def assertFixtureAsArgument(self, fixture: Fixture) -> None:
         """
         Asserts that the simple compiler when run under the fixture's phase and
         given the fixture's sim file as an argument produces the expected
         output.
         """
-        result = runner(fixture.sim_file_path)
+        result = self.run_phase(fixture.sim_file_path)
         self.assertFixtureOutput(fixture.phase_file, result)
 
-    def assertFixtureAsStdin(self, fixture: Fixture,
-                             runner: SimpleRunner) -> None:
+    def assertFixtureAsStdin(self, fixture: Fixture) -> None:
         """
         Asserts that the simple compiler when run under the fixture's phase and
         given the fixture's sim file as stdin produces the expected output.
         """
-        result = runner(fixture.sim_file_path, as_stdin=True)  # type: ignore
+        result = self.run_phase(fixture.sim_file_path, as_stdin=True)
         self.assertFixtureOutput(fixture.phase_file, result)
 
     def assertFixtureOutput(self, expected: PhaseFile, result: Result) -> None:

@@ -16,7 +16,8 @@ class TestLint(TestCase):
         errors = [
             *get_flake8_errors(),
             *get_pylint_errors('simple_test', 'setup.py'),
-            *get_pylint_errors('--disable=C0111,C0103,R0201,R0902,W0201',
+            *get_pylint_errors('--disable=C0111,C0103,R0201,R0902,R0913,'
+                               'R0914,W0201',
                                '--method-rgx=[a-z_][a-z0-9_]{2,50}',
                                'tests')
         ]

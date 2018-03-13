@@ -12,11 +12,10 @@ $ ./integration_tests/bin/run_harness
 
 The second command will run the test harness against the `./sc` compiler. If
 you can't run your compiler with `./sc` from the current directory you can
-pass in the `SC` environment variable to let the tests know where your
-compiler is:
+add the `--sc` argument to let the test harness know where your compiler is:
 
 ```
-$ SC=../../path/to/my/sc ./integration_tests/bin/run_harness
+$ ./integration_tests/bin/run_harness --sc ../../path/to/my/sc
 ```
 
 For convenience, I recommend adding a target to your `Makefile` to run this:
@@ -40,6 +39,21 @@ This repo's `master` should always be safe, so you can just pull:
 $ git -C 'integration_tests' pull origin master
 ```
 
+
+### Advanced Usage
+
+You can run the test suites for only certain phases of the compiler by
+specifying them as arguments to `run_harness`. The phases so far are:
+
+  - `scanner`
+  - `cst`
+  - `st` (symbol table)
+
+For example, to run just the scanner and symbol table:
+
+```
+$ ./integration_tests/bin/run_harness scanner st
+```
 
 ## Contributing New Test Cases
 
