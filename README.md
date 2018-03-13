@@ -195,6 +195,23 @@ To get test coverage reports:
 $ pipenv run python3 setup.py coverage
 ```
 
+To ensure the test harness really works, there are some very comprehensive
+integration tests that test all components together against a faked compiler.
+This, of course, involves a lot of file I/O and takes a decent amount of time
+to run (about 30 seconds on a 2017 MBP). You can of course run tests
+individually with (for example):
+
+```
+$ pipenv run python3 -m tests.simple_test.test_main
+```
+
+But you can also pass the environment variable `SLOW_TESTS=0` to exclude these
+slow integration tests (as well as linting, which also takes a few seconds):
+
+```
+$ SLOW_TESTS=0 pipenv run python3 setup.py coverage
+```
+
 
 ## Requirements
 

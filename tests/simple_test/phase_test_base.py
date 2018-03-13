@@ -11,6 +11,7 @@ from unittest.mock import call
 
 from simple_test.fixtures import discover_fixtures
 from simple_test.runner import Runner
+from tests.utils import slow_test
 
 
 class PhaseTestBase(TestCase):
@@ -21,6 +22,7 @@ class PhaseTestBase(TestCase):
     (has stdout and stderr that are mocked and reports the arguments and stdin
     it receives) against a TestCase.
     """
+    @slow_test
     def test_tests_pass_for_dummy_compiler(self):
         # unittest discover will pick up this base class, so we skip it when it
         # is run to prevent any errors from uninitialized properties

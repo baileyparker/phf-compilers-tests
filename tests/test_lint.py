@@ -6,12 +6,14 @@ from subprocess import run, PIPE
 from unittest import main, TestCase
 
 from flake8.api.legacy import get_style_guide
+from tests.utils import slow_test
 
 
 REPO_ROOT = (Path(__file__) / '..' / '..').resolve()
 
 
 class TestLint(TestCase):
+    @slow_test
     def test_lint(self):
         errors = [
             *get_flake8_errors(),
