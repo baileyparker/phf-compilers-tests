@@ -16,6 +16,7 @@ from simple_test.runner import Runner, BinaryNotFoundError, \
 from simple_test.test_scanner import TestScanner
 from simple_test.test_cst import TestCST
 from simple_test.test_symbol_table import TestSymbolTable
+from simple_test.test_ast import TestAST
 
 
 class Phase(Enum):
@@ -23,6 +24,7 @@ class Phase(Enum):
     SCANNER = TestScanner
     CST = TestCST
     ST = TestSymbolTable
+    AST = TestAST
 
     def __call__(self, *args: Any, **kwargs: Any) -> TestCase:
         return cast(TestCase, self.value(*args, **kwargs))

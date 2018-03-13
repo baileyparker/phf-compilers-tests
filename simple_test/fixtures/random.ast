@@ -1,0 +1,200 @@
+instructions =>
+  Assign:
+  location =>
+    Variable:
+    variable =>
+      VAR BEGIN
+        type:
+          INTEGER
+      END VAR
+  expression =>
+    Number:
+    value =>
+      CONST BEGIN
+        type:
+          INTEGER
+        value:
+          1
+      END CONST
+  If:
+  condition =>
+    Condition (=):
+    left =>
+      Number:
+      value =>
+        CONST BEGIN
+          type:
+            INTEGER
+          value:
+            0
+        END CONST
+    right =>
+      Number:
+      value =>
+        CONST BEGIN
+          type:
+            INTEGER
+          value:
+            0
+        END CONST
+  true =>
+    Repeat:
+    condition =>
+      Condition (#):
+      left =>
+        Number:
+        value =>
+          CONST BEGIN
+            type:
+              INTEGER
+            value:
+              0
+          END CONST
+      right =>
+        Number:
+        value =>
+          CONST BEGIN
+            type:
+              INTEGER
+            value:
+              0
+          END CONST
+    instructions =>
+      Assign:
+      location =>
+        Variable:
+        variable =>
+          VAR BEGIN
+            type:
+              INTEGER
+          END VAR
+      expression =>
+        Binary (-):
+        left =>
+          Binary (*):
+          left =>
+            Number:
+            value =>
+              CONST BEGIN
+                type:
+                  INTEGER
+                value:
+                  16807
+              END CONST
+          right =>
+            Binary (MOD):
+            left =>
+              Variable:
+              variable =>
+                VAR BEGIN
+                  type:
+                    INTEGER
+                END VAR
+            right =>
+              Number:
+              value =>
+                CONST BEGIN
+                  type:
+                    INTEGER
+                  value:
+                    127773
+                END CONST
+        right =>
+          Binary (*):
+          left =>
+            Number:
+            value =>
+              CONST BEGIN
+                type:
+                  INTEGER
+                value:
+                  2836
+              END CONST
+          right =>
+            Binary (DIV):
+            left =>
+              Variable:
+              variable =>
+                VAR BEGIN
+                  type:
+                    INTEGER
+                END VAR
+            right =>
+              Number:
+              value =>
+                CONST BEGIN
+                  type:
+                    INTEGER
+                  value:
+                    127773
+                END CONST
+      If:
+      condition =>
+        Condition (>):
+        left =>
+          Variable:
+          variable =>
+            VAR BEGIN
+              type:
+                INTEGER
+            END VAR
+        right =>
+          Number:
+          value =>
+            CONST BEGIN
+              type:
+                INTEGER
+              value:
+                0
+            END CONST
+      true =>
+        Assign:
+        location =>
+          Variable:
+          variable =>
+            VAR BEGIN
+              type:
+                INTEGER
+            END VAR
+        expression =>
+          Variable:
+          variable =>
+            VAR BEGIN
+              type:
+                INTEGER
+            END VAR
+      false =>
+        Assign:
+        location =>
+          Variable:
+          variable =>
+            VAR BEGIN
+              type:
+                INTEGER
+            END VAR
+        expression =>
+          Binary (+):
+          left =>
+            Variable:
+            variable =>
+              VAR BEGIN
+                type:
+                  INTEGER
+              END VAR
+          right =>
+            Number:
+            value =>
+              CONST BEGIN
+                type:
+                  INTEGER
+                value:
+                  2147483647
+              END CONST
+      Write:
+      expression =>
+        Variable:
+        variable =>
+          VAR BEGIN
+            type:
+              INTEGER
+          END VAR

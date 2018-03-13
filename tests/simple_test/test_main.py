@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from contextlib import contextmanager, redirect_stderr
 import io
 from pathlib import Path
@@ -15,7 +16,8 @@ PREFIX = 'simple_test.test_'
 
 with patch(PREFIX + 'scanner.TestScanner') as TestScanner, \
         patch(PREFIX + 'cst.TestCST') as TestCST, \
-        patch(PREFIX + 'symbol_table.TestSymbolTable') as TestSymbolTable:
+        patch(PREFIX + 'symbol_table.TestSymbolTable') as TestSymbolTable, \
+        patch(PREFIX + 'ast.TestAST') as TestAST:
     from simple_test.main import main
 
 
@@ -23,24 +25,25 @@ with patch(PREFIX + 'scanner.TestScanner') as TestScanner, \
 # These tests are a little fragile; forgetting to include one of these does not
 # cause code coverage to go down (same for optional args). Also spelling of
 # optional args is not enforced (either here or in the consuming TestCase).
-ALL_TESTS = [TestScanner, TestCST, TestSymbolTable]
+# It would be optimal to fail a test if forgotten test_*.py are found in
+# simple_test/. Similarly, a way to assert all optional args in main are tested
+# would be swell.
+ALL_TESTS = OrderedDict([('scanner', TestScanner),
+                         ('cst', TestCST),
+                         ('st', TestSymbolTable),
+                         ('ast', TestAST)])
 
 
 class TestMain(TestCase):
     def setUp(self):
-        TestScanner.reset_mock()
-        TestCST.reset_mock()
-        TestSymbolTable.reset_mock()
+        for test_case in ALL_TESTS.values():
+            test_case.reset_mock()
 
     def test_main_no_args_runs_everything_with_defaults(self):
         self.assertMainRunsTests()
 
     def test_main_single_test(self):
-        cases = {'scanner': TestScanner,
-                 'cst': TestCST,
-                 'st': TestSymbolTable}
-
-        for name, test_class in cases.items():
+        for name, test_class in ALL_TESTS.items():
             with self.subTest(name):
                 self.assertMainRunsTests(tests=[test_class], args=[name])
 
@@ -90,7 +93,7 @@ class TestMain(TestCase):
                             verbosity=1, config=None,
                             runner_create_raises=None, expect_exit=False):
         if tests is None:
-            tests = ALL_TESTS
+            tests = list(ALL_TESTS.values())
         if not args:
             args = []
         if not config:

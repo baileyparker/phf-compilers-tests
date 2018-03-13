@@ -65,6 +65,9 @@ class TestRunner(TestCase):
     def test_run_simple_symbol_table(self):
         self.assertRunsSimple(self.runner.run_symbol_table, ['-t'])
 
+    def test_run_simple_ast(self):
+        self.assertRunsSimple(self.runner.run_ast, ['-a'])
+
     def assertRunsSimple(self, runner, args):
         with patch("{}.run".format(PREFIX)) as self.subprocess_run, \
              patch("{}.shell_quote".format(PREFIX)) as self.shell_quote:

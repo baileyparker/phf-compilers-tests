@@ -48,11 +48,12 @@ specifying them as arguments to `run_harness`. The phases so far are:
   - `scanner`
   - `cst`
   - `st` (symbol table)
+  - `ast`
 
 For example, to run just the scanner and symbol table:
 
 ```
-$ ./integration_tests/bin/run_harness scanner st
+$ ./integration_tests/bin/run_harness scanner ast
 ```
 
 #### Optional Flags
@@ -91,8 +92,8 @@ that provide input to the compiler and describe the expected output:
 
   1. A `*.sim` file (called the **input file**) that will be given to the
      compiler under test
-  2. A `*.{scanner|cst|st}` file (called the **phase file**) that described what
-     the expected output of running the compiler under test in the phase
+  2. A `*.{scanner|cst|st|ast}` file (called the **phase file**) that described
+     what the expected output of running the compiler under test in the phase
      described by its file extension against the `*.sim` file of the same name
 
 In a line (*if you trust your compiler!*), a fixture for the scanner can be
@@ -111,6 +112,7 @@ the compiler in from the extension of the second file, currently the phases are:
   - `*.cst` - `./sc -c`
   - `*.st` - `./sc -t` (**do not** replace all `INTEGER` values with `5`s in
     these files!)
+  - `*.ast` - `./sc -a`
 
 More will be added with future assignments.
 

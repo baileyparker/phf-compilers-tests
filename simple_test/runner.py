@@ -56,6 +56,15 @@ class Runner:
         """
         return self._run(['-t'], sim_file, as_stdin)
 
+    def run_ast(self, sim_file: Path, as_stdin: bool = False) -> Result:
+        """
+        Run the AST phase of the simple compiler. If `as_stdin` is True, then
+        the `sim_file` will be fed into the stdin of the compiler. Otherwise,
+        `sim_file`'s path will be passed as the final argument to the compiler.
+        Returns a result containing the stdout and stderr.
+        """
+        return self._run(['-a'], sim_file, as_stdin)
+
     def _run(self, args: List[str], sim_file: Path,
              as_stdin: bool = False) -> Result:
         """

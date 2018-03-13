@@ -69,6 +69,9 @@ def is_pylint_error(line):
 
 
 def parse_lint_error(line):
+    # TODO  # pylint: disable=W0511
+    # Despite args, sometimes we get multiline errors (upon which this
+    # unpacking) fails. Ideally, we combine it with the last line.
     path, line, col, rest = line.split(':', 3)
     msg_letter, (msg_id, _) = rest[1], rest[2:].split(' ', 1)  # noqa: F841
     return (path, int(line), int(col), msg_letter, int(msg_id))
