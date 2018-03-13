@@ -1,0 +1,12 @@
+PROGRAM X;
+CONST
+  sz = 47;
+VAR
+  a: ARRAY sz OF INTEGER;
+  i: INTEGER;
+BEGIN
+  i := 0;
+  REPEAT
+    a[i] := 64738
+  UNTIL i >= sz END
+END X.
