@@ -19,6 +19,13 @@ with patch(PREFIX + 'scanner.TestScanner') as TestScanner, \
     from simple_test.main import main
 
 
+# TODO:  # pylint: disable=W0511
+# These tests are a little fragile; forgetting to include one of these does not
+# cause code coverage to go down (same for optional args). Also spelling of
+# optional args is not enforced (either here or in the consuming TestCase).
+ALL_TESTS = [TestScanner, TestCST, TestSymbolTable]
+
+
 class TestMain(TestCase):
     def setUp(self):
         TestScanner.reset_mock()
@@ -26,7 +33,7 @@ class TestMain(TestCase):
         TestSymbolTable.reset_mock()
 
     def test_main_no_args_runs_everything_with_defaults(self):
-        self.assertMainRunsTests(tests=[TestScanner, TestCST, TestSymbolTable])
+        self.assertMainRunsTests()
 
     def test_main_single_test(self):
         cases = {'scanner': TestScanner,
@@ -42,8 +49,7 @@ class TestMain(TestCase):
                                        args=['foo'])
 
     def test_main_with_sc_runs_everything(self):
-        self.assertMainRunsTests(tests=[TestScanner, TestCST, TestSymbolTable],
-                                 args=['--sc', 'other/sc'], sc='other/sc')
+        self.assertMainRunsTests(args=['--sc', 'other/sc'], sc='other/sc')
 
     def test_main_sc_not_exist_errors(self):
         error = BinaryNotFoundError('foo')
@@ -59,13 +65,17 @@ class TestMain(TestCase):
     @patch('simple_test.main.warn')
     def test_main_sc_env_var_deprecation(self, warn):
         with fake_environ({'SC': 'other/sc'}):
-            self.assertMainRunsTests(tests=[TestScanner, TestCST,
-                                            TestSymbolTable],
-                                     sc='other/sc')
+            self.assertMainRunsTests(sc='other/sc')
 
         msg = 'The SC environment variable is deprecated. ' \
               'Use: run_harness --sc other/sc'
         warn.assert_called_once_with(msg, DeprecationWarning)
+
+    def test_main_extra_args_passed_to_tests(self):
+        extra_args = [(['--st-all-fives'], {'st_all_fives': True})]
+
+        for args, config in extra_args:
+            self.assertMainRunsTests(args=args, config=config)
 
     def assertMainFailsWithStderr(self, stderr, *args, **kwargs):
         f = io.StringIO()
@@ -76,9 +86,11 @@ class TestMain(TestCase):
 
         self.assertIn(stderr, f.getvalue())
 
-    def assertMainRunsTests(self, tests, args=None, sc='./sc', verbosity=1,
-                            config=None, runner_create_raises=None,
-                            expect_exit=False):
+    def assertMainRunsTests(self, tests=None, args=None, sc='./sc',
+                            verbosity=1, config=None,
+                            runner_create_raises=None, expect_exit=False):
+        if tests is None:
+            tests = ALL_TESTS
         if not args:
             args = []
         if not config:

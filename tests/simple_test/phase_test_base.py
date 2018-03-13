@@ -1,10 +1,13 @@
+# pylint: disable=W0613
 from collections import namedtuple
 from importlib import import_module
 import json
 from pathlib import Path
+import re
 from shutil import copyfile, rmtree
 from tempfile import mkdtemp
 from unittest import TestCase
+from unittest.mock import call
 
 from simple_test.fixtures import discover_fixtures
 from simple_test.runner import Runner
@@ -24,6 +27,13 @@ class PhaseTestBase(TestCase):
         if type(self) == PhaseTestBase:  # pylint: disable=C0123
             return
 
+        assert hasattr(self, 'cases_under_test'), \
+            'specify cases_under_test in the PhaseTestBase child'
+        assert hasattr(self, 'phase_name'), \
+            'specify phase_name in the PhaseTestBase child'
+        assert hasattr(self, 'sc_args'), \
+            'specify sc_args in the PhaseTestBase child'
+
         with FakeCompilerContext() as fake_compiler:
             phase_name = self.phase_name  # noqa  # pylint: disable=E1101
             fixtures = [f for f in discover_fixtures()
@@ -33,39 +43,62 @@ class PhaseTestBase(TestCase):
                           "*.{} phase files in fixtures/"
                           .format(self.__class__.__name__, phase_name))
 
-            for fixture in fixtures:
-                self.assertGoodFakeCompilerPasses(fake_compiler, fixture)
+            test_case_args = [{}] + getattr(self, 'extra_test_case_args', [])
+            cases_under_test = self.cases_under_test  # noqa  # pylint: disable=E1101
+            test_case_name = cases_under_test.split('.')[-1]
 
-                if fixture.phase_file.has_error:
-                    self.assertMultipleErrorsPasses(fake_compiler, fixture)
+            for args in test_case_args:
+                test_case_call = re.sub(r'^call', test_case_name,
+                                        repr(call(**args)))
+                for fixture in fixtures:
+                    subtest_name = "{} - {}".format(test_case_call,
+                                                    fixture.name)
 
-                for for_stdin in (False, True):
-                    self.assertBadStdoutFakeCompilerFails(fake_compiler,
-                                                          fixture, for_stdin)
-                    self.assertBadStderrFakeCompilerFails(fake_compiler,
-                                                          fixture, for_stdin)
+                    with self.subTest(subtest_name):
+                        self.assertTestCaseWithArgsPassesFixture(fake_compiler,
+                                                                 fixture, args)
 
-    def assertGoodFakeCompilerPasses(self, fake_compiler, fixture):
+    def assertTestCaseWithArgsPassesFixture(self, fake_compiler, fixture,
+                                            test_case_args):
+        self.assertGoodFakeCompilerPasses(fake_compiler, fixture,
+                                          test_case_args)
+
+        if fixture.phase_file.has_error:
+            self.assertMultipleErrorsPasses(fake_compiler, fixture,
+                                            test_case_args)
+
+        for for_stdin in (False, True):
+            self.assertBadStdoutFakeCompilerFails(fake_compiler, fixture,
+                                                  for_stdin, test_case_args)
+            self.assertBadStderrFakeCompilerFails(fake_compiler, fixture,
+                                                  for_stdin, test_case_args)
+
+    def assertGoodFakeCompilerPasses(self, fake_compiler, fixture,
+                                     test_case_args):
         phase_file = fixture.phase_file
 
         stderr = 'error: blah blah\n' if phase_file.has_error else ''
-        self.run_fake_compiler(fake_compiler, fixture, (phase_file.stdout,
-                                                        stderr))
+        output = (phase_file.stdout, stderr)
+        self.run_fake_compiler(fake_compiler, fixture, output,
+                               test_case_args=test_case_args)
 
-        self.assertFakeCompilerHasCalls(fake_compiler, fixture)
+        self.assertFakeCompilerHasCalls(fake_compiler, fixture, test_case_args)
 
-    def assertMultipleErrorsPasses(self, fake_compiler, fixture):
+    def assertMultipleErrorsPasses(self, fake_compiler, fixture,
+                                   test_case_args):
         phase_file = fixture.phase_file
         assert phase_file.has_error, 'should only be called for error fixtures'
 
         stderr = 'error: foo bar\nerror: baz blah'
-        self.run_fake_compiler(fake_compiler, fixture, (phase_file.stdout,
-                                                        stderr))
+        output = (phase_file.stdout, stderr)
+        self.run_fake_compiler(fake_compiler, fixture, output,
+                               test_case_args=test_case_args)
 
-        self.assertFakeCompilerHasCalls(fake_compiler, fixture)
+        self.assertFakeCompilerHasCalls(fake_compiler, fixture,
+                                        test_case_args)
 
     def assertBadStdoutFakeCompilerFails(self, fake_compiler, fixture,
-                                         for_stdin):
+                                         for_stdin, test_case_args):
         with self.assertRaises(AssertionError):
             phase_file = fixture.phase_file
             stdout = phase_file.stdout
@@ -79,19 +112,23 @@ class PhaseTestBase(TestCase):
             if not for_stdin:
                 self.run_fake_compiler(fake_compiler, fixture,
                                        arg_output=(bad_stdout, stderr),
-                                       stdin_output=(stdout, stderr))
+                                       stdin_output=(stdout, stderr),
+                                       test_case_args=test_case_args)
             else:
                 self.run_fake_compiler(fake_compiler, fixture,
                                        arg_output=(stdout, stderr),
-                                       stdin_output=(bad_stdout, stderr))
+                                       stdin_output=(bad_stdout, stderr),
+                                       test_case_args=test_case_args)
 
         if not for_stdin:
-            self.assertFakeCompilerHasArgumentCall(fake_compiler, fixture)
+            self.assertFakeCompilerHasArgumentCall(fake_compiler, fixture,
+                                                   test_case_args)
         else:
-            self.assertFakeCompilerHasStdinCall(fake_compiler, fixture)
+            self.assertFakeCompilerHasStdinCall(fake_compiler, fixture,
+                                                test_case_args)
 
     def assertBadStderrFakeCompilerFails(self, fake_compiler, fixture,
-                                         for_stdin):
+                                         for_stdin, test_case_args):
         with self.assertRaises(AssertionError):
             phase_file = fixture.phase_file
             stdout = phase_file.stdout
@@ -101,19 +138,23 @@ class PhaseTestBase(TestCase):
             if not for_stdin:
                 self.run_fake_compiler(fake_compiler, fixture,
                                        arg_output=(stdout, bad_stderr),
-                                       stdin_output=(stdout, stderr))
+                                       stdin_output=(stdout, stderr),
+                                       test_case_args=test_case_args)
             else:
                 self.run_fake_compiler(fake_compiler, fixture,
                                        arg_output=(stdout, stderr),
-                                       stdin_output=(stdout, bad_stderr))
+                                       stdin_output=(stdout, bad_stderr),
+                                       test_case_args=test_case_args)
 
         if not for_stdin:
-            self.assertFakeCompilerHasArgumentCall(fake_compiler, fixture)
+            self.assertFakeCompilerHasArgumentCall(fake_compiler, fixture,
+                                                   test_case_args)
         else:
-            self.assertFakeCompilerHasStdinCall(fake_compiler, fixture)
+            self.assertFakeCompilerHasStdinCall(fake_compiler, fixture,
+                                                test_case_args)
 
     def run_fake_compiler(self, fake_compiler, fixture, arg_output,
-                          stdin_output=None):
+                          test_case_args, stdin_output=None):
         fake_compiler.fake_output(arg_output, stdin_output)
 
         # NOTE: python -m unittest discover is a little over eager. Namely,
@@ -131,15 +172,20 @@ class PhaseTestBase(TestCase):
         fqn = self.__class__.cases_under_test  # noqa  # pylint: disable=E1101
         cases_module, class_name = fqn.rsplit('.', 1)
         test_cases_class = getattr(import_module(cases_module), class_name)
-        test_cases = test_cases_class(Runner(fake_compiler.sc_path))
+        test_cases = test_cases_class(runner=Runner(fake_compiler.sc_path),
+                                      **test_case_args)
 
         getattr(test_cases, "test_{}".format(fixture.name))()
 
-    def assertFakeCompilerHasCalls(self, fake_compiler, fixture):
-        self.assertFakeCompilerHasArgumentCall(fake_compiler, fixture)
-        self.assertFakeCompilerHasStdinCall(fake_compiler, fixture)
+    def assertFakeCompilerHasCalls(self, fake_compiler, fixture,
+                                   test_case_args):
+        self.assertFakeCompilerHasArgumentCall(fake_compiler, fixture,
+                                               test_case_args)
+        self.assertFakeCompilerHasStdinCall(fake_compiler, fixture,
+                                            test_case_args)
 
-    def assertFakeCompilerHasArgumentCall(self, fake_compiler, fixture):
+    def assertFakeCompilerHasArgumentCall(self, fake_compiler, fixture,
+                                          test_case_args):
         base_args = self.__class__.sc_args  # pylint: disable=E1101
 
         cwd = Path('.').resolve()
@@ -149,7 +195,8 @@ class PhaseTestBase(TestCase):
 
         self.assertEqual(argument_call, fake_compiler.get_first_input())
 
-    def assertFakeCompilerHasStdinCall(self, fake_compiler, fixture):
+    def assertFakeCompilerHasStdinCall(self, fake_compiler, fixture,
+                                       test_case_args):
         base_args = self.__class__.sc_args  # pylint: disable=E1101
 
         with fixture.sim_file_path.open() as f:

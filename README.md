@@ -55,6 +55,19 @@ For example, to run just the scanner and symbol table:
 $ ./integration_tests/bin/run_harness scanner st
 ```
 
+#### Optional Flags
+
+##### Symbol Table `5`s
+For the Symbol Table assignment (before the AST assignment), your symbol table
+should replace all constant integer values with `5`. But then for the AST
+assignment and after, the constants should be the proper (constant folded)
+values. For the Symbol Table assignment, you should run the harness with
+`--st-all-fives` to assert that all constant integers values are indeed `5`:
+
+```
+$ ./integration_tests/bin/run_harness --st-all-fives
+```
+
 ## Contributing New Test Cases
 
 You are too kind 😄! The process is pretty straightforward (it's the standard

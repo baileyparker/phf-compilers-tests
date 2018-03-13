@@ -60,6 +60,11 @@ def _get_args() -> Namespace:
     parser.add_argument('--sc', dest='runner', type=_make_runner,
                         default='./sc', help='path to the sc binary')
 
+    parser.add_argument('--st-all-fives', action='store_const', const=True,
+                        help='Expect all numeric constants to be 5 in the '
+                             'symbol table tests (useful for ST assignment '
+                             'before the AST, when constant folding is added)')
+
     # We are unable to use choices here due to a longstanding bug in the
     # interaction between type, choices, nargs='*', and default=[]:
     # https://bugs.python.org/issue9625
