@@ -1,0 +1,9 @@
+PROGRAM arrayCondition;
+  VAR x, y : ARRAY 2 OF INTEGER;
+BEGIN
+  IF x # y THEN
+    WRITE 1
+  ELSE
+    WRITE 2
+  END
+END arrayCondition.

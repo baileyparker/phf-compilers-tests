@@ -1,0 +1,10 @@
+PROGRAM compareRecordField;
+  VAR foo : RECORD x : INTEGER; END;
+      bar : RECORD y : INTEGER; END;
+BEGIN
+  IF foo.x # bar.y THEN
+    WRITE 33
+  ELSE
+    WRITE 66
+  END
+END compareRecordField.

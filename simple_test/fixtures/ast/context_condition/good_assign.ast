@@ -1,0 +1,38 @@
+instructions =>
+  Assign:
+  location =>
+    Variable:
+    variable =>
+      VAR BEGIN
+        type:
+          ARRAY BEGIN
+            type:
+              SCOPE BEGIN
+                foo =>
+                  VAR BEGIN
+                    type:
+                      INTEGER
+                  END VAR
+              SCOPE END
+            length:
+              6
+          END ARRAY
+      END VAR
+  expression =>
+    Variable:
+    variable =>
+      VAR BEGIN
+        type:
+          ARRAY BEGIN
+            type:
+              SCOPE BEGIN
+                foo =>
+                  VAR BEGIN
+                    type:
+                      INTEGER
+                  END VAR
+              SCOPE END
+            length:
+              6
+          END ARRAY
+      END VAR

@@ -1,0 +1,6 @@
+PROGRAM badAssign;
+    VAR foo : ARRAY 6 OF INTEGER;
+    VAR bar : ARRAY 6 OF INTEGER;
+BEGIN
+    foo := bar
+END badAssign.

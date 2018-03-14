@@ -1,0 +1,6 @@
+PROGRAM goodAssign;
+  TYPE thingy = ARRAY 6 OF RECORD foo : INTEGER; END;
+  VAR a, b : thingy;
+BEGIN
+  a := b
+END goodAssign.

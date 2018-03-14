@@ -1,0 +1,5 @@
+PROGRAM badDirect;
+  CONST foo = 123;
+BEGIN
+  WRITE foo.baz
+END badDirect.

@@ -1,0 +1,5 @@
+PROGRAM writeRecord;
+  VAR x : RECORD x, y : INTEGER; END;
+BEGIN
+  WRITE x.y
+END writeRecord.

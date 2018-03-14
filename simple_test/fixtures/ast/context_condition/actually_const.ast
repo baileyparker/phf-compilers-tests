@@ -1,0 +1,34 @@
+instructions =>
+  Assign:
+  location =>
+    Index:
+    location =>
+      Variable:
+      variable =>
+        VAR BEGIN
+          type:
+            ARRAY BEGIN
+              type:
+                INTEGER
+              length:
+                3
+            END ARRAY
+        END VAR
+    expression =>
+      Number:
+      value =>
+        CONST BEGIN
+          type:
+            INTEGER
+          value:
+            0
+        END CONST
+  expression =>
+    Number:
+    value =>
+      CONST BEGIN
+        type:
+          INTEGER
+        value:
+          123
+      END CONST

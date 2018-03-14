@@ -1,0 +1,5 @@
+PROGRAM writeArray;
+  VAR x : ARRAY 5 OF INTEGER;
+BEGIN
+  WRITE x
+END writeArray.

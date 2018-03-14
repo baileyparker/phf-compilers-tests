@@ -1,0 +1,5 @@
+PROGRAM badIndirect;
+  VAR foo : RECORD abc : INTEGER END;
+BEGIN
+  WRITE foo[123]
+END badIndirect.

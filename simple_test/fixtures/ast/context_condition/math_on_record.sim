@@ -1,0 +1,6 @@
+PROGRAM mathOnRecord;
+  VAR a, b : RECORD a : INTEGER;
+                    b : ARRAY 6 OF INTEGER END;
+BEGIN
+    a := a + b
+END mathOnRecord.

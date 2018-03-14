@@ -1,0 +1,5 @@
+PROGRAM mathOnRecord;
+  VAR a, b : ARRAY 42 OF INTEGER END;
+BEGIN
+    a := a DIV b
+END mathOnRecord.

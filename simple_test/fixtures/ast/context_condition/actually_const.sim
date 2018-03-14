@@ -1,0 +1,7 @@
+PROGRAM actuallConst;
+    CONST baz = 1;
+          bar = 2 * baz + 1;
+    VAR a : ARRAY bar OF INTEGER;
+BEGIN
+    a[0] := 123
+END actuallConst.

@@ -1,0 +1,5 @@
+PROGRAM readArray;
+  VAR x : ARRAY 5 OF INTEGER;
+BEGIN
+  READ x
+END readArray.

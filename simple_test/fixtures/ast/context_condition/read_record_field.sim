@@ -1,0 +1,5 @@
+PROGRAM readRecord;
+  VAR x : RECORD x, y : INTEGER; END;
+BEGIN
+  READ x.x
+END readRecord.
