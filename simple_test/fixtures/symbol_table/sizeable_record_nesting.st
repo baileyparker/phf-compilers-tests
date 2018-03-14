@@ -61,7 +61,7 @@ SCOPE BEGIN
           END SCOPE
         END RECORD
       length:
-        5
+        6
     END ARRAY
   R =>
     RECORD BEGIN
@@ -119,6 +119,6 @@ SCOPE BEGIN
       type:
         INTEGER
       value:
-        5
+        47
     END CONST
 END SCOPE
