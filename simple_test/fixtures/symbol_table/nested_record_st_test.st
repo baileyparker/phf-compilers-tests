@@ -9,7 +9,7 @@ SCOPE BEGIN
                 type:
                   INTEGER
                 length:
-                  5
+                  7
               END ARRAY
           END VAR
         b =>
@@ -19,7 +19,7 @@ SCOPE BEGIN
                 type:
                   INTEGER
                 length:
-                  5
+                  7
               END ARRAY
           END VAR
         c =>
@@ -39,7 +39,7 @@ SCOPE BEGIN
                           type:
                             INTEGER
                           length:
-                            5
+                            14
                         END ARRAY
                     END VAR
                 END SCOPE
@@ -62,7 +62,7 @@ SCOPE BEGIN
                           type:
                             INTEGER
                           length:
-                            5
+                            14
                         END ARRAY
                     END VAR
                 END SCOPE
@@ -75,7 +75,7 @@ SCOPE BEGIN
       type:
         INTEGER
       value:
-        5
+        47
     END CONST
   b =>
     INTEGER
@@ -84,7 +84,7 @@ SCOPE BEGIN
       type:
         INTEGER
       length:
-        5
+        55
     END ARRAY
   i =>
     VAR BEGIN
@@ -98,7 +98,7 @@ SCOPE BEGIN
           type:
             INTEGER
           length:
-            5
+            12
         END ARRAY
     END VAR
   x =>
