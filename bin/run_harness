@@ -1,4 +1,4 @@
 #!/bin/sh
 
 root="$(dirname "$0")/..";
-PYTHONPATH="$root" exec python3 -m simple_test.main
+PYTHONPATH="$root" exec python3 -m simple_test.main "$@"
