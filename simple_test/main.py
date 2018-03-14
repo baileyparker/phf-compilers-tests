@@ -6,13 +6,14 @@ from os import environ
 from pathlib import Path
 from shlex import quote as shell_quote
 from sys import argv
-from typing import Any, cast
-from unittest import TestCase, TestSuite, TextTestRunner
+from typing import Any, cast, List, Type
+from unittest import defaultTestLoader, TestSuite, TextTestRunner
 from warnings import warn
 
 
 from simple_test.runner import Runner, BinaryNotFoundError, \
     BinaryNotExecutableError
+from simple_test.test_case import TestCase
 from simple_test.test_scanner import TestScanner
 from simple_test.test_cst import TestCST
 from simple_test.test_symbol_table import TestSymbolTable
@@ -46,9 +47,16 @@ def main() -> None:
     args = _get_args()
 
     test_runner = TextTestRunner(verbosity=args.verbosity)
-    test_suite = TestSuite([p(**args.__dict__) for p in args.phases])
+    test_suite = TestSuite([p(name=method, **args.__dict__)
+                            for p in args.phases
+                            for method in _get_test_case_names(p)])
 
     test_runner.run(test_suite)
+
+
+def _get_test_case_names(test_case: Type[TestCase]) -> List[str]:
+    fake_case = test_case(name='runTest', runner=None)  # type: ignore
+    return list(defaultTestLoader.getTestCaseNames(fake_case))  # type: ignore
 
 
 def _get_args() -> Namespace:

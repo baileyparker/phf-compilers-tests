@@ -9,7 +9,8 @@ from simple_test.runner import Runner
 class TestCase(BaseTestCase):
     """Base class for test harness TestCases."""
 
-    def __init__(self, runner: Runner, **_: Any) -> None:
-        super().__init__()
+    def __init__(self, runner: Runner, name: str = 'runTest',
+                 **_: Any) -> None:
+        super().__init__(name)
 
         self.runner = runner

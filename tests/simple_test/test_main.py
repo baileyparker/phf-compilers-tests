@@ -4,7 +4,8 @@ import io
 from pathlib import Path
 import re
 from sys import argv
-from unittest import main as test_main, TestCase, TestSuite, TextTestRunner
+from unittest import main as test_main, TestCase, TestSuite, TextTestRunner, \
+    defaultTestLoader
 from unittest.mock import call, MagicMock, Mock, patch
 
 from simple_test.runner import Runner, BinaryNotFoundError, \
@@ -28,18 +29,30 @@ with patch(PREFIX + 'scanner.TestScanner') as TestScanner, \
 # It would be optimal to fail a test if forgotten test_*.py are found in
 # simple_test/. Similarly, a way to assert all optional args in main are tested
 # would be swell.
-ALL_TESTS = OrderedDict([('scanner', TestScanner),
-                         ('cst', TestCST),
-                         ('st', TestSymbolTable),
-                         ('ast', TestAST)])
+ALL_TESTS = {}
 
 
 class TestMain(TestCase):
     def setUp(self):
+        # Have to import these in here so running test_main doesn't pickup the
+        # real harness tests
+        from simple_test.test_scanner import TestScanner as TestScanner_
+        from simple_test.test_cst import TestCST as TestCST_
+        from simple_test.test_symbol_table \
+            import TestSymbolTable as TestSymbolTable_
+        from simple_test.test_ast import TestAST as TestAST_
+
+        # Unfortunately, it must be this way
+        global ALL_TESTS  # pylint: disable=W0603
+        ALL_TESTS = OrderedDict([('scanner', (TestScanner, TestScanner_)),
+                                 ('cst', (TestCST, TestCST_)),
+                                 ('st', (TestSymbolTable, TestSymbolTable_)),
+                                 ('ast', (TestAST, TestAST_))])
+
         self.reset_mocks()
 
     def reset_mocks(self):
-        for test_case in ALL_TESTS.values():
+        for test_case, _ in ALL_TESTS.values():
             test_case.reset_mock()
 
     def test_main_no_args_runs_everything_with_defaults(self):
@@ -109,10 +122,38 @@ class TestMain(TestCase):
             runner = Mock(Runner)
             test_suite = Mock(TestSuite)
             test_runner = Mock(TextTestRunner)
-            created_tests = [MagicMock() for _ in tests]
+            get_tests = defaultTestLoader.getTestCaseNames
+            created_tests = [{n: MagicMock()
+                              for n in get_tests(real_class(name='runTest',
+                                                            runner=None))}
+                             for _, real_class in tests]
 
-            for test_class, created_test in zip(tests, created_tests):
-                test_class.return_value = created_test
+            def make_half_proxy(real_class, created_tests):
+                def proxy(*args, **kwargs):
+                    this_call = call(*args, **kwargs)
+
+                    if this_call == call(name='runTest', runner=None):  # noqa  # pylint: disable=R1705
+                        return real_class(*args, **kwargs)
+                    else:
+                        assert kwargs['name'], \
+                            "must pass in method name, received: {}" \
+                            .format(this_call)
+
+                        self.assertIn(kwargs['name'], created_tests,
+                                      "must be a method on {}"
+                                      .format(real_class.__class__.__name__))
+
+                        self.assertEqual(subset_call(name=kwargs['name'],
+                                                     runner=runner,
+                                                     **config),
+                                         this_call)
+
+                        return created_tests[kwargs['name']]
+
+                return proxy
+
+            for (mock_class, real_class), fake in zip(tests, created_tests):
+                mock_class.side_effect = make_half_proxy(real_class, fake)
 
             with patch('simple_test.main.Runner') as Runner_, \
                     patch('simple_test.main.TextTestRunner') as TestRunner_, \
@@ -130,13 +171,16 @@ class TestMain(TestCase):
 
                 Runner_.create.assert_called_once_with(Path(sc))
                 TestRunner_.assert_called_once_with(verbosity=verbosity)
-                TestSuite_.assert_called_once_with(created_tests)
+
+                # Assert suite was created with all of the tests requested
+                self.assertEqual(1, TestSuite_.call_count)
+
+                all_tests = [t for ts in created_tests for t in ts.values()]
+                (passed_tests,), _ = TestSuite_.call_args
+                self.assertCountEqual(all_tests, passed_tests,
+                                      'all tests were passed into the suite')
 
             test_runner.run.assert_called_once_with(test_suite)
-
-            for test_class in tests:
-                subset = {'runner': runner, **config}
-                self.assertCalledOnceWithKwargsSubset(test_class, subset)
         except SystemExit as e:
             if not expect_exit:
                 self.fail("unexpected exit: {}".format(e))
@@ -178,7 +222,10 @@ class _subset_call(type(call)):
 
     def __eq__(self, other):
         _, _, my_kwargs = self
-        other_args, other_kwargs = other
+        try:
+            other_args, other_kwargs = other
+        except ValueError:
+            _, other_args, other_kwargs = other
 
         other_subset = call(*other_args,
                             **{k: v for k, v in other_kwargs.items()
