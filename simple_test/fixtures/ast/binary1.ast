@@ -1,0 +1,26 @@
+instructions =>
+  Assign:
+  location =>
+    Variable:
+    variable =>
+      VAR BEGIN
+        type:
+          ARRAY BEGIN
+            type:
+              INTEGER
+            length:
+              5
+          END ARRAY
+      END VAR
+  expression =>
+    Variable:
+    variable =>
+      VAR BEGIN
+        type:
+          ARRAY BEGIN
+            type:
+              INTEGER
+            length:
+              5
+          END ARRAY
+      END VAR

@@ -1,0 +1,5 @@
+PROGRAM x;
+  VAR a,b: INTEGER;
+BEGIN
+  WRITE a DIV b
+END x.

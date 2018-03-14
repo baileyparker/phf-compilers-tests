@@ -1,0 +1,3 @@
+PROGRAM peter;
+  VAR a : ARRAY 10 DIV (1 - 1) OF INTEGER;
+END peter.

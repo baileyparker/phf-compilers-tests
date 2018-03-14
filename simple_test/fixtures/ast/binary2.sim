@@ -1,0 +1,6 @@
+PROGRAM x;
+    VAR a: ARRAY 5 OF INTEGER;
+    VAR b: ARRAY 5 OF INTEGER;
+BEGIN
+    a := b
+END x.

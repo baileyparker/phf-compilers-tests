@@ -1,0 +1,33 @@
+instructions =>
+  If:
+  condition =>
+    Condition (=):
+    left =>
+      Number:
+      value =>
+        CONST BEGIN
+          type:
+            INTEGER
+          value:
+            0
+        END CONST
+    right =>
+      Number:
+      value =>
+        CONST BEGIN
+          type:
+            INTEGER
+          value:
+            0
+        END CONST
+  true =>
+    Write:
+    expression =>
+      Number:
+      value =>
+        CONST BEGIN
+          type:
+            INTEGER
+          value:
+            10
+        END CONST
