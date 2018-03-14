@@ -1,0 +1,74 @@
+instructions =>
+  If:
+  condition =>
+    Condition (#):
+    left =>
+      Field:
+      location =>
+        Variable:
+        variable =>
+          VAR BEGIN
+            type:
+              RECORD BEGIN
+                SCOPE BEGIN
+                  x =>
+                    VAR BEGIN
+                      type:
+                        INTEGER
+                    END VAR
+                END SCOPE
+              END RECORD
+          END VAR
+      variable =>
+        Variable:
+        variable =>
+          VAR BEGIN
+            type:
+              INTEGER
+          END VAR
+    right =>
+      Field:
+      location =>
+        Variable:
+        variable =>
+          VAR BEGIN
+            type:
+              RECORD BEGIN
+                SCOPE BEGIN
+                  y =>
+                    VAR BEGIN
+                      type:
+                        INTEGER
+                    END VAR
+                END SCOPE
+              END RECORD
+          END VAR
+      variable =>
+        Variable:
+        variable =>
+          VAR BEGIN
+            type:
+              INTEGER
+          END VAR
+  true =>
+    Write:
+    expression =>
+      Number:
+      value =>
+        CONST BEGIN
+          type:
+            INTEGER
+          value:
+            33
+        END CONST
+  false =>
+    Write:
+    expression =>
+      Number:
+      value =>
+        CONST BEGIN
+          type:
+            INTEGER
+          value:
+            66
+        END CONST

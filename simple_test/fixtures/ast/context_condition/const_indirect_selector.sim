@@ -1,0 +1,5 @@
+PROGRAM badIndirect;
+  CONST foo = 123;
+BEGIN
+  WRITE foo[22]
+END badIndirect.

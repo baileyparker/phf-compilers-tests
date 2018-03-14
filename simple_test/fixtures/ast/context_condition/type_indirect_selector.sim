@@ -1,0 +1,5 @@
+PROGRAM badIndirect;
+  TYPE foo = INTEGER;
+BEGIN
+  WRITE foo[1]
+END badIndirect.

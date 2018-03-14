@@ -1,0 +1,5 @@
+PROGRAM typeDesignator;
+  TYPE a = INTEGER;
+BEGIN
+  WRITE 1 + a
+END typeDesignator.

@@ -1,0 +1,10 @@
+PROGRAM compareArrayItem;
+  VAR foo : ARRAY 22 OF INTEGER;
+      bar : ARRAY 10 OF INTEGER;
+BEGIN
+  IF foo[10] = bar[8] THEN
+    WRITE 2
+  ELSE
+    WRITE 22
+  END
+END compareArrayItem.

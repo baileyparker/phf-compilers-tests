@@ -1,0 +1,5 @@
+PROGRAM badDirect;
+  VAR foo = ARRAY 23 OF INTEGER;
+BEGIN
+  WRITE foo.baz
+END badDirect.

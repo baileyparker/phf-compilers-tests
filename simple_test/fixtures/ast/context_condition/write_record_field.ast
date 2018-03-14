@@ -1,0 +1,31 @@
+instructions =>
+  Write:
+  expression =>
+    Field:
+    location =>
+      Variable:
+      variable =>
+        VAR BEGIN
+          type:
+            RECORD BEGIN
+              SCOPE BEGIN
+                x =>
+                  VAR BEGIN
+                    type:
+                      INTEGER
+                  END VAR
+                y =>
+                  VAR BEGIN
+                    type:
+                      INTEGER
+                  END VAR
+              END SCOPE
+            END RECORD
+        END VAR
+    variable =>
+      Variable:
+      variable =>
+        VAR BEGIN
+          type:
+            INTEGER
+        END VAR

@@ -1,0 +1,72 @@
+instructions =>
+  If:
+  condition =>
+    Condition (=):
+    left =>
+      Index:
+      location =>
+        Variable:
+        variable =>
+          VAR BEGIN
+            type:
+              ARRAY BEGIN
+                type:
+                  INTEGER
+                length:
+                  22
+              END ARRAY
+          END VAR
+      expression =>
+        Number:
+        value =>
+          CONST BEGIN
+            type:
+              INTEGER
+            value:
+              10
+          END CONST
+    right =>
+      Index:
+      location =>
+        Variable:
+        variable =>
+          VAR BEGIN
+            type:
+              ARRAY BEGIN
+                type:
+                  INTEGER
+                length:
+                  10
+              END ARRAY
+          END VAR
+      expression =>
+        Number:
+        value =>
+          CONST BEGIN
+            type:
+              INTEGER
+            value:
+              8
+          END CONST
+  true =>
+    Write:
+    expression =>
+      Number:
+      value =>
+        CONST BEGIN
+          type:
+            INTEGER
+          value:
+            2
+        END CONST
+  false =>
+    Write:
+    expression =>
+      Number:
+      value =>
+        CONST BEGIN
+          type:
+            INTEGER
+          value:
+            22
+        END CONST

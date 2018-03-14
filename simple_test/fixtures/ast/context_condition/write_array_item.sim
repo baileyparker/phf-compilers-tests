@@ -1,0 +1,5 @@
+PROGRAM writeArray;
+  VAR x : ARRAY 7 OF INTEGER;
+BEGIN
+  WRITE x[432]
+END writeArray.

@@ -1,0 +1,4 @@
+PROGRAM foobar;
+    VAR baz : INTEGER;
+    CONST bar = 1 + baz;
+END foobar.

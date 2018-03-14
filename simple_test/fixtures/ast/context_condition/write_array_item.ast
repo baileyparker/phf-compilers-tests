@@ -1,0 +1,25 @@
+instructions =>
+  Write:
+  expression =>
+    Index:
+    location =>
+      Variable:
+      variable =>
+        VAR BEGIN
+          type:
+            ARRAY BEGIN
+              type:
+                INTEGER
+              length:
+                7
+            END ARRAY
+        END VAR
+    expression =>
+      Number:
+      value =>
+        CONST BEGIN
+          type:
+            INTEGER
+          value:
+            432
+        END CONST

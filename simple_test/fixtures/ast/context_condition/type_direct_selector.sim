@@ -1,0 +1,5 @@
+PROGRAM badDirect;
+  TYPE foo = INTEGER;
+BEGIN
+  WRITE foo.bar
+END badDirect.

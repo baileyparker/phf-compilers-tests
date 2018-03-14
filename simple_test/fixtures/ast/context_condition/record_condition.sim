@@ -1,0 +1,9 @@
+PROGRAM recordCondition;
+  VAR x, y : RECORD foo : INTEGER; bar : INTEGER END;
+BEGIN
+  IF x <= y THEN
+    WRITE 23
+  ELSE
+    WRITE 24
+  END
+END recordCondition.

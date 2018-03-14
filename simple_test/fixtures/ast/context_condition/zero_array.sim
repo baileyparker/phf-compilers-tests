@@ -1,0 +1,3 @@
+PROGRAM zeroArray;
+  VAR thisIsAlsoANoNo : ARRAY 10 DIV 2 - 5 OF RECORD END;
+END zeroArray.

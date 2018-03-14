@@ -1,0 +1,25 @@
+instructions =>
+  Read:
+  location =>
+    Index:
+    location =>
+      Variable:
+      variable =>
+        VAR BEGIN
+          type:
+            ARRAY BEGIN
+              type:
+                INTEGER
+              length:
+                6
+            END ARRAY
+        END VAR
+    expression =>
+      Number:
+      value =>
+        CONST BEGIN
+          type:
+            INTEGER
+          value:
+            1
+        END CONST
