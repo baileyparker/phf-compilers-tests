@@ -4,5 +4,5 @@ PROGRAM ArraysAndRecords;
     END;
     VAR q: a;
 BEGIN
-    q.a[1].b[2] := 14;
+    q.a[1].b[2] := 14
 END ArraysAndRecords.

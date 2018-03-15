@@ -29,7 +29,7 @@ instructions =>
                                             type:
                                               INTEGER
                                             length:
-                                              5
+                                              6
                                           END ARRAY
                                       END VAR
                                   END SCOPE
@@ -57,7 +57,7 @@ instructions =>
                                   type:
                                     INTEGER
                                   length:
-                                    5
+                                    6
                                 END ARRAY
                             END VAR
                         END SCOPE
@@ -73,7 +73,7 @@ instructions =>
               type:
                 INTEGER
               value:
-                5
+                1
             END CONST
       variable =>
         Variable:
@@ -84,7 +84,7 @@ instructions =>
                 type:
                   INTEGER
                 length:
-                  5
+                  6
               END ARRAY
           END VAR
     expression =>
@@ -94,7 +94,7 @@ instructions =>
           type:
             INTEGER
           value:
-            5
+            2
         END CONST
   expression =>
     Number:
@@ -103,5 +103,5 @@ instructions =>
         type:
           INTEGER
         value:
-          5
+          14
       END CONST
