@@ -1,0 +1,107 @@
+instructions =>
+  Assign:
+  location =>
+    Index:
+    location =>
+      Field:
+      location =>
+        Index:
+        location =>
+          Field:
+          location =>
+            Variable:
+            variable =>
+              VAR BEGIN
+                type:
+                  RECORD BEGIN
+                    SCOPE BEGIN
+                      a =>
+                        VAR BEGIN
+                          type:
+                            ARRAY BEGIN
+                              type:
+                                RECORD BEGIN
+                                  SCOPE BEGIN
+                                    b =>
+                                      VAR BEGIN
+                                        type:
+                                          ARRAY BEGIN
+                                            type:
+                                              INTEGER
+                                            length:
+                                              6
+                                          END ARRAY
+                                      END VAR
+                                  END SCOPE
+                                END RECORD
+                              length:
+                                5
+                            END ARRAY
+                        END VAR
+                    END SCOPE
+                  END RECORD
+              END VAR
+          variable =>
+            Variable:
+            variable =>
+              VAR BEGIN
+                type:
+                  ARRAY BEGIN
+                    type:
+                      RECORD BEGIN
+                        SCOPE BEGIN
+                          b =>
+                            VAR BEGIN
+                              type:
+                                ARRAY BEGIN
+                                  type:
+                                    INTEGER
+                                  length:
+                                    6
+                                END ARRAY
+                            END VAR
+                        END SCOPE
+                      END RECORD
+                    length:
+                      5
+                  END ARRAY
+              END VAR
+        expression =>
+          Number:
+          value =>
+            CONST BEGIN
+              type:
+                INTEGER
+              value:
+                1
+            END CONST
+      variable =>
+        Variable:
+        variable =>
+          VAR BEGIN
+            type:
+              ARRAY BEGIN
+                type:
+                  INTEGER
+                length:
+                  6
+              END ARRAY
+          END VAR
+    expression =>
+      Number:
+      value =>
+        CONST BEGIN
+          type:
+            INTEGER
+          value:
+            2
+        END CONST
+  expression =>
+    Number:
+    value =>
+      CONST BEGIN
+        type:
+          INTEGER
+        value:
+          14
+      END CONST

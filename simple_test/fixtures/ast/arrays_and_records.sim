@@ -1,0 +1,8 @@
+PROGRAM ArraysAndRecords;
+    TYPE a = RECORD
+        a: ARRAY 5 OF RECORD b: ARRAY 6 OF INTEGER; END;
+    END;
+    VAR q: a;
+BEGIN
+    q.a[1].b[2] := 14
+END ArraysAndRecords.
