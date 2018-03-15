@@ -7,13 +7,15 @@ instructions =>
         type:
           ARRAY BEGIN
             type:
-              SCOPE BEGIN
-                foo =>
-                  VAR BEGIN
-                    type:
-                      INTEGER
-                  END VAR
-              SCOPE END
+              RECORD BEGIN
+                SCOPE BEGIN
+                  foo =>
+                    VAR BEGIN
+                      type:
+                        INTEGER
+                    END VAR
+                END SCOPE
+              END RECORD
             length:
               6
           END ARRAY
@@ -25,13 +27,15 @@ instructions =>
         type:
           ARRAY BEGIN
             type:
-              SCOPE BEGIN
-                foo =>
-                  VAR BEGIN
-                    type:
-                      INTEGER
-                  END VAR
-              SCOPE END
+              RECORD BEGIN
+                SCOPE BEGIN
+                  foo =>
+                    VAR BEGIN
+                      type:
+                        INTEGER
+                    END VAR
+                END SCOPE
+              END RECORD
             length:
               6
           END ARRAY
