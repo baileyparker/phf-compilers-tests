@@ -1,0 +1,69 @@
+instructions =>
+  Assign:
+  location =>
+    Variable:
+    variable =>
+      VAR BEGIN
+        type:
+          INTEGER
+      END VAR
+  expression =>
+    Number:
+    value =>
+      CONST BEGIN
+        type:
+          INTEGER
+        value:
+          -8
+      END CONST
+  Assign:
+  location =>
+    Variable:
+    variable =>
+      VAR BEGIN
+        type:
+          INTEGER
+      END VAR
+  expression =>
+    Number:
+    value =>
+      CONST BEGIN
+        type:
+          INTEGER
+        value:
+          0
+      END CONST
+  Assign:
+  location =>
+    Variable:
+    variable =>
+      VAR BEGIN
+        type:
+          INTEGER
+      END VAR
+  expression =>
+    Number:
+    value =>
+      CONST BEGIN
+        type:
+          INTEGER
+        value:
+          -15
+      END CONST
+  Assign:
+  location =>
+    Variable:
+    variable =>
+      VAR BEGIN
+        type:
+          INTEGER
+      END VAR
+  expression =>
+    Number:
+    value =>
+      CONST BEGIN
+        type:
+          INTEGER
+        value:
+          13
+      END CONST
