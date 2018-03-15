@@ -1,0 +1,8 @@
+PROGRAM sorryAuntSally;
+  VAR a, b, c, d : INTEGER;
+BEGIN
+  a := - 4 + 2 * 2;  (* -8 *)
+  b := - 4 - 4;      (* 0 *)
+  c := - 3 + 2 * 6;  (* -15 *)
+  d := 3 - 2 + 3 * 4 (* 13 *)
+END sorryAuntSally.
