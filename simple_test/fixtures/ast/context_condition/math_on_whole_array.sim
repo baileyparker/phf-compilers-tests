@@ -1,5 +1,5 @@
 PROGRAM mathOnRecord;
-  VAR a, b : ARRAY 42 OF INTEGER END;
+  VAR a, b : ARRAY 42 OF INTEGER;
 BEGIN
     a := a DIV b
 END mathOnRecord.
