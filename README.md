@@ -245,6 +245,7 @@ thanks to these wonderful people who contributed test cases:
   - [Sam Beckley](https://github.com/sobeckley)
   - [Peter Lazorchak](https://github.com/lazorchakp)
   - [Rachel Kinney](https://github.com/rkinney4)
+  - [Andrew Rojas](https://github.com/amrojas)
   - Your name could be here!
 
 

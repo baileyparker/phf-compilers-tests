@@ -65,7 +65,8 @@ def _get_args() -> Namespace:
                             epilog='Made with love by Bailey Parker.\n\n'
                                    'Special thanks to test contributors: '
                                    'Nick Hale, Sam Beckley, '
-                                   'Peter Lazorchak, and Rachel Kinney')
+                                   'Peter Lazorchak, Rachel Kinney, and '
+                                   'Andrew Rojas')
 
     parser.add_argument('--sc', dest='runner', type=_make_runner,
                         default='./sc', help='path to the sc binary')
