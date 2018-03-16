@@ -1,0 +1,5 @@
+PROGRAM const;
+    CONST s = 5;
+BEGIN
+    read s
+END const.
