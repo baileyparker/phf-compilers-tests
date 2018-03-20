@@ -77,7 +77,7 @@ class Runner:
         # Make path relative to CWD so if we have to print out the full command
         # we ran (in a failed test assertion, for example), we don't have to
         # barf out the entire absolute path
-        cwd = Path('.').resolve()
+        cwd = Path.cwd()
         try:
             sim_file = sim_file.relative_to(cwd)
         except ValueError:
@@ -92,7 +92,14 @@ class Runner:
                 result = run([str(self._sc_path), *args], stdin=f, stdout=PIPE,
                              stderr=PIPE)
 
-        cmd = ' '.join(map(shell_quote, result.args))
+        # Make the path to the sc binary relative to CWD, so that the output
+        # command is cleaner
+        try:
+            sc_relative_path = str(self._sc_path.relative_to(cwd))
+        except ValueError:
+            sc_relative_path = str(self._sc_path)
+
+        cmd = ' '.join(map(shell_quote, [sc_relative_path, *result.args[1:]]))
         if as_stdin:
             cmd += " < {}".format(str(sim_file))
 

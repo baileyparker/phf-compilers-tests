@@ -169,7 +169,7 @@ class TestMain(TestCase):
                 with fake_argv(args):
                     main()
 
-                Runner_.create.assert_called_once_with(Path(sc))
+                Runner_.create.assert_called_once_with(Path(Path.cwd(), sc))
                 TestRunner_.assert_called_once_with(verbosity=verbosity)
 
                 # Assert suite was created with all of the tests requested

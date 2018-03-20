@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from itertools import product
 from pathlib import Path
 from subprocess import CompletedProcess, DEVNULL, PIPE
 from unittest import main, TestCase
@@ -13,7 +14,10 @@ PREFIX = 'simple_test.runner'
 
 class TestRunner(TestCase):
     def setUp(self):
-        self.sc_path = Path('path/to/sc')
+        path = 'path/to/sc'
+        self.sc_path = MagicMock(spec=Path)
+        self.sc_path.__str__.return_value = path
+
         self.runner = Runner(self.sc_path)
 
     @patch('simple_test.runner.os')
@@ -72,45 +76,70 @@ class TestRunner(TestCase):
         with patch("{}.run".format(PREFIX)) as self.subprocess_run, \
              patch("{}.shell_quote".format(PREFIX)) as self.shell_quote:
 
-            for raises in (False, True):
-                self.assertRunsSimpleWithArgument(runner, args,
-                                                  relative_to_raises=raises)
-                self.assertRunsSimpleAsStdin(runner, args,
-                                             relative_to_raises=raises)
+            for raises, sc_raises in product((False, True), repeat=2):
+                self.assertRunsSimpleBothWays(runner, args, raises, sc_raises)
 
-    def setup_subprocess(self, relative_to_raises=False):
+    def assertRunsSimpleBothWays(self, runner, args, raises, sc_raises):
+        name = "raises={}, sc_raises={}".format(raises, sc_raises)
+        with self.subTest("with argument, {}".format(name)):
+            self.assertRunsSimpleWithArgument(runner, args,
+                                              relative_to_raises=raises,
+                                              sc_raises=sc_raises)
+
+        with self.subTest("as stdin, {}".format(name)):
+            self.assertRunsSimpleAsStdin(runner, args,
+                                         relative_to_raises=raises,
+                                         sc_raises=sc_raises)
+
+    def setup_subprocess(self, relative_to_raises=False,
+                         sc_relative_to_raises=False):
+        cwd = Path.cwd()
+
         sim_file = MagicMock()
         sim_file.__str__.return_value = 'non_relative_path.sim'
         relative_sim_file = MagicMock()
         relative_sim_file.__str__.return_value = 'foo/bar.sim'
 
         if not relative_to_raises:
-            cwd = Path('.').resolve()
-
             sim_file.relative_to.side_effect = \
                 lambda p: relative_sim_file if p == cwd else None
         else:
             sim_file.relative_to.side_effect = ValueError('relative_to')
 
         stdout, stderr = Mock(), Mock()
-        fake_args = ('a', 'b')
         quoted_args = OrderedDict([('a', 'c'), ('b', 'd')])
+        fake_args = tuple(['full/path/to/sc', *quoted_args.keys()])
         completed_process = Mock(CompletedProcess, args=fake_args,
                                  stdout=stdout, stderr=stderr)
 
+        self.sc_path.reset_mock()
         self.subprocess_run.reset_mock()
         self.shell_quote.reset_mock()
-        self.subprocess_run.return_value = completed_process
-        self.shell_quote.side_effect = lambda x: quoted_args[x]
 
-        cmd = ' '.join(quoted_args.values())
+        quoted_sc_path = 'quoted/sc/path'
+
+        if not sc_relative_to_raises:
+            unquoted_sc_path = Path('relative/path/to/sc')
+            self.sc_path.relative_to.side_effect = \
+                lambda p: unquoted_sc_path if p == cwd else None
+        else:
+            unquoted_sc_path = str(self.sc_path)
+            self.sc_path.relative_to.side_effect = ValueError('relative_to')
+
+        self.subprocess_run.return_value = completed_process
+        self.shell_quote.side_effect = \
+            lambda x: quoted_sc_path if x == str(unquoted_sc_path) \
+            else quoted_args[x]
+
+        cmd = ' '.join([quoted_sc_path, *quoted_args.values()])
 
         return sim_file, relative_sim_file, cmd, stdout, stderr
 
     def assertRunsSimpleWithArgument(self, runner, args,
-                                     relative_to_raises=False):
+                                     relative_to_raises=False,
+                                     sc_raises=False):
         sim_file, relative_sim_file, cmd, stdout, stderr = \
-            self.setup_subprocess(relative_to_raises)
+            self.setup_subprocess(relative_to_raises, sc_raises)
         last_arg = sim_file if relative_to_raises else relative_sim_file
 
         result = runner(sim_file)
@@ -122,9 +151,10 @@ class TestRunner(TestCase):
         self.assertEqual(stdout, result.stdout)
         self.assertEqual(stderr, result.stderr)
 
-    def assertRunsSimpleAsStdin(self, runner, args, relative_to_raises=False):
+    def assertRunsSimpleAsStdin(self, runner, args, relative_to_raises=False,
+                                sc_raises=False):
         sim_file, relative_sim_file, cmd, stdout, stderr = \
-            self.setup_subprocess(relative_to_raises)
+            self.setup_subprocess(relative_to_raises, sc_raises)
         redirected_file = sim_file if relative_to_raises else relative_sim_file
 
         # Wire up relative_sim_file so we can call .open() on it

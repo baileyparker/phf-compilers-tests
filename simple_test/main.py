@@ -99,7 +99,7 @@ def _get_args() -> Namespace:
 
 def _make_runner(path: str) -> Runner:
     try:
-        return Runner.create(Path(path))
+        return Runner.create(Path(Path.cwd(), path))
     except BinaryNotFoundError as e:
         cmd = "{} --sc path/to/sc".format(argv[0])
         msg = "simple compiler does not exist: {} (try: {})" \
