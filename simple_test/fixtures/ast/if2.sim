@@ -1,0 +1,6 @@
+PROGRAM x;
+BEGIN
+  IF 0 = 0 THEN
+    WRITE 10
+  END
+END x.

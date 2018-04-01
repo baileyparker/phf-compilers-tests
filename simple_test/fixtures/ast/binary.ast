@@ -1,0 +1,18 @@
+instructions =>
+  Write:
+  expression =>
+    Binary (DIV):
+    left =>
+      Variable:
+      variable =>
+        VAR BEGIN
+          type:
+            INTEGER
+        END VAR
+    right =>
+      Variable:
+      variable =>
+        VAR BEGIN
+          type:
+            INTEGER
+        END VAR

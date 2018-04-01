@@ -1,0 +1,38 @@
+instructions =>
+  If:
+  condition =>
+    Condition (=):
+    left =>
+      Variable:
+      variable =>
+        VAR BEGIN
+          type:
+            INTEGER
+        END VAR
+    right =>
+      Variable:
+      variable =>
+        VAR BEGIN
+          type:
+            INTEGER
+        END VAR
+  true =>
+    Write:
+    expression =>
+      Variable:
+      variable =>
+        VAR BEGIN
+          type:
+            INTEGER
+        END VAR
+  false =>
+    Write:
+    expression =>
+      Number:
+      value =>
+        CONST BEGIN
+          type:
+            INTEGER
+          value:
+            42
+        END CONST

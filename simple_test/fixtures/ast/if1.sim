@@ -1,0 +1,9 @@
+PROGRAM x;
+  VAR a,b: INTEGER;
+BEGIN
+  IF a = b THEN
+    WRITE a
+  ELSE
+    WRITE 42
+  END
+END x.
