@@ -4,6 +4,8 @@ from pathlib import Path
 
 from simple_test.fixtures import Fixture
 from simple_test.fixtured_test_case import FixturedTestCase
+from simple_test.phase_file import StopTestError
+from simple_test.runner import CompilationError
 from simple_test.subprocess import ProgramInvocation
 
 
@@ -16,12 +18,20 @@ class TestDecentCodeGenerator(FixturedTestCase, phase_name='run'):
         # TODO: XXX: uncomment this
         # assert self.remote is not None, 'must specify --remote'
 
-    def run_phase(self, sim_file: Path,
+    def run_phase(self, fixture: Fixture,
                   as_stdin: bool = False) -> ProgramInvocation:
         """
         Run the compiler of the simple compiler.
         """
-        return self.runner.run_compiler(sim_file, as_stdin, advanced=True)
+        phase_file = fixture.phase_file
+
+        try:
+            invocation = self.runner.run_compiler(fixture.sim_file_path,
+                                                  as_stdin)
+            phase_file.handle_compilation_error(self, None, advanced=True)
+            return invocation
+        except CompilationError as e:
+            phase_file.handle_compilation_error(self, e, advanced=True)
 
     def assertFixture(self, fixture: Fixture) -> None:
         """
@@ -33,3 +43,14 @@ class TestDecentCodeGenerator(FixturedTestCase, phase_name='run'):
         #       test the stdin functionality of the compiler. For now, this
         #       will do.
         self.assertFixtureAsStdin(fixture)
+
+    def assertFixtureAsStdin(self, fixture: Fixture) -> None:
+        """
+        Asserts that the simple compiler when run under the fixture's phase and
+        given the fixture's sim file as stdin produces the expected output.
+        """
+        try:
+            invocation = self.run_phase(fixture, as_stdin=True)
+            self.assertFixtureBehavior(fixture.phase_file, invocation)
+        except StopTestError:
+            pass

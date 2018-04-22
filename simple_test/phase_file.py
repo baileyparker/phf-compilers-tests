@@ -10,8 +10,10 @@ import sys
 from typing import Any, cast, List, Optional, Union
 from unittest import TestCase
 
+from simple_test.runner import CompilationError
 from simple_test.subprocess import ProgramInvocation, InteractiveProgram
-from simple_test.utils import unified_diff, relative_to_cwd, catch_map
+from simple_test.utils import unified_diff, relative_to_cwd, catch_map, \
+    list_split
 
 
 class PhaseFile:
@@ -38,6 +40,15 @@ class PhaseFile:
         raised against test_case.
         """
         raise NotImplementedError
+
+    def handle_compilation_error(self, test_case: TestCase,
+                                 e: Optional[CompilationError],
+                                 advanced: bool = False) -> None:
+        """
+        Handles a compilation error by suppressing it if it was expected, or
+        re-raising it if it was unexpected.
+        """
+        raise e
 
 
 class OutputPhaseFile(PhaseFile):
@@ -351,6 +362,9 @@ class BlankLine(RunLine):
         return str(self._line)
 
 
+CompilationError = Optional[Line]
+
+
 class RunPhaseFile(PhaseFile):
     """
     Represents the expected result of running a simple program (either via the
@@ -358,8 +372,12 @@ class RunPhaseFile(PhaseFile):
     outputs/errors in order.
     """
 
-    def __init__(self, lines: List[RunLine]) -> None:
+    def __init__(self, lines: List[RunLine],
+                 compilation_error: CompilationError,
+                 advanced_compilation_error: CompilationError) -> None:
         self._lines = lines
+        self._advanced_compilation_error = advanced_compilation_error
+        self._compilation_error = compilation_error
 
     @classmethod
     def load(cls, phase_name: str, path: Path) -> 'RunPhaseFile':
@@ -368,12 +386,38 @@ class RunPhaseFile(PhaseFile):
 
         with path.open() as f:
             relative_path = relative_to_cwd(path)
-            raw_lines = f.read().splitlines(keepends=True)
-            lines = (Line(l, Path(relative_path), i)
-                     for i, l in enumerate(raw_lines))
-            run_lines = catch_map(RunLine.parse, lines)
 
-            return cls(run_lines)
+            raw_lines = f.read().splitlines(keepends=True)
+            lines = [Line(l, Path(relative_path), i)
+                     for i, l in enumerate(raw_lines)]
+
+            interaction_lines, *compilation_errors = \
+                list_split('-----\n', raw_lines)
+
+            assert len(compilation_errors) < 3, \
+                'compilation errors only allowed for codegen & decent codegen'
+
+            advanced_compilation_error = None
+            compilation_error = None
+
+            if len(compilation_errors) != 0:
+                try:
+                    advanced_compilation_error = compilation_errors[0][0]
+                except IndexError:
+                    pass
+
+                if len(compilation_errors) == 1:
+                    compilation_error = advanced_compilation_error
+                else:
+                    try:
+                        compilation_error = compilation_errors[1][0]
+                    except IndexError:
+                        pass
+
+            run_lines = catch_map(RunLine.parse, interaction_lines)
+
+            return cls(run_lines, compilation_error,
+                       advanced_compilation_error)
 
     @property
     def _has_error(self) -> bool:
@@ -435,3 +479,29 @@ class RunPhaseFile(PhaseFile):
                                   "expected returncode 0 (got: {})\n\n"
                                   "context:\n\n{}".format(completed.returncode,
                                                           ''.join(context)))
+
+    def handle_compilation_error(self, test_case: TestCase,
+                                 e: Optional[CompilationError],
+                                 advanced: bool = False) -> None:
+        """
+        Handles a compilation error by suppressing it if it was expected, or
+        re-raising it if it was unexpected.
+        """
+        expected_compilation_error = \
+            self._advanced_compilation_error if advanced \
+            else self._compilation_error
+
+        if expected_compilation_error is not None:
+            if e is None or not e.result.failed:
+                test_case.fail("expected compilation error:\n\n{}"
+                               .format(expected_compilation_error))
+
+            raise StopTestError()
+        else:
+            if e is not None and e.result.failed:
+                test_case.fail("unexpected compilation error:\n\n{}"
+                               .format(e.result.stderr))
+
+
+class StopTestError(Exception):
+    pass

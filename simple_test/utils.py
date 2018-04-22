@@ -2,6 +2,7 @@
 
 from contextlib import contextmanager
 from difflib import unified_diff as _unified_diff
+from itertools import takewhile, tee
 from pathlib import Path
 import re
 from shlex import quote as shell_quote
@@ -125,3 +126,19 @@ class MultiException(Exception):
     def __init__(self, exceptions: List[Exception]) -> None:
         super().__init__('\n'.join(map(str, exceptions)))
         self.exceptions = exceptions
+
+
+W = TypeVar('W')
+
+
+def list_split(sep: W, items: List[W]) -> Iterable[List[W]]:
+    it = iter(items)
+
+    while True:
+        yield list(takewhile(lambda x: x != sep, it))
+
+        it_, it = tee(it)
+        try:
+            next(it_)
+        except StopIteration:
+            break

@@ -8,7 +8,6 @@ import shutil
 from types import TracebackType
 from typing import Dict, List, Optional, Tuple, Union
 
-from simple_test.fixtures import FIXTURES
 from simple_test.subprocess import ProgramInvocation, CompletedProgram
 from simple_test.typing_extensions import BaseExceptionType, ContextManager
 from simple_test.utils import relative_to_cwd
@@ -150,6 +149,7 @@ class Runner(ContextManager['Runner']):
                     # TODO: clean up file creation
 
                 # Assemble with gcc (remote)
+                from simple_test.fixtures import FIXTURES
                 name = str(sim_file.relative_to(FIXTURES)).replace('/', '_')
                 if as_stdin:
                     name += '-stdin'

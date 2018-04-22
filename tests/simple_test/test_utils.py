@@ -4,7 +4,7 @@ from unittest.mock import Mock, MagicMock, patch
 
 from simple_test.utils import assertion_context, unified_diff, \
     replace_values_with_fives, relative_to_cwd, join_cmd, catch_map, \
-    MultiException
+    MultiException, list_split
 
 
 class TestUtils(TestCase):
@@ -203,6 +203,10 @@ class TestUtils(TestCase):
             catch_map(raise_one, iterable)
 
         self.assertEqual(exceptions, cm.exception.exceptions)
+
+    def test_list_split(self):
+        result = list(list_split(0, [0, 1, 2, 0, 3, 0, 0, 4]))
+        self.assertEqual([[], [1, 2], [3], [], [4]], result)
 
 
 # Paths are a pain to mock, we subclass to allow overwriting methods with mocks
