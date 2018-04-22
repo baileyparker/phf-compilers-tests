@@ -1,0 +1,65 @@
+PROGRAM wip;
+    TYPE a = RECORD x: INTEGER; y: INTEGER; END;
+    TYPE b = RECORD f: a; END;
+    TYPE c = RECORD g: b; END;
+
+    VAR x1: a;
+    VAR y1: a;
+
+    VAR x2: b;
+    VAR y2: b;
+
+    VAR x3: c;
+    VAR y3: c;
+BEGIN
+    x1.x := 14;
+    x1.y := 15;
+    WRITE x1.x;
+    WRITE x1.y;
+    y1 := x1;
+    WRITE y1.x;
+    WRITE y1.y;
+
+    WRITE x2.f.x;
+    x2.f := y1;
+    WRITE x2.f.x;
+    y2 := x2;
+    WRITE y2.f.x;
+    WRITE y2.f.y;
+    y2.f.y := 12;
+    WRITE y2.f.y;
+    WRITE x2.f.y;
+
+    WRITE x3.g.f.x;
+    x3.g.f := y1;
+    WRITE x3.g.f.x;
+    WRITE x3.g.f.y;
+    y3 := x3;
+    WRITE y3.g.f.x;
+    WRITE y3.g.f.y;
+    y3.g.f.y := 9;
+    WRITE y3.g.f.y;
+    WRITE x3.g.f.y
+END wip.
+
+(* Expected Output
+14
+15
+14
+15
+
+0
+14
+14
+15
+12
+15
+
+0
+14
+15
+14
+15
+9
+15
+*)
