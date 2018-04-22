@@ -19,6 +19,7 @@ from simple_test.test_cst import TestCST
 from simple_test.test_symbol_table import TestSymbolTable
 from simple_test.test_ast import TestAST
 from simple_test.test_interpreter import TestInterpreter
+from simple_test.test_code_generator import TestCodeGenerator
 
 
 class Phase(Enum):
@@ -28,6 +29,7 @@ class Phase(Enum):
     ST = TestSymbolTable
     AST = TestAST
     INTERPRETER = TestInterpreter
+    CODE_GENERATOR = TestCodeGenerator
 
     def __call__(self, *args: Any, **kwargs: Any) -> TestCase:
         return cast(TestCase, self.value(*args, **kwargs))
@@ -74,6 +76,19 @@ def _get_args() -> Namespace:
     parser.add_argument('--sc', dest='runner', type=_make_runner,
                         default='./sc', help='path to the sc binary')
 
+    # TODO: wire these into runner
+    parser.add_argument('--timeout', type=float,
+                        help='How long to wait for the simple compiler to run,'
+                             ' ssh connections/communication, for a line to '
+                             'be printed by a simple program under test, etc.')
+
+    parser.add_argument('--remote',
+                        help='The user@hostname (or short name) that can be '
+                             'ssh\'d to and is capable of compiling the '
+                             'assembly output by the simple compiler. Used to '
+                             'test the behavior of programs compiled by the '
+                             'simple code generators.')
+
     parser.add_argument('--st-all-fives', action='store_const', const=True,
                         help='Expect all numeric constants to be 5 in the '
                              'symbol table tests (useful for ST assignment '
@@ -102,7 +117,7 @@ def _get_args() -> Namespace:
 
 def _make_runner(path: str) -> Runner:
     try:
-        return Runner.create(Path(Path.cwd(), path))
+        return Runner.create(Path(Path.cwd(), path), remote='arm')
     except BinaryNotFoundError as e:
         cmd = "{} --sc path/to/sc".format(argv[0])
         msg = "simple compiler does not exist: {} (try: {})" \

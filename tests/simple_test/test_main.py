@@ -20,6 +20,7 @@ with patch(PREFIX + 'scanner.TestScanner') as TestScanner, \
         patch(PREFIX + 'symbol_table.TestSymbolTable') as TestSymbolTable, \
         patch(PREFIX + 'ast.TestAST') as TestAST, \
         patch(PREFIX + 'interpreter.TestInterpreter') as TestInterpreter:
+        patch(PREFIX + 'code_generator.TestCodeGenerator') as TestCodeGenerator:
     from simple_test.main import main
 
 
@@ -44,6 +45,8 @@ class TestMain(TestCase):
         from simple_test.test_ast import TestAST as TestAST_
         from simple_test.test_interpreter import \
             TestInterpreter as TestInterpreter_
+        from simple_test.test_code_generator import \
+            TestCodeGenerator as TestCodeGenerator_
 
         # Unfortunately, it must be this way
         global ALL_TESTS  # pylint: disable=W0603
@@ -52,7 +55,9 @@ class TestMain(TestCase):
                                  ('st', (TestSymbolTable, TestSymbolTable_)),
                                  ('ast', (TestAST, TestAST_)),
                                  ('interpreter', (TestInterpreter,
-                                                  TestInterpreter_))])
+                                                  TestInterpreter_)),
+                                 ('code_generator', (TestCodeGenerator,
+                                                     TestCodeGenerator_))])
 
         self.reset_mocks()
 

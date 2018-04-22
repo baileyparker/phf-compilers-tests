@@ -16,6 +16,7 @@ class TestRunner(TestCase):
         self.loop = Mock()
         self.sc_path = Mock(spec=Path)
         self.timeout = 6.0
+        self.remote = 'user@host'
 
         self.runner = Runner(self.loop, self.sc_path, timeout=self.timeout,
                              remote=self.remote)
