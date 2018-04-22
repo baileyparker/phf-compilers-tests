@@ -4,7 +4,7 @@ from pathlib import Path
 from unittest import main
 
 from simple_test.fixtured_test_case import FixturedTestCase
-from simple_test.runner import Result
+from simple_test.subprocess import ProgramInvocation
 
 
 class TestScanner(FixturedTestCase, phase_name='scanner'):
@@ -12,7 +12,8 @@ class TestScanner(FixturedTestCase, phase_name='scanner'):
 
     # TODO: randomized fuzzing tests  # pylint: disable=W0511
 
-    def run_phase(self, sim_file: Path, as_stdin: bool = False) -> Result:
+    def run_phase(self, sim_file: Path,
+                  as_stdin: bool = False) -> ProgramInvocation:
         """
         Run the scanner phase of the simple compiler.
         """

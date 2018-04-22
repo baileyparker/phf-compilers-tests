@@ -4,6 +4,8 @@ from itertools import chain
 from pathlib import Path
 from typing import DefaultDict, Dict, List, NamedTuple, Set  # noqa  # pylint: disable=W0611
 
+from simple_test.phase_file import PhaseFile
+
 
 FIXTURES = (Path(__file__) / '..' / 'fixtures').resolve()
 
@@ -18,13 +20,18 @@ class Fixture(NamedTuple('Fixture', [('phase_file_path', Path)])):
     def name(self) -> str:
         """Returns the name of the fixture.
 
+        If the fixture has a phase subname then the dot is replaced with an
+        underscore (to allow the name to be used as a unittest TestCase test
+        method name). For example, a fixture with phase file
+        'fixtures/foo.bar.run' will be named 'foo_bar'.
+
         For fixtures in a subdirectory, the slashes are replaced with
         underscores (to allow the name to be used as a unittest TestCase test
         method name. For example, a fixture with phase file
         'fixtures/foo/bar.scanner' will be named 'foo_bar'.
         """
         relative_path = str(self._relative_phase_file_path.with_suffix(''))
-        return relative_path.replace('/', '_')
+        return relative_path.replace('/', '_').replace('.', '_')
 
     @property
     def phase_name(self) -> str:
@@ -34,7 +41,11 @@ class Fixture(NamedTuple('Fixture', [('phase_file_path', Path)])):
     @property
     def sim_file_path(self) -> Path:
         """Returns the path to the sim file to pass into the compiler."""
-        return self.phase_file_path.with_suffix('.sim')
+        phase_file_path = self.phase_file_path
+        if '.' in phase_file_path.stem:
+            phase_file_path = phase_file_path.with_suffix('')
+
+        return phase_file_path.with_suffix('.sim')
 
     @property
     def relative_sim_file_path(self) -> Path:
@@ -43,31 +54,14 @@ class Fixture(NamedTuple('Fixture', [('phase_file_path', Path)])):
 
     @property
     def phase_file(self) -> 'PhaseFile':
-        """Returns the PhaseFile representing the expected compiler output."""
-        return PhaseFile.load(self.phase_file_path)
+        """
+        Returns the PhaseFile representing the expected compiler phase output.
+        """
+        return PhaseFile.load(self.phase_name, self.phase_file_path)
 
     @property
     def _relative_phase_file_path(self) -> Path:
         return self.phase_file_path.relative_to(FIXTURES)
-
-
-class PhaseFile(NamedTuple('PhaseFile', [('stdout', str),
-                                         ('has_error', bool)])):
-    """
-    The expected output of running a certain phase of the simple compiler under
-    test against some sim file (see `Fixture`).
-    """
-    @classmethod
-    def load(cls, path: Path) -> 'PhaseFile':
-        """Load and return a PhaseFile from the filesystem."""
-        with path.open() as f:
-            stage_output = f.read()
-            output_lines = stage_output.splitlines(keepends=True)
-            stdout = ''.join(filter(lambda l: not l.startswith('error: '),
-                                    output_lines))
-            has_errors = any(l.startswith('error: ') for l in output_lines)
-
-            return cls(stdout, has_errors)
 
 
 def discover_fixtures() -> List[Fixture]:
@@ -90,7 +84,7 @@ def discover_fixtures() -> List[Fixture]:
     One sim file can have multiple phase files (each pair produces a separate
     fixture). These fixtures can be organized into directories if desired.
     """
-    phase_files = defaultdict(list)  # type: DefaultDict[Path, List[Path]]
+    phase_files = defaultdict(list)  # type: DefaultDict[Path, List[Fixture]]
     sim_files = set()  # type: Set[Path]
 
     for path in filter(lambda p: p.name[0] != '.', FIXTURES.glob('**/*')):
@@ -100,10 +94,11 @@ def discover_fixtures() -> List[Fixture]:
 
             # Organize phase tests by their associated .sim file
             if path.suffix != '.sim':
-                phase_files[path.with_suffix('.sim')].append(path)
+                fixture = Fixture(path)
+                phase_files[fixture.sim_file_path].append(fixture)
 
             # Keep track of sim files (see assertions below)
-            if path.suffix == '.sim':
+            else:
                 sim_files.add(path)
 
     # Every fixture not ending in .sim, must have a corresponding .sim file (of
@@ -121,7 +116,7 @@ def discover_fixtures() -> List[Fixture]:
     assert not testless_sim_files, "these *.sim files have no phases:\n{}" \
         .format('\n'.join(map(str, sorted(testless_sim_files))))
 
-    fixtures = list(map(Fixture, sorted(chain(*phase_files.values()))))
+    fixtures = list(chain.from_iterable(phase_files.values()))
 
     # We replace '/' in paths with '_' for the test name. This could allow for
     # a scenario where both a/b and a_b exist. Instead of just having one

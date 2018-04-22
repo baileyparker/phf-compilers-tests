@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch
 
 from simple_test.fixtured_test_case import FixturedTestCase
 from simple_test.fixtures import Fixture, PhaseFile
-from simple_test.runner import Result
+from simple_test.subprocess import ProgramInvocation
 
 
 PREFIX = 'simple_test.fixtured_test_case'
@@ -83,13 +83,14 @@ class TestFixturedTestCaseAssertions(TestCase):
 
         self.sim_file_path = Mock()
         self.expected_stdout = Mock()
-        self.phase_file = Mock(autospec=PhaseFile, stdout=self.expected_stdout)
+        self.phase_file = Mock(autospec=PhaseFile)
+        self.phase_file.assert_behavior = Mock()
         self.stdout = Mock()
         self.stdout_str = 'stdout!'
         self.stderr = Mock()
         self.stderr_str = 'stderr!'
-        self.result = Mock(autospec=Result, cmd='result cmd',
-                           stdout=self.stdout, stderr=self.stderr)
+        self.invocation = Mock(spec=ProgramInvocation)
+        self.invocation.cmd = 'some cmd'
 
         self.fixture = Mock(autospec=Fixture, sim_file_path=self.sim_file_path,
                             phase_file=self.phase_file)
@@ -109,121 +110,39 @@ class TestFixturedTestCaseAssertions(TestCase):
             .assert_called_once_with(self.fixture)
 
     def test_assertFixtureAsArgument(self):
-        self.runner.foo.return_value = self.result
-        self.test_case.assertFixtureOutput = Mock()
+        self.runner.foo.return_value = self.invocation
+        self.test_case.assertFixtureBehavior = Mock()
 
         self.test_case.assertFixtureAsArgument(self.fixture)
 
         self.runner.foo.assert_called_once_with(self.sim_file_path)
-        self.test_case.assertFixtureOutput. \
-            assert_called_once_with(self.phase_file, self.result)
+        self.test_case.assertFixtureBehavior. \
+            assert_called_once_with(self.phase_file, self.invocation)
 
     def test_assertFixtureAsStdin(self):
-        self.runner.foo.return_value = self.result
-        self.test_case.assertFixtureOutput = Mock()
+        self.runner.foo.return_value = self.invocation
+        self.test_case.assertFixtureBehavior = Mock()
 
         self.test_case.assertFixtureAsStdin(self.fixture)
 
         self.runner.foo.assert_called_once_with(self.sim_file_path,
                                                 as_stdin=True)
-        self.test_case.assertFixtureOutput \
-            .assert_called_once_with(self.phase_file, self.result)
+        self.test_case.assertFixtureBehavior \
+            .assert_called_once_with(self.phase_file, self.invocation)
 
-    def test_assertFixtureOutput(self):
-        self.test_case.assertFixtureStdout = Mock()
-        self.test_case.assertFixtureStderr = Mock()
+    def test_assertFixtureBehavior(self):
+        self.test_case.assertFixtureBehavior(self.phase_file, self.invocation)
 
-        self.test_case.assertFixtureOutput(self.phase_file, self.result)
+        self.phase_file.assert_behavior \
+            .assert_called_once_with(self.test_case, self.invocation)
 
-        self.test_case.assertFixtureStdout \
-            .assert_called_once_with(self.phase_file, self.result)
-        self.test_case.assertFixtureStderr \
-            .assert_called_once_with(self.phase_file, self.result)
+    def test_assertFixtureBehavior_adds_context(self):
+        self.phase_file.assert_behavior.side_effect = AssertionError('P = NP')
 
-    def test_assertFixtureOutput_adds_context(self):
-        assertion_error = AssertionError('P = NP')
-        self.test_case.assertFixtureStdout = Mock(side_effect=assertion_error)
-        self.test_case.assertFixtureStderr = Mock(side_effect=assertion_error)
-
-        error = "while running: {}\n\n.*P = NP".format(self.result.cmd)
+        error = "while running: {}\n\n.*P = NP".format(self.invocation.cmd)
         with self.assertRaisesRegex(AssertionError, error):
-            self.test_case.assertFixtureOutput(self.phase_file, self.result)
-
-    def test_assertFixtureStdout(self):
-        self.test_case.assertStdoutEqual = Mock()
-
-        self.test_case.assertFixtureStdout(self.phase_file, self.result)
-
-        self.test_case.assertStdoutEqual \
-            .assert_called_once_with(self.expected_stdout, self.stdout,
-                                     self.stderr)
-
-    def test_assertFixtureStderr_expected_error(self):
-        self.assertStderrAssertionSucceeds(True, 'error: stuff\n')
-
-    def test_assertFixtureStderr_unexpected_and_no_error(self):
-        self.assertStderrAssertionSucceeds(False, '')
-
-    def assertStderrAssertionSucceeds(self, has_error, stderr):
-        self.phase_file.has_error = has_error
-        self.stderr.decode.return_value = stderr
-
-        self.test_case.assertFixtureStderr(self.phase_file, self.result)
-        self.stderr.decode.assert_called_once_with('utf8')
-
-    def test_assertFixtureStderr_expected_but_no_error(self):
-        stderr = ''
-        error = 'at least one error.*\n\nstdout.*:\n\n{}\n\nstderr.*:\n\n{}' \
-            .format(self.stdout_str, stderr)
-
-        self.assertStderrAssertionFails(True, stderr, error)
-
-    def test_assertFixtureStderr_unexpected_error(self):
-        stderr = 'error: unexpected!\n'
-        error = 'expected no error.*\n\nstdout.*:\n\n{}\n\nstderr.*:\n\n{}' \
-            .format(self.stdout_str, stderr)
-
-        self.assertStderrAssertionFails(False, stderr, error)
-
-    def assertStderrAssertionFails(self, has_error, stderr, assertion_regex):
-        with self.assertRaisesRegex(AssertionError, assertion_regex):
-            self.phase_file.has_error = has_error
-            self.stderr.decode.return_value = stderr
-
-            self.test_case.assertFixtureStderr(self.phase_file, self.result)
-
-        self.stdout.decode.assert_called_once_with('utf8')
-        self.stderr.decode.assert_called_once_with('utf8')
-
-    def test_assertStdoutEqual_equal(self):
-        value = Mock()
-        encoded_value = Mock()
-        encoded_value.decode.return_value = value
-
-        self.test_case.assertStdoutEqual(value, encoded_value, self.stderr)
-        encoded_value.decode.assert_called_with('utf8')
-
-    def test_assertStdoutEqual_not_equal(self):
-        with patch("{}.unified_diff".format(PREFIX)) as unified_diff, \
-             patch("{}.sys.stdout.isatty".format(PREFIX)) as isatty:
-            expected = Mock()
-            actual = Mock()
-            actual_str = Mock()
-
-            actual.decode.return_value = actual_str
-            unified_diff.return_value = 'diff return!'
-
-            error = "wrong stdout:\n{}\n\nstderr was:\n\n{}" \
-                .format(unified_diff.return_value, self.stderr_str)
-            with self.assertRaisesRegex(AssertionError, error):
-                self.test_case.assertStdoutEqual(expected, actual, self.stderr)
-
-            actual.decode.assert_called_with('utf8')
-            self.stderr.decode.assert_called_with('utf8')
-            unified_diff.assert_called_with(expected, actual_str,
-                                            fromfile='expected_stdout',
-                                            tofile='actual_stdout',
-                                            color=isatty.return_value)
+            self.test_case.assertFixtureBehavior(self.phase_file,
+                                                 self.invocation)
 
 
 if __name__ == '__main__':

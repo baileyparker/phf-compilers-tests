@@ -18,7 +18,8 @@ PREFIX = 'simple_test.test_'
 with patch(PREFIX + 'scanner.TestScanner') as TestScanner, \
         patch(PREFIX + 'cst.TestCST') as TestCST, \
         patch(PREFIX + 'symbol_table.TestSymbolTable') as TestSymbolTable, \
-        patch(PREFIX + 'ast.TestAST') as TestAST:
+        patch(PREFIX + 'ast.TestAST') as TestAST, \
+        patch(PREFIX + 'interpreter.TestInterpreter') as TestInterpreter:
     from simple_test.main import main
 
 
@@ -41,13 +42,17 @@ class TestMain(TestCase):
         from simple_test.test_symbol_table \
             import TestSymbolTable as TestSymbolTable_
         from simple_test.test_ast import TestAST as TestAST_
+        from simple_test.test_interpreter import \
+            TestInterpreter as TestInterpreter_
 
         # Unfortunately, it must be this way
         global ALL_TESTS  # pylint: disable=W0603
         ALL_TESTS = OrderedDict([('scanner', (TestScanner, TestScanner_)),
                                  ('cst', (TestCST, TestCST_)),
                                  ('st', (TestSymbolTable, TestSymbolTable_)),
-                                 ('ast', (TestAST, TestAST_))])
+                                 ('ast', (TestAST, TestAST_)),
+                                 ('interpreter', (TestInterpreter,
+                                                  TestInterpreter_))])
 
         self.reset_mocks()
 

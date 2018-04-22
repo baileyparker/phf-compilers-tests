@@ -1,0 +1,7 @@
+PROGRAM basicEcho;
+    VAR
+        x : INTEGER;
+BEGIN
+    READ x;
+    WRITE x
+END basicEcho.

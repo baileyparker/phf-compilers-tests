@@ -49,6 +49,7 @@ specifying them as arguments to `run_harness`. The phases so far are:
   - `cst`
   - `st` (symbol table)
   - `ast`
+  - `interpreter`
 
 For example, to run just the scanner and symbol table:
 
@@ -127,6 +128,7 @@ the compiler in from the extension of the second file, currently the phases are:
   - `*.st` - `./sc -t` (**do not** replace all `INTEGER` values with `5`s in
     these files!)
   - `*.ast` - `./sc -a`
+  - `*.*.run` - `./sc -i` (see **About Runs** below)
 
 More will be added with future assignments.
 
@@ -179,6 +181,91 @@ too early):
 ```
 identifier<ics142>@(4, 9)
 error: unexpected ';' at (11, 11)
+```
+
+#### About Runs
+
+The interpreter and later assignments pose a different paradigm than previous
+assignments and therefore require some specialized testing machinery. Whereas
+before tests only had to invoke the compiler and then assert that the output
+matches, the interpreter introduces a two step process wherein the input is
+fed into the compiler and then the program (running in the interpreter) is
+interacted with (while output and errors are asserted). To facilitate this,
+`*.*.run` files have been introduced.
+
+Run files encapsulate the input, output, and errors of one interactive session
+running a simple program. Imagine if did `./sc -i some_file.sim` and then
+captured all of the your input and the output/errors—that would be the run
+file.
+
+A run file named `name.subname.run` has two parts: the sim name and run name.
+The sim name ties a run to a `*.sim` file. The run name allows you to create
+multiple runs (with descriptive names) for one `*.sim` file.
+
+For example, `matrix_multiply.small.run` is a run file that represents input
+and expected output/errors of running `./sc -i matrix_multiply.sim`. The
+run name (`small`) names the run and tells you that this run probably exercises
+the program with small matrices as input. Because of the run name, you can
+additionally create `matrix_multiply.identity.run` and
+`matrix_multiply.large.run` (both of which are associated with
+`matrix_multiply.sim`) to test different inputs on your program.
+
+The anatomy of a run file is very similar to normal phase files. They should be
+treated as a list of sequential actions/expectations. Any line starting with a
+number is an expectation that the program will next `WRITE` a line containing
+that number. Any line beginning with `error: ` indicates that the program is
+expected to error at this point and exit with a non-zero status code. Run files
+add an additional syntax for input: `> 123` means that at this point the number
+`123` should be written to the program's `stdin`.
+
+For organization, run files also support Python-style line comments (starting
+with `#`) and empty lines.
+
+##### Example
+
+**binary_search.small.run:**
+
+
+```
+> 10  # input the size of the array
+
+# Input each element in the array
+> 88
+> 1
+> 13
+> 14
+> 50
+> 21
+> 18
+> 14
+> 75
+> 10
+
+10   # the length of the array is echoed back
+
+# Then the array is printed in sorted order
+1
+10
+13
+14
+14
+18
+21
+50
+75
+```
+
+
+**multiply\_and\_divide.by_zero.run:**
+
+```
+> 10  # input a
+> 0   # input b
+
+0     # a * b
+
+# a DIV b
+error: division by 0
 ```
 
 #### Some Housekeeping

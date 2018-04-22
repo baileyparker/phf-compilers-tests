@@ -6,9 +6,9 @@ import sys
 from typing import Callable
 
 from simple_test.fixtures import Fixture, PhaseFile, discover_fixtures
-from simple_test.runner import Result
 from simple_test.test_case import TestCase
-from simple_test.utils import assertion_context, unified_diff
+from simple_test.subprocess import ProgramInvocation
+from simple_test.utils import assertion_context
 
 
 TestMethod = Callable[['FixturedTestCase'], None]
@@ -93,7 +93,8 @@ class FixturedTestCase(TestCase, metaclass=_PEP487):
 
                 setattr(cls, method_name, test_method)
 
-    def run_phase(self, sim_file: Path, as_stdin: bool = False) -> Result:
+    def run_phase(self, sim_file: Path,
+                  as_stdin: bool = False) -> ProgramInvocation:
         """
         Run the appropriate phase of the simple compiler for this test case.
         """
@@ -113,59 +114,24 @@ class FixturedTestCase(TestCase, metaclass=_PEP487):
         given the fixture's sim file as an argument produces the expected
         output.
         """
-        result = self.run_phase(fixture.sim_file_path)
-        self.assertFixtureOutput(fixture.phase_file, result)
+        invocation = self.run_phase(fixture.sim_file_path)
+        self.assertFixtureBehavior(fixture.phase_file, invocation)
 
     def assertFixtureAsStdin(self, fixture: Fixture) -> None:
         """
         Asserts that the simple compiler when run under the fixture's phase and
         given the fixture's sim file as stdin produces the expected output.
         """
-        result = self.run_phase(fixture.sim_file_path, as_stdin=True)
-        self.assertFixtureOutput(fixture.phase_file, result)
+        invocation = self.run_phase(fixture.sim_file_path, as_stdin=True)
+        self.assertFixtureBehavior(fixture.phase_file, invocation)
 
-    def assertFixtureOutput(self, expected: PhaseFile, result: Result) -> None:
+    def assertFixtureBehavior(self, phase_file: PhaseFile,
+                              invocation: ProgramInvocation) -> None:
         """
         Asserts that the given stdout/stderr from the simple compiler matches
         the expected output from the `PhaseFile`.
         """
         # Wrap assertion errors in the exact command to invoke
         # (that can be copied and pasted) for convenience
-        with assertion_context("while running: {}\n\n".format(result.cmd)):
-            self.assertFixtureStdout(expected, result)
-            self.assertFixtureStderr(expected, result)
-
-    def assertFixtureStdout(self, expected: PhaseFile, result: Result) -> None:
-        """Assert the stdout from the simple compiler matches the expected."""
-        self.assertStdoutEqual(expected.stdout, result.stdout, result.stderr)
-
-    def assertFixtureStderr(self, expected: PhaseFile, result: Result) -> None:
-        """
-        Assert that the simple compiler returned the appropriate errors for
-        the given expected output `PhaseFile`.
-        """
-        stderr = result.stderr.decode('utf8')
-
-        if expected.has_error:
-            if not stderr.startswith('error: '):
-                self.fail("expected stderr to report at least one error\n\n"
-                          "stdout was:\n\n{}\n\nstderr was:\n\n{}"
-                          .format(result.stdout.decode('utf8'), stderr))
-        elif stderr != '':
-            self.fail("expected no errors to be reported\n\n"
-                      "stdout was:\n\n{}\n\nstderr was:\n\n{}"
-                      .format(result.stdout.decode('utf8'), stderr))
-
-    def assertStdoutEqual(self, expected: str, actual: bytes,
-                          stderr: bytes) -> None:
-        """Assert that actual stdout matches expected stdout."""
-        actual_str = actual.decode('utf8')
-
-        if expected != actual_str:
-            diff = unified_diff(expected, actual_str,
-                                fromfile='expected_stdout',
-                                tofile='actual_stdout',
-                                color=sys.stdout.isatty())
-
-            self.fail("wrong stdout:\n{}\n\nstderr was:\n\n{}"
-                      .format(diff, stderr.decode('utf8')))
+        with assertion_context("while running: {}\n\n".format(invocation.cmd)):
+            phase_file.assert_behavior(self, invocation)
