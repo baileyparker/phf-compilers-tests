@@ -82,8 +82,7 @@ def _get_args() -> Namespace:
     parser.add_argument('--sc', dest='runner', type=_make_runner,
                         default='./sc', help='path to the sc binary')
 
-    # TODO: wire these into runner
-    parser.add_argument('--timeout', type=float, default=5.0,
+    parser.add_argument('--timeout', type=float, default=10.0,
                         help='How long to wait for the simple compiler to run,'
                              ' ssh connections/communication, for a line to '
                              'be printed by a simple program under test, etc.')
