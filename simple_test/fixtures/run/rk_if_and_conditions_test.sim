@@ -1,0 +1,154 @@
+PROGRAM X;
+CONST
+  over9000 = 9001;
+TYPE
+  s = RECORD Goku : INTEGER; Vegeta : INTEGER; Krillin : INTEGER; END;
+  dbs = ARRAY 7 OF INTEGER;
+  seas = ARRAY 3 OF s;
+VAR
+  powerLevel: INTEGER;
+  seiyans, rCopy: s;
+  dragonBalls, aCopy: dbs;
+  i: INTEGER;
+
+  season: seas;
+  version: RECORD original : seas; END;
+
+  arrOfarr: ARRAY 3 OF dbs;
+  recOfrec: RECORD a: s; END;
+BEGIN
+
+  (* If with constants *)
+  IF 1 = 1 THEN
+    WRITE 1
+  ELSE
+    WRITE 0
+  END;
+  IF over9000 = over9000 THEN
+    WRITE 1
+  ELSE
+    WRITE 0
+  END;
+  
+  (* If with variables *)
+  powerLevel := over9000;
+  IF powerLevel = powerLevel THEN
+    WRITE powerLevel
+  ELSE
+    WRITE 0
+  END;
+    
+  (* If with mix *)
+  IF powerLevel = over9000 THEN
+    WRITE 9001
+  ELSE
+    WRITE 0
+  END;
+  
+  (* Else case triggers *)
+  seiyans.Goku := over9000;
+  seiyans.Vegeta := over9000 - 1000;
+  IF seiyans.Vegeta = seiyans.Goku THEN
+    WRITE 1
+  ELSE
+    WRITE 0
+  END;
+  
+  (* If without else works *)
+  IF 1 = 1 THEN
+    WRITE 1
+  END;
+  IF seiyans.Vegeta = over9000 THEN
+    WRITE over9000
+  END;
+  
+  (* If with multiple instructions *)
+  IF 1 = 1 THEN
+    WRITE 10;
+    WRITE 11;
+    WRITE 12
+  ELSE
+    WRITE -10
+  END;
+  IF 1 = 0 THEN
+    WRITE -10
+  ELSE
+    WRITE 10;
+    WRITE 11;
+    WRITE 12
+  END;
+  
+  (***** Comparisons *****)
+  WRITE 100;
+  
+  (* # *)
+  IF seiyans.Goku # seiyans.Vegeta THEN
+    WRITE 1
+  ELSE
+    WRITE 0
+  END;
+  IF seiyans.Goku # over9000 THEN
+    WRITE 1
+  ELSE
+    WRITE 0
+  END;
+  
+  (* > *)
+  IF seiyans.Goku > seiyans.Vegeta THEN
+    WRITE 1
+  ELSE
+    WRITE 0
+  END;
+  IF seiyans.Vegeta > seiyans.Goku THEN
+    WRITE 1
+  ELSE
+    WRITE 0
+  END;
+  
+  (* < *)
+  IF seiyans.Vegeta < seiyans.Goku THEN
+    WRITE 1
+  ELSE
+    WRITE 0
+  END;
+  IF seiyans.Goku < seiyans.Vegeta THEN
+    WRITE 1
+  ELSE
+    WRITE 0
+  END;
+  
+  (* >= *)
+  IF seiyans.Goku >= seiyans.Vegeta THEN
+    WRITE 1
+  ELSE
+    WRITE 0
+  END;
+  IF seiyans.Vegeta >= seiyans.Goku THEN
+    WRITE 1
+  ELSE
+    WRITE 0
+  END;
+  IF seiyans.Goku >= seiyans.Goku THEN
+    WRITE 100
+  ELSE
+    WRITE 0
+  END;
+  
+  (* <= *) 
+  IF seiyans.Vegeta <= seiyans.Goku THEN
+    WRITE 1
+  ELSE
+    WRITE 0
+  END;
+  IF seiyans.Goku <= seiyans.Vegeta THEN
+    WRITE 1
+  ELSE
+    WRITE 0
+  END;
+  IF seiyans.Goku <= seiyans.Goku THEN
+    WRITE 100
+  ELSE
+    WRITE 0
+  END
+
+END X.

@@ -1,0 +1,9 @@
+PROGRAM X;
+VAR 
+  zero: INTEGER;
+BEGIN
+
+  zero := 0;
+  WRITE 100 DIV zero
+
+END X.

@@ -1,0 +1,51 @@
+PROGRAM X;
+CONST
+  max = 2147483647;
+  min = -2147483648;
+VAR
+  a: INTEGER;
+  b: INTEGER;
+BEGIN
+  WRITE max;
+  WRITE min;
+
+  a := max;
+  b := min;
+  WRITE a;
+  WRITE b;
+
+  (* Arithmetic With Constants *)
+
+  WRITE max - 1;
+  WRITE max - max;
+  WRITE min + 1;
+  WRITE min - min;
+  WRITE min + max;
+  WRITE max + min;
+  WRITE max * 1;
+  WRITE min * 1;
+  WRITE max DIV 1;
+  WRITE min DIV 1;
+  WRITE max MOD 1;
+  WRITE max MOD max;
+  WRITE min MOD 1;
+  WRITE min MOD min;
+
+  (* Arithmetic With Variables *)
+
+  WRITE a - 1;
+  WRITE a - a;
+  WRITE b + 1;
+  WRITE b - b;
+  WRITE b + a;
+  WRITE a + b;
+  WRITE a * 1;
+  WRITE b * 1;
+  WRITE a DIV 1;
+  WRITE b DIV 1;
+  WRITE a MOD 1;
+  WRITE a MOD a;
+  WRITE b MOD 1;
+  WRITE b MOD b
+
+END X.

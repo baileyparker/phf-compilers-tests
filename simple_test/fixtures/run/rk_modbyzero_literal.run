@@ -1,0 +1,1 @@
+error: Parser - ParsedDivByZero: Division by zero on line 4: 'WRITE 100 MOD 0'
