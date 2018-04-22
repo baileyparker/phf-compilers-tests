@@ -1,0 +1,48 @@
+PROGRAM x;
+TYPE a1 = ARRAY 2 OF INTEGER;
+TYPE r2 = RECORD x: a1; y: a1; END;
+TYPE r3 = RECORD x: r2; y: r2; END;
+
+VAR x: r3;
+BEGIN
+    WRITE x.x.x[0];
+    WRITE x.x.x[1];
+    WRITE x.x.y[0];
+    WRITE x.x.y[1];
+    WRITE x.y.x[0];
+    WRITE x.y.x[1];
+    WRITE x.y.y[0];
+    WRITE x.y.y[1];
+
+    x.x.y[1] := 1;
+    x.y.x[0] := 1;
+
+    WRITE x.x.x[0];
+    WRITE x.x.x[1];
+    WRITE x.x.y[0];
+    WRITE x.x.y[1];
+    WRITE x.y.x[0];
+    WRITE x.y.x[1];
+    WRITE x.y.y[0];
+    WRITE x.y.y[1]
+END x.
+
+(* Expected Output
+0
+0
+0
+0
+0
+0
+0
+0
+
+0
+0
+0
+1
+1
+0
+0
+0
+*)
