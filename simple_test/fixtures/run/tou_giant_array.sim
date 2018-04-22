@@ -1,0 +1,12 @@
+PROGRAM GIANTARRAY;
+	VAR x : ARRAY 9001 OF INTEGER;
+BEGIN
+ x[9000] := 9001;
+ x[5000] := 5000;
+ x[0] := 1;
+ x[x[0]] := x[x[5000]];
+ WRITE x[9000];
+ WRITE x[1];
+ WRITE x[0];
+ WRITE x[5000]
+END GIANTARRAY.
