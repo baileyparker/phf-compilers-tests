@@ -1,0 +1,28 @@
+PROGRAM x;
+TYPE a1 = ARRAY 2 OF INTEGER;
+TYPE a2 = ARRAY 2 OF a1;
+
+VAR x: a2;
+BEGIN
+    WRITE x[0][0];
+    WRITE x[0][1];
+    WRITE x[1][0];
+    WRITE x[1][1];
+    x[1][1] := 1;
+    WRITE x[0][0];
+    WRITE x[0][1];
+    WRITE x[1][0];
+    WRITE x[1][1]
+END x.
+
+(* Expected Output
+0
+0
+0
+0
+
+0
+0
+0
+1
+*)

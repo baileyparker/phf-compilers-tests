@@ -1,0 +1,10 @@
+PROGRAM x;
+
+TYPE arr = ARRAY 9000 OF INTEGER;
+VAR x: arr;
+
+BEGIN
+  x[4001] := 14;
+  WRITE x[4001]
+END x.
+

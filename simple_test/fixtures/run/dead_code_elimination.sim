@@ -1,0 +1,23 @@
+PROGRAM x;
+VAR x: INTEGER;
+VAR y: INTEGER;
+BEGIN
+    (* This IF should produce no ELSE branch *)
+    IF 0 < 1 THEN WRITE 1 ELSE WRITE 2 END;
+
+    (* This IF should produce no THEN branch *)
+    IF 0 > 1 THEN WRITE 1 ELSE WRITE 2 END;
+
+    (* This REPEAT never repeats *)
+    REPEAT WRITE 2 UNTIL 1 < 4 END;
+
+    (* This WHILE is a NOP *)
+    WHILE 4 < 2 DO WRITE 2 END
+END x.
+
+(* Expected Output
+1
+2
+2
+*)
+

@@ -1,0 +1,30 @@
+PROGRAM x;
+VAR x: INTEGER;
+VAR y: INTEGER;
+BEGIN
+    x := 2;
+    y := 16;
+    WRITE x;
+    WRITE y;
+
+    x := y MOD 8;
+    WRITE x;
+
+    y := 23;
+    x := y MOD 8;
+    WRITE x;
+
+    x := x DIV 2;
+    WRITE x
+END x.
+
+(* Expected Output
+2
+16
+
+0
+
+7
+
+3
+*)
