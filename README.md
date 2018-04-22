@@ -221,6 +221,56 @@ add an additional syntax for input: `> 123` means that at this point the number
 For organization, run files also support Python-style line comments (starting
 with `#`) and empty lines.
 
+##### Compile Time Errors
+
+This assignment also supports asserting that certain compile time errors
+occurred for either just the decent code generator or both the decent and silly
+code generators. The syntax uses a line containing `-----` to separate the
+different times that an error can occur.
+
+```
+error: this error must occur for only the decent code generator (1)
+-----
+error: this error must occur also for the silly code generator (2)
+-----
+# Normal run file from here down...
+> 1   # interpreter runs until it hits the error
+1
+2
+error: this error occurred at runtime (3)
+```
+
+You should specify errors for all cases so that the run file will work with all
+three phases of tests.
+
+If, for example, you have a compile time error that you only expect to occur
+for the decent code generator you can do:
+
+```
+error: constant array index out of bounds
+-----
+-----
+# Normal run file from here down...
+> 1   # interpreter/silly codegen runs until it hits the error
+1
+2
+error: array index of out bounds
+```
+
+If there are no compile time errors, you can omit the `-----` sections. Having
+none of them is equivalent to having two empty compilation error sections:
+
+```
+-----
+-----
+> 5
+1
+2
+3
+4
+5
+```
+
 ##### Example
 
 **binary_search.small.run:**
