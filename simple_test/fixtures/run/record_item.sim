@@ -1,0 +1,18 @@
+PROGRAM x;
+TYPE r = RECORD x: INTEGER; y: INTEGER; END;
+VAR x: r;
+BEGIN
+  WRITE x.x;
+  WRITE x.y;
+  x.x := 1;
+  WRITE x.x;
+  WRITE x.y
+
+END x.
+
+(* Expected Output
+0
+0
+1
+0
+*)
