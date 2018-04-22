@@ -1,0 +1,9 @@
+PROGRAM X;
+	TYPE a = ARRAY 10 OF INTEGER;
+	VAR 
+	x : a;
+BEGIN
+x[7] := 7;
+WRITE x[x[x[x[x[x[x[x[7]]]]]]]]
+END X.
+	
