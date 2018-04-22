@@ -1,0 +1,37 @@
+(*
+ * Random number benchmark with I/O.
+ *
+ * This is the integer version of a random number generator described in Wirth
+ * and Reiser: Programming in Oberon, 1992. The original reference is Park and
+ * Miller: Random Number Generators, 1988. We use the 10000th number to check
+ * for correctness, see https://tinyurl.com/yb6cnpqs for more.
+ *)
+
+PROGRAM Random;
+CONST
+  A = 16807;
+  M = 2147483647;
+  Q = M DIV A;
+  R = M MOD A;
+VAR
+  z, g, i, I, Z0: INTEGER;
+BEGIN
+  (* Read number of iterations and initial seed. *)
+  READ I; READ Z0;
+
+  (* Benchmark a bunch of times. *)
+  i := 0; z := Z0;
+  WHILE i < I DO
+
+    (* Generate next random number. *)
+    g := A*(z MOD Q) - R*(z DIV Q);
+    IF g > 0 THEN z := g ELSE z := g + M END;
+
+    i := i + 1
+  END;
+
+  (* Write the results. *)
+  WRITE I; WRITE z
+END Random.
+
+(* vim: set filetype=simple: *)
