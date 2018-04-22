@@ -1,0 +1,73 @@
+(*
+ * Matrix multiplication benchmark with I/O.
+ *)
+
+PROGRAM Matrix;
+CONST
+  N = 32; (* might be adjusted *)
+TYPE
+  Matrix = ARRAY N OF ARRAY N OF INTEGER;
+VAR
+  a, b, c, z: Matrix;
+  i, j, k: INTEGER;
+  iter, I: INTEGER;
+BEGIN
+  (* Read number of iterations. *)
+  READ I;
+
+  (* Read two matrices worth of integers. *)
+  i := 0;
+  WHILE i < N DO
+    j := 0;
+    WHILE j < N DO
+      READ a[i][j];
+      j := j + 1
+    END;
+    i := i + 1
+  END;
+
+  i := 0;
+  WHILE i < N DO
+    j := 0;
+    WHILE j < N DO
+      READ b[i][j];
+      j := j + 1
+    END;
+    i := i + 1
+  END;
+
+  (* Benchmark a bunch of times. *)
+  iter := 0;
+  WHILE iter < I DO
+
+    (* Multiply the matrices. *)
+    i := 0; c := z;
+    WHILE i < N DO
+      j := 0;
+      WHILE j < N DO
+        k := 0;
+        WHILE k < N DO
+          c[i][j] := c[i][j] + a[i][k] * b[k][j];
+          k := k + 1
+        END;
+        j := j + 1
+      END;
+      i := i + 1
+    END;
+
+    iter := iter + 1
+  END;
+
+  (* Write the result matrix. *)
+  i := 0;
+  WHILE i < N DO
+    j := 0;
+    WHILE j < N DO
+      WRITE c[i][j];
+      j := j + 1
+    END;
+    i := i + 1
+  END
+END Matrix.
+
+(* vim: set filetype=simple: *)
