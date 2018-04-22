@@ -333,6 +333,7 @@ thanks to these wonderful people who contributed test cases:
   - [Peter Lazorchak](https://github.com/lazorchakp)
   - [Rachel Kinney](https://github.com/rkinney4)
   - [Andrew Rojas](https://github.com/amrojas)
+  - [Tristan Orton-Urbina](https://github.com/Solian42)
   - Your name could be here!
 
 
