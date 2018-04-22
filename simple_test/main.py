@@ -20,6 +20,7 @@ from simple_test.test_symbol_table import TestSymbolTable
 from simple_test.test_ast import TestAST
 from simple_test.test_interpreter import TestInterpreter
 from simple_test.test_code_generator import TestCodeGenerator
+from simple_test.test_decent_code_generator import TestDecentCodeGenerator
 
 
 class Phase(Enum):
@@ -30,6 +31,7 @@ class Phase(Enum):
     AST = TestAST
     INTERPRETER = TestInterpreter
     CODE_GENERATOR = TestCodeGenerator
+    DECENT_CODE_GENERATOR = TestDecentCodeGenerator
 
     def __call__(self, *args: Any, **kwargs: Any) -> TestCase:
         return cast(TestCase, self.value(*args, **kwargs))

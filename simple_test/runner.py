@@ -15,7 +15,8 @@ from simple_test.utils import relative_to_cwd
 
 
 RemoteTempDir = Optional[Union[Path, 'BinaryCacheError']]
-CompilationCache = Dict[Tuple[Path, bool], Union[ProgramInvocation, Exception]]
+CompilationCache = Dict[Tuple[Path, bool, bool],
+                        Union[ProgramInvocation, Exception]]
 
 
 class Runner(ContextManager['Runner']):
@@ -112,7 +113,8 @@ class Runner(ContextManager['Runner']):
 
     # TODO: handle compile time errors
     def run_compiler(self, sim_file: Path,
-                     as_stdin: bool = False) -> ProgramInvocation:
+                     as_stdin: bool = False,
+                     advanced: bool = False) -> ProgramInvocation:
         """
         Invoke the silly compiler of the simple compiler. If `as_stdin` is
         True, then the `sim_file` will be fed into the stdin of the compiler.
@@ -124,15 +126,18 @@ class Runner(ContextManager['Runner']):
         write_line(), read_line(), and read_error_line(). Call wait() to get
         the CompletedProgram with returncode.
         """
+        key = (sim_file, as_stdin, advanced)
+
         try:
-            invocation = self._compilation_cache[(sim_file, as_stdin)]
+            invocation = self._compilation_cache[key]
         except KeyError:
             try:
                 # Fail early...
                 remote_temp_dir = self._remote_temp_dir
 
                 # Compile with simple compiler
-                compiler = self._run([], sim_file, as_stdin)
+                sc_args = ['-x'] if advanced else []
+                compiler = self._run(sc_args, sim_file, as_stdin)
                 if compiler.failed:
                     raise CompilationError(compiler) from None
 
@@ -163,7 +168,7 @@ class Runner(ContextManager['Runner']):
             except (ToolchainError, TimeoutError) as e:
                 invocation = e
             finally:
-                self._compilation_cache[(sim_file, as_stdin)] = invocation
+                self._compilation_cache[key] = invocation
 
         if isinstance(invocation, ToolchainError):
             raise invocation
