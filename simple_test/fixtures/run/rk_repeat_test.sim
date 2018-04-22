@@ -1,0 +1,39 @@
+PROGRAM X;
+CONST
+  over9000 = 9001;
+TYPE
+  s = RECORD Goku : INTEGER; Vegeta : INTEGER; Krillin : INTEGER; END;
+  dbs = ARRAY 7 OF INTEGER;
+  seas = ARRAY 3 OF s;
+VAR
+  powerLevel: INTEGER;
+  seiyans, rCopy: s;
+  dragonBalls, aCopy: dbs;
+  i: INTEGER;
+
+  season: seas;
+  version: RECORD original : seas; END;
+
+BEGIN
+
+    powerLevel := over9000;
+
+    (* Condition initially true *)
+    REPEAT
+        WRITE 1
+    UNTIL over9000 = over9000 END;
+
+    (* Single iteration *)
+    i := 0;
+    REPEAT
+        i := i + 1
+    UNTIL i > 1 END;
+    WRITE i;
+
+    (* Many iterations *)
+    REPEAT
+        seiyans.Goku := seiyans.Goku + 1
+    UNTIL seiyans.Goku >= over9000 END;
+    WRITE seiyans.Goku
+
+END X.

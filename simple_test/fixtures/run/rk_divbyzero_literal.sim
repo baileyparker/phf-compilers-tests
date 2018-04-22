@@ -1,0 +1,6 @@
+PROGRAM X;
+BEGIN
+
+  WRITE 100 DIV 0
+
+END X.
