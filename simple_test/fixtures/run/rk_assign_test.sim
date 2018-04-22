@@ -1,0 +1,68 @@
+PROGRAM X;
+CONST
+  over9000 = 9001;
+TYPE
+  s = RECORD Goku : INTEGER; Vegeta : INTEGER; Krillin : INTEGER; END;
+  dbs = ARRAY 7 OF INTEGER;
+  seas = ARRAY 3 OF s;
+VAR
+  powerLevel: INTEGER;
+  seiyans, rCopy: s;
+  dragonBalls, aCopy: dbs;
+  i: INTEGER;
+
+  season: seas;
+  version: RECORD original : seas; END;
+
+  arrOfarr: ARRAY 3 OF dbs;
+  recOfrec: RECORD a: s; END;
+BEGIN
+
+  (* Assign Variable *)
+  powerLevel := over9000;
+  WRITE powerLevel;
+  
+  (* Assign Constant *)
+  powerLevel := 9002;
+  WRITE powerLevel;
+  
+  (* Assign to Record Field *)
+  seiyans.Goku := over9000;
+  seiyans.Vegeta := seiyans.Goku DIV 2;
+  WRITE seiyans.Goku;
+  WRITE seiyans.Vegeta;
+  WRITE seiyans.Krillin;
+  
+  (* Assign to Array *)
+  i := 0;
+  WHILE i < 7 DO
+    dragonBalls[i] := 1;
+    i := i + 1
+  END;
+  WRITE dragonBalls[3];
+  
+  (* Deepcopy Record *)
+  rCopy := seiyans;
+  seiyans.Goku := 10000;
+  WRITE seiyans.Goku;
+  WRITE rCopy.Goku;
+  
+  (* Deepcopy Array *)
+  aCopy := dragonBalls;
+  dragonBalls[6] := 0;
+  WRITE dragonBalls[6];
+  WRITE aCopy[6];
+  
+  (* Assign multi-level array *)
+  arrOfarr[1][5] := 1;
+  WRITE arrOfarr[1][5];
+  
+  (* Assign multi-level record *)
+  recOfrec.a.Goku := over9000;
+  WRITE recOfrec.a.Goku;
+  
+  (* Assign mixed array/record *)
+  version.original[0].Goku := over9000;
+  WRITE version.original[0].Goku
+
+END X.

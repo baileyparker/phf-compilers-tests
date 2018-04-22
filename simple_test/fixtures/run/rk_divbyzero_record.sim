@@ -1,0 +1,9 @@
+PROGRAM X;
+VAR 
+  a: RECORD a: INTEGER; END;
+BEGIN
+
+  a.a := 0;
+  WRITE 100 DIV a.a
+
+END X.

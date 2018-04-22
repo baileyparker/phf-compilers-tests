@@ -1,0 +1,6 @@
+PROGRAM X;
+BEGIN
+
+  WRITE 100 MOD 0
+
+END X.
