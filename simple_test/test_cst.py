@@ -1,12 +1,13 @@
 """Tests for the scanner phase of the simple compiler."""
 
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 from unittest import main
 
 from simple_test.fixtures import Fixture
 from simple_test.fixtured_test_case import FixturedTestCase
-from simple_test.runner import Result
+from simple_test.phase_file import OutputPhaseFile
+from simple_test.subprocess import ProgramInvocation
 
 
 class TestCST(FixturedTestCase, phase_name='cst'):
@@ -18,7 +19,8 @@ class TestCST(FixturedTestCase, phase_name='cst'):
 
     # TODO: randomized fuzzing tests  # pylint: disable=W0511
 
-    def run_phase(self, sim_file: Path, as_stdin: bool = False) -> Result:
+    def run_phase(self, sim_file: Path,
+                  as_stdin: bool = False) -> ProgramInvocation:
         """
         Run the CST phase of the simple compiler.
         """
@@ -32,12 +34,16 @@ class TestCST(FixturedTestCase, phase_name='cst'):
 
         # With --skip-cst-passes, skip any fixtures that don't have errors
         # (they may be syntactically valid, but not semantically valid)
-        if self.skip_passes and not fixture.phase_file.has_error:
+        any_phase_file = fixture.phase_file
+        assert isinstance(any_phase_file, OutputPhaseFile)
+
+        phase_file = cast(OutputPhaseFile, fixture.phase_file)
+
+        if self.skip_passes and not phase_file.has_error:
             self.skipTest('valid CST fixture may not be semantically valid, '
                           'skipping due to --skip-cst-passes')
 
-        self.assertFixtureAsArgument(fixture)
-        self.assertFixtureAsStdin(fixture)
+        super().assertFixture(fixture)
 
 
 if __name__ == '__main__':

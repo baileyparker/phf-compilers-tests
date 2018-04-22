@@ -1,7 +1,6 @@
-from collections import OrderedDict
-from itertools import product
+from asyncio import SelectorEventLoop
+from functools import partial
 from pathlib import Path
-from subprocess import CompletedProcess, DEVNULL, PIPE
 from unittest import main, TestCase
 from unittest.mock import MagicMock, Mock, patch
 
@@ -14,27 +13,44 @@ PREFIX = 'simple_test.runner'
 
 class TestRunner(TestCase):
     def setUp(self):
-        path = 'path/to/sc'
-        self.sc_path = MagicMock(spec=Path)
-        self.sc_path.__str__.return_value = path
+        self.loop = Mock()
+        self.sc_path = Mock(spec=Path)
+        self.timeout = 6.0
 
-        self.runner = Runner(self.sc_path)
+        self.runner = Runner(self.loop, self.sc_path, timeout=self.timeout,
+                             remote=self.remote)
 
+    @patch('simple_test.runner.set_event_loop')
+    @patch('simple_test.runner.SelectorEventLoop')
+    @patch('simple_test.runner.Runner')
     @patch('simple_test.runner.os')
-    def test_create(self, os):
+    def test_create(self, os, Runner_, SelectorEventLoop_, set_event_loop):
         path = 'good/path'
-        sc_path = MagicMock(Path)
+        sc_path = MagicMock(spec=Path)
         sc_path.__str__.return_value = path
         sc_path.exists.return_value = True
         os.access.return_value = True
 
-        self.assertEqual(sc_path, Runner.create(sc_path)._sc_path)  # noqa  # pylint: disable=W0212
+        runner = Mock(spec=Runner)
+        loop = Mock(spec=SelectorEventLoop)
+        timeout, remote = Mock(), Mock()
+
+        SelectorEventLoop_.return_value = loop
+        Runner_.return_value = runner
+
+        create = partial(Runner.create.__func__, Runner_)
+        self.assertEqual(runner, create(sc_path, timeout, remote))
 
         sc_path.exists.assert_called_once_with()
         os.access.assert_called_once_with(path, os.X_OK)
 
+        SelectorEventLoop_.assert_called_once_with()
+        set_event_loop.assert_called_once_with(loop)
+        Runner_.assert_called_once_with(loop, sc_path, timeout=timeout,
+                                        remote=remote)
+
     def test_create_fails_if_not_exist(self):
-        path = 'good/path'
+        path = 'bad/path'
         sc_path = MagicMock(Path)
         sc_path.__str__.return_value = path
         sc_path.exists.return_value = False
@@ -46,7 +62,7 @@ class TestRunner(TestCase):
 
     @patch('simple_test.runner.os')
     def test_create_fails_if_not_executable(self, os):
-        path = 'good/path'
+        path = 'bad/path'
         sc_path = MagicMock(Path)
         sc_path.__str__.return_value = path
         sc_path.exists.return_value = True
@@ -60,118 +76,63 @@ class TestRunner(TestCase):
         sc_path.exists.assert_called_once_with()
         os.access.assert_called_once_with(path, os.X_OK)
 
+    def test_context_manager(self):
+        with self.runner:
+            pass
+
+        self.loop.close.expect_called_once_with()
+
+    def test_context_manager_raises(self):
+        self.loop.close.side_effect = RuntimeError('loop already closed')
+
+        with self.runner:
+            pass
+
+        self.loop.close.expect_called_once_with()
+
     def test_run_simple_scanner(self):
-        self.assertRunsSimple(self.runner.run_scanner, ['-s'])
+        self.assertInvokesSimple(self.runner.run_scanner, ['-s'])
 
     def test_run_simple_cst(self):
-        self.assertRunsSimple(self.runner.run_cst, ['-c'])
+        self.assertInvokesSimple(self.runner.run_cst, ['-c'])
 
     def test_run_simple_symbol_table(self):
-        self.assertRunsSimple(self.runner.run_symbol_table, ['-t'])
+        self.assertInvokesSimple(self.runner.run_symbol_table, ['-t'])
 
     def test_run_simple_ast(self):
-        self.assertRunsSimple(self.runner.run_ast, ['-a'])
+        self.assertInvokesSimple(self.runner.run_ast, ['-a'])
 
-    def assertRunsSimple(self, runner, args):
-        with patch("{}.run".format(PREFIX)) as self.subprocess_run, \
-             patch("{}.shell_quote".format(PREFIX)) as self.shell_quote:
+    def test_run_simple_interpreter(self):
+        self.assertInvokesSimple(self.runner.run_interpreter, ['-i'])
 
-            for raises, sc_raises in product((False, True), repeat=2):
-                self.assertRunsSimpleBothWays(runner, args, raises, sc_raises)
+    def assertInvokesSimple(self, runner, args):
+        self.assertInvokesSimpleAsStdin(runner, args)
+        self.assertInvokesSimpleAsArgument(runner, args)  # noqa  # pylint: disable=E1120
 
-    def assertRunsSimpleBothWays(self, runner, args, raises, sc_raises):
-        name = "raises={}, sc_raises={}".format(raises, sc_raises)
-        with self.subTest("with argument, {}".format(name)):
-            self.assertRunsSimpleWithArgument(runner, args,
-                                              relative_to_raises=raises,
-                                              sc_raises=sc_raises)
+    def assertInvokesSimpleAsStdin(self, runner, args):
+        sim_file = Mock()
+        self.assertInvokesSimpleWith(runner, args, sim_file, stdin=sim_file,  # noqa  # pylint: disable=E1120
+                                     as_stdin=True)
 
-        with self.subTest("as stdin, {}".format(name)):
-            self.assertRunsSimpleAsStdin(runner, args,
-                                         relative_to_raises=raises,
-                                         sc_raises=sc_raises)
+    @patch('simple_test.runner.relative_to_cwd')
+    def assertInvokesSimpleAsArgument(self, runner, args, relative_to_cwd):
+        sim_file = Mock()
+        sim_file_path = Mock()
+        relative_to_cwd.return_value = sim_file_path
 
-    def setup_subprocess(self, relative_to_raises=False,
-                         sc_relative_to_raises=False):
-        cwd = Path.cwd()
+        self.assertInvokesSimpleWith(runner, [*args, sim_file_path], sim_file)  # noqa  # pylint: disable=E1120
+        relative_to_cwd.assert_called_once_with(sim_file)
 
-        sim_file = MagicMock()
-        sim_file.__str__.return_value = 'non_relative_path.sim'
-        relative_sim_file = MagicMock()
-        relative_sim_file.__str__.return_value = 'foo/bar.sim'
+    @patch('simple_test.runner.ProgramInvocation')
+    def assertInvokesSimpleWith(self, runner, args, sim_file,
+                                ProgramInvocation, stdin=None, as_stdin=False):
+        invocation = Mock()
+        ProgramInvocation.return_value = invocation
 
-        if not relative_to_raises:
-            sim_file.relative_to.side_effect = \
-                lambda p: relative_sim_file if p == cwd else None
-        else:
-            sim_file.relative_to.side_effect = ValueError('relative_to')
-
-        stdout, stderr = Mock(), Mock()
-        quoted_args = OrderedDict([('a', 'c'), ('b', 'd')])
-        fake_args = tuple(['full/path/to/sc', *quoted_args.keys()])
-        completed_process = Mock(CompletedProcess, args=fake_args,
-                                 stdout=stdout, stderr=stderr)
-
-        self.sc_path.reset_mock()
-        self.subprocess_run.reset_mock()
-        self.shell_quote.reset_mock()
-
-        quoted_sc_path = 'quoted/sc/path'
-
-        if not sc_relative_to_raises:
-            unquoted_sc_path = Path('relative/path/to/sc')
-            self.sc_path.relative_to.side_effect = \
-                lambda p: unquoted_sc_path if p == cwd else None
-        else:
-            unquoted_sc_path = str(self.sc_path)
-            self.sc_path.relative_to.side_effect = ValueError('relative_to')
-
-        self.subprocess_run.return_value = completed_process
-        self.shell_quote.side_effect = \
-            lambda x: quoted_sc_path if x == str(unquoted_sc_path) \
-            else quoted_args[x]
-
-        cmd = ' '.join([quoted_sc_path, *quoted_args.values()])
-
-        return sim_file, relative_sim_file, cmd, stdout, stderr
-
-    def assertRunsSimpleWithArgument(self, runner, args,
-                                     relative_to_raises=False,
-                                     sc_raises=False):
-        sim_file, relative_sim_file, cmd, stdout, stderr = \
-            self.setup_subprocess(relative_to_raises, sc_raises)
-        last_arg = sim_file if relative_to_raises else relative_sim_file
-
-        result = runner(sim_file)
-
-        self.subprocess_run \
-            .assert_called_once_with([str(self.sc_path), *args, str(last_arg)],
-                                     stdout=PIPE, stderr=PIPE, stdin=DEVNULL)
-        self.assertEqual(cmd, result.cmd)
-        self.assertEqual(stdout, result.stdout)
-        self.assertEqual(stderr, result.stderr)
-
-    def assertRunsSimpleAsStdin(self, runner, args, relative_to_raises=False,
-                                sc_raises=False):
-        sim_file, relative_sim_file, cmd, stdout, stderr = \
-            self.setup_subprocess(relative_to_raises, sc_raises)
-        redirected_file = sim_file if relative_to_raises else relative_sim_file
-
-        # Wire up relative_sim_file so we can call .open() on it
-        fake_file = MagicMock()
-        fake_file_context = MagicMock()
-        fake_file_context.__enter__.return_value = fake_file
-        redirected_file.open.return_value = fake_file_context
-
-        result = runner(sim_file, as_stdin=True)
-
-        redirected_file.open.assert_called_once_with()
-        self.subprocess_run \
-            .assert_called_once_with([str(self.sc_path), *args], stdout=PIPE,
-                                     stderr=PIPE, stdin=fake_file)
-        self.assertEqual("{} < {}".format(cmd, redirected_file), result.cmd)
-        self.assertEqual(stdout, result.stdout)
-        self.assertEqual(stderr, result.stderr)
+        self.assertEqual(invocation, runner(sim_file, as_stdin))
+        ProgramInvocation.assert_called_once_with(self.loop, self.sc_path,
+                                                  args, stdin=stdin,
+                                                  timeout=self.timeout)
 
 
 if __name__ == '__main__':

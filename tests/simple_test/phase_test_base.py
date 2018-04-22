@@ -174,10 +174,11 @@ class PhaseTestBase(TestCase):
         fqn = self.__class__.cases_under_test  # noqa  # pylint: disable=E1101
         cases_module, class_name = fqn.rsplit('.', 1)
         test_cases_class = getattr(import_module(cases_module), class_name)
-        test_cases = test_cases_class(runner=Runner(fake_compiler.sc_path),
-                                      **test_case_args)
+        runner = Runner.create(fake_compiler.sc_path, timeout=0.5)
+        test_cases = test_cases_class(runner=runner, **test_case_args)
 
-        getattr(test_cases, "test_{}".format(fixture.name))()
+        with runner:
+            getattr(test_cases, "test_{}".format(fixture.name))()
 
     def assertFakeCompilerHasCalls(self, fake_compiler, fixture,
                                    test_case_args):

@@ -18,6 +18,7 @@ from simple_test.test_scanner import TestScanner
 from simple_test.test_cst import TestCST
 from simple_test.test_symbol_table import TestSymbolTable
 from simple_test.test_ast import TestAST
+from simple_test.test_interpreter import TestInterpreter
 
 
 class Phase(Enum):
@@ -26,6 +27,7 @@ class Phase(Enum):
     CST = TestCST
     ST = TestSymbolTable
     AST = TestAST
+    INTERPRETER = TestInterpreter
 
     def __call__(self, *args: Any, **kwargs: Any) -> TestCase:
         return cast(TestCase, self.value(*args, **kwargs))
@@ -46,12 +48,13 @@ def main() -> None:
 
     args = _get_args()
 
-    test_runner = TextTestRunner(verbosity=args.verbosity)
-    test_suite = TestSuite([p(name=method, **args.__dict__)
-                            for p in args.phases
-                            for method in _get_test_case_names(p)])
+    with args.runner:
+        test_runner = TextTestRunner(verbosity=args.verbosity)
+        test_suite = TestSuite([p(name=method, **args.__dict__)
+                                for p in args.phases
+                                for method in _get_test_case_names(p)])
 
-    test_runner.run(test_suite)
+        test_runner.run(test_suite)
 
 
 def _get_test_case_names(test_case: Type[TestCase]) -> List[str]:
