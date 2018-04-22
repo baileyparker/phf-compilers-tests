@@ -27,7 +27,7 @@ class TestDecentCodeGenerator(FixturedTestCase, phase_name='run'):
 
         try:
             invocation = self.runner.run_compiler(fixture.sim_file_path,
-                                                  as_stdin)
+                                                  as_stdin, advanced=True)
             phase_file.handle_compilation_error(self, None, advanced=True)
             return invocation
         except CompilationError as e:
