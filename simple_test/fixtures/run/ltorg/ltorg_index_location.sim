@@ -12,48 +12,8 @@ PROGRAM ltorg;
             x : INTEGER;
         END;
 BEGIN
-    READ x;
-
-    y := 1;  (* push variable location *)
-    WRITE y; (* push variable value *)
-
     x := 257;
     padding[x] := 2;  (* push index location *)
-    WRITE padding[x]; (* push index value *)
-
-    r.x := 3;  (* push field location *)
-    WRITE r.x; (* push field value *)
-
-    r.padding := padding; (* assign *)
-    WRITE r.padding[257];
-
-    x := 0;
-    x := 257 + x; (* add constant *)
-    WRITE x;
-
-    x := 0;
-    x := 257 - x; (* sub constant *)
-    WRITE x;
-
-    x := 0;
-    x := x - 257; (* sub constant *)
-    WRITE x;
-
-    x := 1;
-    x := 257 DIV x; (* div constant *)
-    WRITE x;
-
-    x := 771;
-    x := x DIV 3; (* div constant *)
-    WRITE x;
-
-    x := 10;
-    x := 257 MOD x; (* mod constant *)
-    WRITE x;
-
-    x := 258;
-    x := x MOD 257; (* mod constant *)
-    WRITE x;
 
     (* A bunch of instructions just to distance the constant pool *)
     x := 1;
@@ -2455,5 +2415,8 @@ BEGIN
     x := 1;
     x := 1;
     x := 1;
-    x := 1
+    x := 1;
+
+    x := 257;
+    WRITE padding[x] (* push index value *)
 END ltorg.
