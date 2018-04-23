@@ -110,5 +110,13 @@ BEGIN
 
     e.x.y := 23;
     d := e;
-    WRITE d.x.y (* 23 *)
+    WRITE d.x.y; (* 23 *)
+
+    (* Times 0 can be eliminated (unless another error is possible) *)
+    x := 24 + 0 * (z + b.x * d.w.y);
+    WRITE x; (* 24 *)
+
+    d.w.y := 1;
+    x := 25 + 0 * (z + b.x DIV d.w.y);
+    WRITE x (* 25 *)
 END deadCode.
