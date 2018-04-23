@@ -1,0 +1,114 @@
+PROGRAM deadCode;
+    VAR
+        x, y, z, zz : INTEGER;
+        a : ARRAY 2 OF INTEGER;
+        b : RECORD x, y : INTEGER; END;
+        c, cc : ARRAY 2 OF ARRAY 2 OF INTEGER;
+        d, e : RECORD w, x : RECORD y, z : INTEGER; END; END;
+BEGIN
+    (* Eliminating useless branches*)
+    IF 0 = 0 THEN
+        WRITE 1
+    ELSE
+        WRITE -1
+    END;
+
+    IF -10 # -10 THEN
+        WRITE -2
+    ELSE
+        WRITE 2
+    END;
+
+    REPEAT
+        WRITE 3
+    UNTIL 42 < 43 END;
+
+    WHILE 42 > 43 DO
+        WRITE -4
+    END;
+
+    IF 255 <= 255 THEN
+        WRITE 5
+    ELSE
+        WRITE -5
+    END;
+
+    IF -4096 >= -4095 THEN
+        WRITE -6
+    ELSE
+        WRITE 6
+    END;
+
+    (* Eliminating identity assigns *)
+    x := 7;
+    x := x;
+    WRITE x; (* 7 *)
+
+    y := 8;
+    x := y;
+    WRITE x; (* 8 *)
+
+    a := a;
+
+    a[1] := 9;
+    a[1] := a[1];
+    WRITE a[1]; (* 9 *)
+
+    a[1] := 10;
+    z := 1;
+    a[z] := a[z];
+    WRITE a[z]; (* 10 *)
+
+    zz := 0;
+    a[0] := 11;
+    a[z] := a[zz];
+    WRITE a[z]; (* 11 *)
+
+    a[0] := 12;
+    a[z-1] := a[z-1];
+    WRITE a[z-1]; (* 12 *)
+
+    a[1] := 13;
+    a[z-1] := a[zz+1];
+    WRITE a[z-1]; (* 13 *)
+
+    b.x := 14;
+    b.x := b.x;
+    WRITE b.x; (* 14 *)
+
+    b.y := 15;
+    b.x := b.y;
+    WRITE b.x; (* 15 *)
+
+    c[0][0] := 16;
+    c[0][0] := c[0][0];
+    WRITE c[0][0]; (* 16 *)
+
+    c[0][1] := 17;
+    c[0][0] := c[0][1];
+    WRITE c[0][0]; (* 17 *)
+
+    c[0][0] := 18;
+    c := c;
+    WRITE c[0][0]; (* 18 *)
+
+    cc[1][1] := 19;
+    c := cc;
+    WRITE c[1][1]; (* 19 *)
+
+    d.w.y := 20;
+    d.w.y := d.w.y;
+    WRITE d.w.y; (* 20 *)
+
+    d.x.y := 21;
+    d.w.y := d.x.y;
+    WRITE d.w.y; (* 21 *)
+
+    d.x.y := 22;
+    d := d;
+    WRITE d.x.y; (* 22 *)
+
+    e.x.y := 23;
+    d := e;
+    WRITE d.x.y (* 23 *)
+END deadCode.
