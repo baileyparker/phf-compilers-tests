@@ -1,0 +1,54 @@
+PROGRAM primeSieve;
+    CONST
+        maxSize = 1048576;
+        FALSE = 0;
+        TRUE = 1;
+    TYPE
+        BOOLEAN = INTEGER;
+    VAR
+        nums    : ARRAY maxSize OF INTEGER;
+        p, i, n : INTEGER;
+        flag    : BOOLEAN;
+BEGIN
+    (* We will find all primes <= n. *)
+    READ n;
+
+    (* We support finding primes up to maxSize. *)
+    IF n < maxSize THEN
+        (* Start at 2. *)
+        p := 2;
+
+        (* Write first prime (if <= n). *)
+        IF p <= n THEN
+            WRITE p
+        END;
+
+        (* Until we are finding primes larger than n. *)
+        WHILE p < n DO
+            (* Mark all multiples of p < n (except itself) as not prime. *)
+            i := 2;
+            WHILE (i * p) <= n DO
+                nums[i * p] := TRUE;
+                i := i + 1
+            END;
+
+            (* Find next prime. *)
+            p := p + 1;
+            REPEAT
+                IF p > n THEN
+                    (* But don't go above n. *)
+                    flag := TRUE
+                ELSE
+                    (* Found the next prime. *)
+                    IF nums[p] = FALSE THEN
+                        WRITE p;
+                        flag := TRUE
+                    END
+                END
+            UNTIL flag = TRUE END
+        END
+    ELSE
+        (* If n is too large. *)
+        WRITE -1
+    END
+END primeSieve.
