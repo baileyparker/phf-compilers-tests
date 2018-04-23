@@ -1,0 +1,16 @@
+PROGRAM LargeMath;
+VAR x: INTEGER;
+VAR y: INTEGER;
+VAR z: INTEGER;
+VAR a: INTEGER;
+VAR b: INTEGER;
+
+BEGIN
+  x := 2;
+  y := 1;
+  z := 2;
+  a := 1;
+  b := 2;
+
+  WRITE (x + (y + (z + (a + (b + (b + (a + (z + (y + (x + (b + (z * (x)))))))))))))
+END LargeMath.
