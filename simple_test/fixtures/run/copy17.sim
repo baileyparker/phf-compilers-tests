@@ -1,0 +1,20 @@
+PROGRAM copy;
+    CONST
+        size = 17;
+    VAR
+        i    : INTEGER;
+        x, y : ARRAY size OF INTEGER;
+BEGIN
+    WHILE i < size DO
+        x[i] := i;
+        i := i + 1
+    END;
+
+    y := x;
+
+    i := 0;
+    WHILE i < size DO
+        WRITE y[i];
+        i := i + 1
+    END
+END copy.
