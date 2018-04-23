@@ -1,0 +1,19 @@
+PROGRAM x;
+VAR x: INTEGER;
+VAR y: INTEGER;
+BEGIN
+  x := 10;
+  y := 10;
+  IF x < y THEN WRITE 14 ELSE WRITE 12 END;
+  IF x <= y THEN WRITE 14 ELSE WRITE 12 END;
+
+  IF x > y THEN WRITE 14 ELSE WRITE 12 END;
+  IF x >= y THEN WRITE 14 ELSE WRITE 12 END
+END x.
+
+(* Expected output:
+12
+14
+12
+14
+*)
