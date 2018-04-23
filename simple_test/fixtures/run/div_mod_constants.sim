@@ -1,0 +1,16 @@
+PROGRAM divModConstants;
+    VAR
+        x : INTEGER;
+BEGIN
+    x := 2;
+    WRITE 7 DIV x;
+
+    x := 12;
+    WRITE x DIV 3;
+
+    x := 3;
+    WRITE 7 MOD x;
+
+    x := 9;
+    WRITE x MOD 3
+END divModConstants.
