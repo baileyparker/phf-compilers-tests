@@ -15,8 +15,7 @@ class TestDecentCodeGenerator(FixturedTestCase, phase_name='run'):
     def setUp(self):
         super().setUp()
 
-        # TODO: XXX: uncomment this
-        # assert self.remote is not None, 'must specify --remote'
+        assert self.runner._remote is not None, 'must specify --remote'
 
     def run_phase(self, fixture: Fixture,
                   as_stdin: bool = False) -> ProgramInvocation:
