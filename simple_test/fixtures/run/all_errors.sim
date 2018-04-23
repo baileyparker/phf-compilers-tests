@@ -1,0 +1,24 @@
+PROGRAM allErrors;
+    VAR
+        x, y : INTEGER;
+        z : ARRAY 1 OF INTEGER;
+BEGIN
+    READ x; (* which error to trigger *)
+
+    IF x = 1 THEN
+        x := 1 DIV y
+    END;
+
+    IF x = 2 THEN
+        x := 1 MOD y
+    END;
+
+    IF x = 3 THEN
+        READ y
+    END;
+
+    IF x = 4 THEN
+        y := -1;
+        x := z[y]
+    END
+END allErrors.
