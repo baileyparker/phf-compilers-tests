@@ -1,0 +1,21 @@
+PROGRAM derp;
+TYPE arr1 = ARRAY 5 OF INTEGER;
+TYPE arr2 = ARRAY 5 OF arr1;
+TYPE arr3 = ARRAY 5 OF arr2;
+TYPE arr4 = ARRAY 5 OF arr3;
+TYPE arr5 = ARRAY 5 OF arr4;
+TYPE arr6 = ARRAY 5 OF arr5;
+
+VAR x: INTEGER;
+VAR z: INTEGER;
+VAR y: arr6;
+BEGIN
+  x := 4;
+  y[x][x][x][x][x][x] := 14;
+  WRITE y[x][x][x][x][x][x];
+
+  z := 2;
+  y[z][z][z][z][z][z] := y[x][x][x][x][x][x];
+  WRITE y[z][z][z][z][z][z]
+
+END derp.
