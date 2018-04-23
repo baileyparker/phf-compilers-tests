@@ -469,6 +469,9 @@ class RunPhaseFile(PhaseFile):
             test_case.assertNotEqual(0, completed.returncode,
                                      "expected non-zero returncode\n\n"
                                      "context:\n\n{}".format(''.join(context)))
+
+            test_case.assertNotEqual(139, completed.returncode,
+                                     'simple program segfaulted')
         else:
             test_case.assertEqual('', completed.stderr,
                                   "expected no more stderr\n\n"
