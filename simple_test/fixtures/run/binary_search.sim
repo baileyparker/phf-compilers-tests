@@ -1,0 +1,52 @@
+PROGRAM binarySearch;
+    CONST
+        maxSize = 1024;
+    VAR
+        nums : ARRAY maxSize OF INTEGER;
+        hi : INTEGER;
+        lo : INTEGER;
+        mid : INTEGER;
+        x : INTEGER;
+BEGIN
+    (* Read in the length of array that will be input. *)
+    READ hi;
+
+    IF hi > 0 THEN
+        WHILE lo < hi DO
+            READ nums[lo];
+            lo := lo + 1
+        END;
+
+        (* So that the user knows inputting is done *)
+        (* WRITE lo; *)
+        lo := 0;
+        hi := hi - 1;
+
+        (* Get number to search for *)
+        READ x;
+
+        (* Binary search for x *)
+        WHILE lo < hi DO
+            mid := (lo + hi) DIV 2;
+
+            IF nums[mid] = x THEN
+                (* We found x *)
+                lo := (lo + hi) DIV 2;
+                hi := lo
+            ELSE
+                IF nums[mid] < x THEN
+                    (* x might be between lo and mid *)
+                    lo := mid + 1
+                ELSE
+                    (* x might be between mid and hi *)
+                    hi := mid - 1
+                END
+            END
+        END;
+
+        (* Print the index if we found x *)
+        IF nums[lo] = x THEN
+            WRITE lo
+        END
+    END
+END binarySearch.

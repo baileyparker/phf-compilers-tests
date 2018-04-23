@@ -1,0 +1,64 @@
+PROGRAM bubbleSort;
+    CONST
+        maxSize = 1024;
+    VAR
+        nums            : ARRAY maxSize OF INTEGER;
+        size            : INTEGER;
+        i, n, top, temp : INTEGER;
+BEGIN
+    (* Read in the length of array that will be input. *)
+    READ size;
+
+    IF size > 0 THEN
+        IF size <= maxSize THEN
+            WHILE i < size DO
+                READ nums[i];
+                i := i + 1
+            END;
+
+            (* Print the size to let user know input is done. *)
+            WRITE size;
+
+            (* Sort the array! *)
+            n := size;
+
+            REPEAT
+                top := 0;
+                i := 1;
+
+                (* Up to the point that the array is unsorted. *)
+                WHILE i < n DO
+                    (* Swap adjacent items in the wrong order. *)
+                    IF nums[i - 1] > nums[i] THEN
+                        temp := nums[i - 1];
+                        nums[i - 1] := nums[i];
+                        nums[i] := temp;
+
+                        (* Keep track of the highest index. It will be the
+                         * point above which everything is properly sorted. *)
+                        top := i
+                    END;
+
+                    i := i + 1
+                END;
+
+                (* On subsequent passes, only consider up to the unsorted
+                 * point. *)
+                n := top
+            UNTIL n = 0 END;
+
+            (* Print the sorted array. *)
+            i := 0;
+            WHILE i < size DO
+                WRITE nums[i];
+                i := i + 1
+            END
+        ELSE
+            (* If the size was too large. *)
+            WRITE -1
+        END
+    ELSE
+        (* If the size was negative. *)
+        WRITE -1
+    END
+END bubbleSort.
