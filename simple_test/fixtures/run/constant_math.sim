@@ -1,0 +1,30 @@
+PROGRAM constantMath;
+    VAR
+        x : INTEGER;
+BEGIN
+    x := x + 1;     (* 1 *)
+    x := x + 256;   (* 257 *)
+    x := x + 258;   (* 515 *)
+    WRITE x;
+
+    x := 0;
+
+    x := 1 + x;     (* 1 *)
+    x := 256 + x;   (* 257 *)
+    x := 258 + x;   (* 515 *)
+    WRITE x;
+
+    x := 515;
+
+    x := x - 1;     (* 514 *)
+    x := x - 256;   (* 258 *)
+    x := x - 257;   (* 1 *)
+    WRITE x;
+
+    x := 1;
+
+    x := 1 - x;     (* 0 *)
+    x := 256 - x;   (* 256 *)
+    x := 257 - x;   (* 1 *)
+    WRITE x
+END constantMath.
