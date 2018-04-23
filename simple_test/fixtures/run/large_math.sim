@@ -12,5 +12,7 @@ BEGIN
   a := 1;
   b := 2;
 
-  WRITE (x + (y + (z + (a + (b + (b + (a + (z + (y + (x + (b + (z * (x)))))))))))))
+  WRITE (x + (y + (z + (a + (b + (b + (a + (z + (y + (x + (b + (z * (x)))))))))))));
+  WRITE (x + (y + (z + (a + (b + (b + (a + (z + (y + (x + (b + (z DIV (x)))))))))))));
+  WRITE (x + (y + (z + (a + (b + (b + (a + (z + (y + (x + (b + (z MOD (x)))))))))))))
 END LargeMath.
