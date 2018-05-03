@@ -1,0 +1,1 @@
+error: Parser - UnexpectedTokenError: Wanted ':=', found on line 5: 'a()'

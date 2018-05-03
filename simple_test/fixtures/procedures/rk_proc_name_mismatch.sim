@@ -1,0 +1,5 @@
+PROGRAM X;
+PROCEDURE
+  test();
+  END nottest;
+END X.
