@@ -1,0 +1,4 @@
+PROGRAM X;
+  PROCEDURE duparg(x: INTEGER; x: INTEGER);
+  END duparg;
+END X.

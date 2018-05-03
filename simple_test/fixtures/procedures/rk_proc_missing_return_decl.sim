@@ -1,0 +1,7 @@
+PROGRAM X;
+PROCEDURE missingRetDecl();
+  RETURN 1
+  END missingRetDecl;
+BEGIN
+  WRITE missingRetDecl()
+END X.
