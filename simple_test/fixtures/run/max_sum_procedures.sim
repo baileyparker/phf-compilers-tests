@@ -1,0 +1,25 @@
+PROGRAM max;
+
+VAR x, y: INTEGER;
+
+PROCEDURE max(a: INTEGER; b: INTEGER): INTEGER;
+    VAR r: INTEGER;
+BEGIN
+    IF a < b THEN
+        r := b
+    ELSE
+        r := a
+    END
+RETURN r
+END max;
+
+PROCEDURE sum(a: INTEGER; b: INTEGER): INTEGER;
+RETURN a+b
+END sum;
+
+BEGIN
+  READ x;
+  READ y;
+  x := sum(sum(x, 1), 1);
+  WRITE max(x, sum(y, 3))
+END max.
