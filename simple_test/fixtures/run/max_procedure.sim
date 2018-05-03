@@ -1,0 +1,20 @@
+PROGRAM max;
+
+VAR x, y: INTEGER;
+
+PROCEDURE max(a: INTEGER; b: INTEGER): INTEGER;
+    VAR r: INTEGER;
+BEGIN
+    IF a < b THEN
+        r := b
+    ELSE
+        r := a
+    END
+RETURN r
+END max;
+
+BEGIN
+  READ x;
+  READ y;
+  WRITE max(x, y)
+END max.
