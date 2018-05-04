@@ -1,0 +1,62 @@
+PROGRAM X;
+
+PROCEDURE procWithManyLocals();
+    VAR x: INTEGER;
+    VAR y: INTEGER;
+    VAR z: INTEGER;
+    VAR q: ARRAY 4 OF INTEGER;
+BEGIN
+    WRITE x;
+    x := 14;
+    WRITE x;
+    WRITE y;
+    y := 23;
+    WRITE y;
+    WRITE z;
+    z := 16;
+    WRITE z;
+
+    q[1] := 25;
+    q[2] := 26;
+    q[3] := 27;
+    WRITE q[1];
+    WRITE q[2];
+    WRITE q[3];
+    WRITE z;
+    WRITE y;
+    WRITE x
+END procWithManyLocals;
+
+PROCEDURE procWithMoreLocals();
+    VAR x: INTEGER;
+    VAR rec: RECORD x: INTEGER; y: INTEGER; z: INTEGER; END;
+BEGIN
+    WRITE x;
+    x := 10053375;
+    WRITE x;
+    procWithManyLocals();
+    WRITE rec.x;
+    rec.x := 309123;
+    WRITE rec.x;
+    WRITE rec.y;
+    rec.y := 309122;
+    WRITE rec.y;
+    WRITE rec.z;
+    rec.z := 309121;
+    WRITE rec.z;
+    WRITE x
+END procWithMoreLocals;
+
+PROCEDURE procWithEvenMoreLocals();
+    VAR x: INTEGER;
+BEGIN
+    WRITE x;
+    x := 10053376;
+    WRITE x;
+    procWithMoreLocals()
+END procWithEvenMoreLocals;
+
+BEGIN
+  procWithEvenMoreLocals()
+END X.
+
