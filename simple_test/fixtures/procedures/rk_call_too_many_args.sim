@@ -1,6 +1,0 @@
-PROGRAM X;
-  PROCEDURE proc(x: INTEGER; y: INTEGER);
-  END proc;
-BEGIN
-  proc(1, 2, 3)
-END X.

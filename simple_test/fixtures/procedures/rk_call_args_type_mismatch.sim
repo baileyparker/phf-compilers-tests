@@ -1,7 +1,0 @@
-PROGRAM X;
-  TYPE a = ARRAY 10 OF INTEGER;
-  PROCEDURE proc(x: INTEGER; y: a);
-  END proc;
-BEGIN
-  proc(1, 2)
-END X.

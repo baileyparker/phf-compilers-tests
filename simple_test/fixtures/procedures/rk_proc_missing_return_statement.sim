@@ -1,6 +1,0 @@
-PROGRAM X;
-PROCEDURE missingRetDecl() : INTEGER;
-  END missingRetDecl;
-BEGIN
-  WRITE missingRetDecl()
-END X.

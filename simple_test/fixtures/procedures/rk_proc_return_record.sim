@@ -1,7 +1,0 @@
-PROGRAM X;
-TYPE rec = RECORD x: INTEGER END;
-PROCEDURE retRec() : rec;
-  VAR x : rec;
-  RETURN x
-  END retRec;
-END X.

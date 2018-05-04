@@ -1,7 +1,0 @@
-PROGRAM X;
-TYPE arr = ARRAY 10 OF INTEGER;
-PROCEDURE retArray() : arr;
-  VAR x : arr;
-  RETURN x
-  END retArray;
-END X.
