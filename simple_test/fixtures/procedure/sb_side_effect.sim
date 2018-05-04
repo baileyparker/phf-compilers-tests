@@ -1,0 +1,15 @@
+PROGRAM X;
+
+TYPE rec1 = RECORD x: INTEGER; y: INTEGER; END;
+VAR rec: rec1;
+
+PROCEDURE procWithSideEffect();
+BEGIN
+    rec.y := 14
+END procWithSideEffect;
+
+BEGIN
+  WRITE rec.y;
+  procWithSideEffect();
+  WRITE rec.y
+END X.

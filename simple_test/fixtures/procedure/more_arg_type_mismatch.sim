@@ -1,0 +1,11 @@
+PROGRAM X;
+  TYPE a = ARRAY 10 OF INTEGER;
+  TYPE b = ARRAY 10 OF INTEGER;
+  VAR c: b;
+
+  PROCEDURE proc(x: INTEGER; y: a);
+  END proc;
+
+BEGIN
+  proc(1, c)
+END X.

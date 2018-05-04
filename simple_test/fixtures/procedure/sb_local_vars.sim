@@ -1,0 +1,13 @@
+PROGRAM X;
+
+PROCEDURE procWithLocals();
+    VAR x: INTEGER;
+BEGIN
+    WRITE x;
+    x := 14;
+    WRITE x
+END procWithLocals;
+
+BEGIN
+  procWithLocals()
+END X.
