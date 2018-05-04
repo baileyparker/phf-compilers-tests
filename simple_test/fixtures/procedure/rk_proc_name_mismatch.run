@@ -1,1 +1,5 @@
 error: Parser - ProcedureNameMismatch: Procedure name identifiers do not match. Line 4: 'END nottest;'
+-----
+error: Parser - ProcedureNameMismatch: Procedure name identifiers do not match. Line 4: 'END nottest;'
+-----
+error: Parser - ProcedureNameMismatch: Procedure name identifiers do not match. Line 4: 'END nottest;'

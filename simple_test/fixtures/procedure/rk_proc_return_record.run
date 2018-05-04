@@ -1,1 +1,5 @@
 error: Parser - InvalidReturnType: Procedure cannot return structured types. Line 3: 'PROCEDURE retRec() : rec;'
+-----
+error: Parser - InvalidReturnType: Procedure cannot return structured types. Line 3: 'PROCEDURE retRec() : rec;'
+-----
+error: Parser - InvalidReturnType: Procedure cannot return structured types. Line 3: 'PROCEDURE retRec() : rec;'

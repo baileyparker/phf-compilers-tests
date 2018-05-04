@@ -1,1 +1,5 @@
 error: Parser - MultipleDeclarationError: Line 3. x previously declared on line 3.
+-----
+error: Parser - MultipleDeclarationError: Line 3. x previously declared on line 3.
+-----
+error: Parser - MultipleDeclarationError: Line 3. x previously declared on line 3.

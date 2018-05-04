@@ -1,1 +1,5 @@
 error: Parser - MissingReturnComponent: Procedure missingRetDecl missing return declaration or RETURN statement. Line 2: 'PROCEDURE missingRetDecl();'
+-----
+error: Parser - MissingReturnComponent: Procedure missingRetDecl missing return declaration or RETURN statement. Line 2: 'PROCEDURE missingRetDecl();'
+-----
+error: Parser - MissingReturnComponent: Procedure missingRetDecl missing return declaration or RETURN statement. Line 2: 'PROCEDURE missingRetDecl();'

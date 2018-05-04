@@ -1,0 +1,5 @@
+error: Parser - CallingProcAsExpression: Cannot call procedures without return values as expressions. Line 6: 'WRITE test()'
+-----
+error: Parser - CallingProcAsExpression: Cannot call procedures without return values as expressions. Line 6: 'WRITE test()'
+-----
+error: Parser - CallingProcAsExpression: Cannot call procedures without return values as expressions. Line 6: 'WRITE test()'
