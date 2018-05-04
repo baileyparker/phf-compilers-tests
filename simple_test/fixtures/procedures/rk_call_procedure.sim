@@ -41,7 +41,7 @@ BEGIN
   procWithArg(3);
   (* Call Procedure with multiple args *)
   WRITE 4;
-  procMultipleArgs(5, 6)
+  procMultipleArgs(5, 6);
   (* Call basic function: No args, with return *)
   WRITE 7;
   WRITE fun();
