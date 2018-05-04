@@ -1,7 +1,7 @@
 PROGRAM X;
 TYPE
   arr = ARRAY 10 OF INTEGER;
-  rec = RECORD x: INTEGER; y: INTEGER END;
+  rec = RECORD x: INTEGER; y: INTEGER; END;
 VAR
   i : INTEGER;
   a : arr;

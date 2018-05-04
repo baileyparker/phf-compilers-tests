@@ -2,7 +2,7 @@ PROGRAM X;
 PROCEDURE shadow(x: INTEGER);
   VAR x : INTEGER;
   BEGIN
-    x := 5
+    x := 5;
     WRITE x
   END shadow;
 BEGIN
