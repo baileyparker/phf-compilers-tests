@@ -1,0 +1,36 @@
+PROGRAM recursiveFactorial;
+    PROCEDURE factorial(n : INTEGER) : INTEGER;
+        VAR
+            return, tmp : INTEGER;
+        BEGIN
+            IF n < 0 THEN
+                return := -1
+            ELSE
+                IF n <= 1 THEN
+                    return := 1
+                ELSE
+                    tmp := factorial(n - 1);
+                    return := n * tmp;
+
+                    (* Overflow detection:
+                     * https://stackoverflow.com/a/1815371
+                     *)
+                    IF n # 0 THEN
+                        IF (return DIV n) # tmp THEN
+                            (* Overflow happened *)
+                            return := 0
+                        END
+                    END
+                END
+            END
+        RETURN return
+    END factorial;
+
+    VAR x, tmp : INTEGER;
+BEGIN
+    x := 1;
+    WHILE x <= 12 DO
+        WRITE factorial(x);
+        x := x + 1
+    END
+END recursiveFactorial.
