@@ -1,0 +1,20 @@
+PROGRAM zeroedLocalsNestedMore;
+    PROCEDURE bar();
+      VAR
+          x, y : INTEGER;
+      BEGIN
+          WRITE x;
+          WRITE y
+    END bar;
+
+    PROCEDURE foo();
+      VAR
+          x, y : INTEGER;
+      BEGIN
+          WRITE x;
+          WRITE y;
+          bar()
+    END foo;
+BEGIN
+    foo()
+END zeroedLocalsNestedMore.

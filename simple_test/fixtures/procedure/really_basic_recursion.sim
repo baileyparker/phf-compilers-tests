@@ -1,0 +1,11 @@
+PROGRAM reallyBasicRecursion;
+    PROCEDURE foo(x : INTEGER);
+        BEGIN
+            IF x <= 2 THEN
+                foo(x + 1)
+            END
+    END foo;
+BEGIN
+    foo(1);
+    WRITE 1
+END reallyBasicRecursion.

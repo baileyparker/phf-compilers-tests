@@ -1,0 +1,11 @@
+PROGRAM nestedCallRegisterClobber;
+    PROCEDURE foo(x, y : INTEGER) : INTEGER;
+        BEGIN
+            WRITE x;
+            WRITE y
+        RETURN x + y
+    END foo;
+BEGIN
+    WRITE foo(8, foo(4, foo(2, 3)))
+(* TODO: push formals in reverse order (and only push registers right before call *)
+END nestedCallRegisterClobber.

@@ -1,0 +1,14 @@
+PROGRAM argCallsArrayByRef;
+    TYPE
+        A = ARRAY 2 OF INTEGER;
+    VAR
+        arr : A;
+    PROCEDURE foo(x: A; i: INTEGER) : INTEGER;
+        BEGIN
+            x[1] := x[1] + i;
+            WRITE x[1]
+        RETURN i
+    END foo;
+BEGIN
+    WRITE foo(arr, foo(arr, 1))
+END argCallsArrayByRef.

@@ -1,0 +1,21 @@
+PROGRAM reallyBasicRecursion;
+    PROCEDURE baz(x : INTEGER);
+        BEGIN
+            WRITE 3
+    END baz;
+
+    PROCEDURE bar(x : INTEGER);
+        BEGIN
+            WRITE 2;
+            baz(x)
+    END bar;
+
+    PROCEDURE foo(x : INTEGER);
+        BEGIN
+            WRITE 1;
+            bar(x)
+    END foo;
+BEGIN
+    foo(1);
+    WRITE 4
+END reallyBasicRecursion.

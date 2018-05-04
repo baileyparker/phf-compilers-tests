@@ -1,0 +1,15 @@
+PROGRAM passByRefSimple;
+    TYPE
+        a = ARRAY 50 OF INTEGER;
+    VAR
+        x : a;
+    PROCEDURE foo(y : a);
+        BEGIN
+            y[22] := 23
+    END foo;
+BEGIN
+    foo(x);
+    WRITE x[21]; (* 0 *)
+    WRITE x[22]; (* 23 *)
+    WRITE x[23]  (* 0 *)
+END passByRefSimple.

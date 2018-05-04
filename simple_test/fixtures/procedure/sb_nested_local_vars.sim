@@ -59,4 +59,3 @@ END procWithEvenMoreLocals;
 BEGIN
   procWithEvenMoreLocals()
 END X.
-
