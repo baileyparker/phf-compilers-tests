@@ -1,0 +1,9 @@
+PROGRAM X;
+
+PROCEDURE simpleRet() : INTEGER;
+RETURN 1
+END simpleRet;
+
+BEGIN
+    WRITE simpleRet()
+END X.
