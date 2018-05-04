@@ -1,0 +1,7 @@
+PROGRAM X;
+PROCEDURE test();
+END test;
+
+BEGIN
+  WRITE test()
+END X.

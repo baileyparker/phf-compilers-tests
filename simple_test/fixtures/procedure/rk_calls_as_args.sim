@@ -1,0 +1,50 @@
+PROGRAM X;
+TYPE
+  a = ARRAY 2 OF INTEGER;
+  r = RECORD b: INTEGER; c: INTEGER; END;
+VAR
+  v : INTEGER;
+  array : a;
+  record : r;
+
+PROCEDURE fun1(x: INTEGER): INTEGER;
+  BEGIN
+    WRITE x
+  RETURN x
+END fun1;
+
+PROCEDURE fun2(x: a; i: INTEGER): INTEGER;
+  BEGIN
+    x[1] := x[1] + i;
+    WRITE x[1]
+  RETURN i
+END fun2;
+
+PROCEDURE fun3(x: r; i: INTEGER): INTEGER;
+  BEGIN
+    x.c := x.c + i;
+    WRITE x.c
+  RETURN i
+END fun3;
+
+BEGIN
+  (* arg is literal *)
+  WRITE fun1(fun1(fun1(fun1(fun1(fun1(fun1(fun1(fun1(fun1(fun1(fun1(fun1(1)
+    ))))))))))));
+  (* arg is variable *)
+  v := 2;
+  WRITE fun1(fun1(fun1(fun1(fun1(fun1(fun1(fun1(fun1(fun1(fun1(fun1(fun1(v)
+    ))))))))))));
+  (* arg is an array *)
+  WRITE array[1];
+  WRITE fun2(array, fun2(array, fun2(array, fun2(array, fun2(array, fun2(array,
+    fun2(array, fun2(array, fun2(array, fun2(array, fun2(array, fun2(array,
+    fun2(array, fun2(array, 1))))))))))))));
+  WRITE array[1];
+  (* arg is a record *)
+  WRITE record.c;
+  WRITE fun3(record, fun3(record, fun3(record, fun3(record, fun3(record,
+    fun3(record, fun3(record, fun3(record, fun3(record, fun3(record,
+    fun3(record, fun3(record, fun3(record, fun3(record, 1))))))))))))));
+  WRITE record.c
+END X.

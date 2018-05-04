@@ -1,0 +1,5 @@
+error: Parser - CallingFunctionAsInstruction: Cannot call procedures with return values as lone instructions. Line 7: 'test()'
+-----
+error: Parser - CallingFunctionAsInstruction: Cannot call procedures with return values as lone instructions. Line 7: 'test()'
+-----
+error: Parser - CallingFunctionAsInstruction: Cannot call procedures with return values as lone instructions. Line 7: 'test()'

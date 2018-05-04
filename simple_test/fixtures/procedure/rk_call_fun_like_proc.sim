@@ -1,0 +1,8 @@
+PROGRAM X;
+PROCEDURE test(): INTEGER;
+  RETURN 1
+END test;
+
+BEGIN
+  test()
+END X.
