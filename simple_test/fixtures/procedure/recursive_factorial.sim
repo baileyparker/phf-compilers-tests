@@ -28,7 +28,7 @@ PROGRAM recursiveFactorial;
 
     VAR x, tmp : INTEGER;
 BEGIN
-    x := 1;
+    x := -1;
     WHILE x <= 12 DO
         WRITE factorial(x);
         x := x + 1
