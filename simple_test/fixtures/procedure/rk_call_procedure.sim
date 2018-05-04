@@ -1,0 +1,57 @@
+PROGRAM X;
+PROCEDURE proc();
+  BEGIN
+    WRITE 1
+  END proc;
+PROCEDURE procWithArg(x: INTEGER);
+  BEGIN
+    WRITE x
+  END procWithArg;
+PROCEDURE procMultipleArgs(x: INTEGER; y: INTEGER);
+  BEGIN
+    WRITE x;
+    WRITE y
+  END procMultipleArgs;
+PROCEDURE fun() : INTEGER;
+  RETURN 8
+  END fun;
+PROCEDURE funWithArg(x : INTEGER) : INTEGER;
+  RETURN x
+  END funWithArg;
+PROCEDURE funWithLocalsAndArg(x : INTEGER) : INTEGER;
+  VAR
+    y : INTEGER;
+  BEGIN
+    y := x
+  RETURN y
+  END funWithLocalsAndArg;
+PROCEDURE funWithBinReturn(x : INTEGER) : INTEGER;
+  VAR
+    y : INTEGER;
+  BEGIN
+    y := x
+  RETURN x + y
+  END funWithBinReturn;
+BEGIN
+  (* Call Basic Procedure: No args, no return *)
+  WRITE 0;
+  proc();
+  (* Call Procedure with single arg *)
+  WRITE 2;
+  procWithArg(3);
+  (* Call Procedure with multiple args *)
+  WRITE 4;
+  procMultipleArgs(5, 6);
+  (* Call basic function: No args, with return *)
+  WRITE 7;
+  WRITE fun();
+  (* Call function with single arg *)
+  WRITE 9;
+  WRITE funWithArg(10);
+  (* Call function with locals *)
+  WRITE 11;
+  WRITE funWithLocalsAndArg(12);
+  (* Call function with binary return *)
+  WRITE 13;
+  WRITE funWithBinReturn(7)
+END X.

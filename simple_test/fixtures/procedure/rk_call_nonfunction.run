@@ -1,0 +1,1 @@
+error: Parser - UnexpectedTokenError: Wanted 'END', found on line 5: 'WRITE a()'

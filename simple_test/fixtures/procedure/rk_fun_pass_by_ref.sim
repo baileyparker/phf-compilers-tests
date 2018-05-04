@@ -1,0 +1,32 @@
+PROGRAM X;
+TYPE
+  arr = ARRAY 10 OF INTEGER;
+  rec = RECORD x: INTEGER; y: INTEGER; END;
+VAR
+  i : INTEGER;
+  a : arr;
+  r : rec;
+PROCEDURE passByRef(x: INTEGER; y: arr; z: rec) : INTEGER;
+  BEGIN
+    x := 1;
+    y[1] := x;
+    z.x := x;
+    WRITE x;
+    WRITE y[0];
+    WRITE y[1];
+    WRITE y[2];
+    WRITE z.x;
+    WRITE z.y
+  RETURN x
+  END passByRef;
+BEGIN
+    WRITE i;
+    WRITE passByRef(i, a, r);
+    WRITE a[0];
+    WRITE a[1];
+    WRITE a[2];
+    WRITE r.x;
+    WRITE r.y;
+    WRITE 1;
+    WRITE i
+END X.

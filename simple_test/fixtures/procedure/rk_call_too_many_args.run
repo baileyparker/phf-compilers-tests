@@ -1,0 +1,1 @@
+error: Parser - InvalidArguments: Call to proc does not match its declaration. Decl: Line 2: 'PROCEDURE proc(x: INTEGER; y: INTEGER);', Call: Line 5: 'proc(1, 2, 3)'
