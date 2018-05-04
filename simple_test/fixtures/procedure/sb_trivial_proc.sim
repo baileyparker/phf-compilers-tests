@@ -1,0 +1,9 @@
+PROGRAM X;
+PROCEDURE proc();
+BEGIN
+    WRITE 1
+END proc;
+
+BEGIN
+  proc()
+END X.
