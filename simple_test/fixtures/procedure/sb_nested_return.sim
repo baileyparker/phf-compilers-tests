@@ -1,0 +1,16 @@
+PROGRAM X;
+
+PROCEDURE simpleRet() : INTEGER;
+    VAR x: INTEGER;
+BEGIN
+    x := 4
+RETURN x+1000
+END simpleRet;
+
+PROCEDURE retRet() : INTEGER;
+RETURN simpleRet()
+END retRet;
+
+BEGIN
+    WRITE retRet()
+END X.
