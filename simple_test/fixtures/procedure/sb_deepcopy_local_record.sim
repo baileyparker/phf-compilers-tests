@@ -1,0 +1,22 @@
+PROGRAM X;
+
+PROCEDURE deepCopyRecord();
+    VAR rec1, rec2: RECORD x: INTEGER; y: INTEGER; END;
+BEGIN
+    WRITE rec1.x;  (* 0 *)
+    WRITE rec1.y;  (* 0 *)
+    rec1.x := 10053375;
+    rec1.y := 10053376;
+    WRITE rec1.x;  (* 10053375 *)
+    WRITE rec1.y;  (* 10053376 *)
+
+    WRITE rec2.x;  (* 0 *)
+    WRITE rec2.y;  (* 0 *)
+    rec2 := rec1;
+    WRITE rec2.x;  (* 10053375 *)
+    WRITE rec2.y  (* 10053376 *)
+END deepCopyRecord;
+
+BEGIN
+    deepCopyRecord()
+END X.
