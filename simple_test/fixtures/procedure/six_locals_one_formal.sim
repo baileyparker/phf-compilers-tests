@@ -1,0 +1,17 @@
+PROGRAM x;
+    PROCEDURE foo(a, b, c, d, e, f : INTEGER) : INTEGER;
+        VAR
+            x : INTEGER;
+        BEGIN
+            WRITE a;
+            WRITE b;
+            WRITE c;
+            WRITE d;
+            WRITE e;
+            WRITE f;
+            x := a + b + c + d + e + f
+        RETURN x
+    END foo;
+BEGIN
+    WRITE foo(1, 2, 3, 4, 5, 6)
+END x.

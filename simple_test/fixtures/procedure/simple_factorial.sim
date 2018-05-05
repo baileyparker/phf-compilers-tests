@@ -1,14 +1,10 @@
 PROGRAM simpleFactorial;
     PROCEDURE factorial(n : INTEGER) : INTEGER;
-        VAR
-            return : INTEGER;
         BEGIN
-            IF n <= 1 THEN
-                return := 1
-            ELSE
-                return := n * factorial(n - 1)
+            IF n > 1 THEN
+                n := n * factorial(n - 1)
             END
-        RETURN return
+        RETURN n
     END factorial;
 BEGIN
     WRITE factorial(2)
